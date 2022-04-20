@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function(){
     Route::post('register',[AuthController::class,'clientRegister']);
-    Route::post('login', [AuthController::class, 'login']);
+    Route::post('login', 'AuthController@login');
 
     Route::get('countries',[CountryController::class,'countries']);
 
