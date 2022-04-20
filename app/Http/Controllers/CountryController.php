@@ -10,4 +10,8 @@ class CountryController extends Controller
    public function countries(){
        return response()->json(Country::all(), 200);
    }
+
+   public function store(Request $request){
+        
+   }
 }

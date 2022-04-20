@@ -26,8 +26,15 @@ class AuthCountroller extends Controller
             'phone' => $request->phone,
             ])->first();
 
-        if (! $user) {
-            return response()->json('Details are incorrect', 400);
+        if (!$user) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'country_id' => (int)$request->country_id
+            ]);
+
+            return $user->createToken(time())->plainTextToken;
         }
      
         return $user->createToken(time())->plainTextToken;
