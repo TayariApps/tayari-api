@@ -34,10 +34,16 @@ class AuthCountroller extends Controller
                 'country_id' => (int)$request->country_id
             ]);
 
-            return $user->createToken(time())->plainTextToken;
+            return response()->json([
+                'status' => 'New',
+                'token' => $user->createToken(time())->plainTextToken
+            ], 200);
         }
      
-        return $user->createToken(time())->plainTextToken;
+        return response()->json([
+            'status' => 'Exists',
+            'token' => $user->createToken(time())->plainTextToken
+        ], 200);
     }
 
     public function clientRegister(Request $request){

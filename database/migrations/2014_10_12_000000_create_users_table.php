@@ -20,8 +20,8 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->integer('role')->default(3);
-            $table->string('phone')->unique();
-            $table->foreignId('country_id')->constrained();
+            $table->string('phone')->unique()->nullable();
+            $table->foreignId('country_id')->constrained()->nullable();
             $table->foreignId('region_id')->constrained()->nullable();
             $table->foreignId('district_id')->constrained()->nullable();
             $table->string('user_image')->nullable();
