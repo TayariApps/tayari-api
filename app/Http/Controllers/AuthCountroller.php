@@ -12,16 +12,21 @@ class AuthCountroller extends Controller
     public function login(Request $request){
         $validator = Validator::make($request->all(), [
             'email' => 'required',
-            'password' => 'required',
+            'name' => 'required',
+            'phone' => 'required',
         ]);
 
         if($validator->fails()){
             return response()->json('Please enter all details', 400);
         }
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where([
+            'email' => $request->email,
+            'name' => $request->name,
+            'phone' => $request->phone,
+            ])->first();
 
-        if (! $user || ! Hash::check($request->password, $user->password)) {
+        if (! $user) {
             return response()->json('Details are incorrect', 400);
         }
      
@@ -32,7 +37,6 @@ class AuthCountroller extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required',
-            'password' => 'required',
             'phone' => 'required',
             'country_id' => 'required',
         ]);
@@ -44,7 +48,6 @@ class AuthCountroller extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
             'phone' => $request->phone,
             'country_id' => (int)$request->country_id
         ]);
