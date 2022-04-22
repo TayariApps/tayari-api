@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function(){
     Route::post('register',[AuthController::class,'clientRegister']);
-    Route::post('login', [AuthController::class,'login']);
+    Route::post('login','AuthController@login');
 
     Route::prefix('countries')->group(function(){
         Route::get('/',[CountryController::class,'countries']);
@@ -41,9 +41,7 @@ Route::prefix('v1')->group(function(){
     });
 
     Route::middleware('auth:sanctum')->group(function(){
-
         Route::post('updateUser',[AuthController::class,'updateUser']);
-
         Route::post('logout',[AuthController::class,'logout']);
 
     });
