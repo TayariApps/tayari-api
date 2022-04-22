@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 
-class AuthCountroller extends Controller
+class AuthController extends Controller
 {
-    public function login(Request $request){
+      public function login(Request $request){
         $validator = Validator::make($request->all(), [
             'email' => 'required',
             'name' => 'required',
