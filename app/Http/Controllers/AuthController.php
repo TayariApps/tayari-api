@@ -12,7 +12,6 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required',
             'name' => 'required',
-            'phone' => 'required',
         ]);
 
         if($validator->fails()){
@@ -22,7 +21,6 @@ class AuthController extends Controller
         $user = User::where([
             'email' => $request->email,
             'name' => $request->name,
-            'phone' => $request->phone,
             ])->first();
 
         if (!$user) {
@@ -35,12 +33,14 @@ class AuthController extends Controller
 
             return response()->json([
                 'status' => 'New',
+                'user' => $user,
                 'token' => $user->createToken(time())->plainTextToken
             ], 200);
         }
      
         return response()->json([
             'status' => 'Exists',
+            'user' => $user,
             'token' => $user->createToken(time())->plainTextToken
         ], 200);
     }
