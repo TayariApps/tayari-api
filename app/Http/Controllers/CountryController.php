@@ -12,6 +12,29 @@ class CountryController extends Controller
    }
 
    public function store(Request $request){
-        
+        Country::create([
+            'name' => $request->name,
+            'currency' => $request->currency,
+            'rate' => $request->rate //based of USD
+        ]);
+
+        return response()->json('Country added', 201);
    }
+
+   public function update(Request $request, $id){
+        Country::update([
+            'name' => $request->name,
+            'currency' => $request->currency,
+            'rate' => $request->rate //based of USD
+        ]);
+
+        return response()->json('Country updated', 200);
+   }
+
+   public function delete($id){
+       Country::where('id', $id)->delete();
+       return response()->json('Country deleted', 200);
+   }
+
+
 }

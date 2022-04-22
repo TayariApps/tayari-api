@@ -46,6 +46,15 @@ class AuthCountroller extends Controller
         ], 200);
     }
 
+    public function updateUser(Request $request){
+        User::update([
+            'country_id' => $request->country_id,
+            'phone' => $request->phone,
+        ]);
+
+        return \response()->json('User updated', 200);
+    }
+
     public function clientRegister(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required',

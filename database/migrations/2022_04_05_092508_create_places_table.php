@@ -21,7 +21,7 @@ class CreatePlacesTable extends Migration
             $table->foreignId('owner_id')->constrained('users');
             $table->string('logo_url');
             $table->string('banner_url');
-            $table->string('policy_url');
+            $table->string('policy_url')->nullable();
             $table->string('phone_number');
             $table->string('email');
             $table->string('location');
