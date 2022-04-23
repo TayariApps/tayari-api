@@ -43,7 +43,6 @@ class OrderController extends Controller
             'order_created_by' => $request->user()->id
         ]);
 
-
         $cost = 0.00;
 
         foreach ($request->drinks as $key => $drink) {

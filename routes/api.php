@@ -14,6 +14,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\JuiceController;
 use App\Http\Controllers\LiquorController;
 use App\Http\Controllers\TableController;
+use App\Http\Controllers\DeliveryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,7 +110,13 @@ Route::prefix('v1')->group(function(){
         });
 
         Route::prefix('order')->group(function(){
+            Route::get('/',[OrderController::class,'index']);
             Route::post('store',[OrderController::class,'store']);
+        });
+
+        Route::prefix('delivery')->group(function(){
+            Route::get('/',[DeliveryController::class,'index']);
+            Route::post('store',[DeliveryController::class,'store']);
         });
 
         Route::prefix('cuisine')->group(function(){
