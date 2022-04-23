@@ -17,7 +17,7 @@ class CreateEmployeesTable extends Migration
             $table->id();
             $table->foreignId('place_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->integer('role');
+            $table->integer('role'); //1-->waiter
             $table->timestamps();
         });
     }

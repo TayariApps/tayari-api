@@ -76,10 +76,10 @@ class PlaceController extends Controller
             $logoPath = $request->file('logo')->move(public_path(), $filename);//image save public folder
         }
 
-        if($request->hasFile('logo')){
-            $img_ext = $request->file('logo')->getClientOriginalExtension();
+        if($request->hasFile('banner')){
+            $img_ext = $request->file('banner')->getClientOriginalExtension();
             $filename = time() . '.' . $img_ext;
-            $bannerPath = $request->file('logo')->move(public_path(), $filename);//image save public folder
+            $bannerPath = $request->file('banner')->move(public_path(), $filename);//image save public folder
         }
 
         Place::where('id', $id)->update([

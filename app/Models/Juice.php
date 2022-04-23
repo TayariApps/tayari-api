@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Juice extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'place_id', 'name', 'volume', 'price',
+        'description', 'image'
+    ];
 }
