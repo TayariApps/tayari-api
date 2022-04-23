@@ -7,6 +7,9 @@ use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CuisineController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\DrinkController;
+use App\Http\Controllers\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,9 +51,29 @@ Route::prefix('v1')->group(function(){
             Route::get('menu/{id}',[PlaceController::class,'placeMenu']);
         });
 
+        Route::prefix('review', function(){
+            Route::get('places', [ReviewController::class,'placeReviews']);
+            Route::get('menus',[ReviewController::class,'menuReviews']);
+            Route::post('place/store',[ReviewController::class,'storePlaceReview']);
+            Route::post('menu/store',[ReviewController::class,'storeFoodReview']);
+        });
+
         Route::prefix('menu')->group(function(){
             Route::get('/',[MenuController::class,'index']);
             Route::post('store',[MenuController::class, 'store']);
+        });
+
+        Route::prefix('drink')->group(function(){
+            Route::get('/', [DrinkController::class,'index']);
+            Route::post('store',[DrinkController::class,'store']);
+            Route::patch('update',[DrinkController::class,'update']);
+            Route::patch('update/stock',[DrinkController::class,'updateStock']);
+            Route::patch('addStock',[DrinkController::class,'addStock']);
+            Route::delete('delete/{id}',[DrinkController::class,'delete']);
+        });
+
+        Route::prefix('order')->group(function(){
+            Route::post('store',[OrderController::class,'store']);
         });
 
         Route::prefix('cuisine')->group(function(){

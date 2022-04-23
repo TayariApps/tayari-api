@@ -16,11 +16,13 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('table_id')->constrained();
+            $table->foreignId('customer_id')->constrained('users');
+            $table->foreignId('order_created_by')->constrained('users');
             $table->integer('waiting_time');
             $table->bigInteger('excecuted_time');
-            $table->float('cost', 8,2);
-            $table->float('total_cost', 8,2);
-            $table->integer('product_total');
+            $table->float('cost', 8,2)->default(0.00);
+            $table->float('total_cost', 8,2)->default(0.00);
+            $table->integer('product_total')->default(0);
             $table->float('paid', 8,2)->default(0.00);
             $table->integer('discount_percentage')->default(0);
             $table->float('discount_value', 8,2)->nullable();
