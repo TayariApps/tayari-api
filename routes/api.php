@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CuisineController;
+use App\Http\Controllers\MenuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,11 @@ Route::prefix('v1')->group(function(){
             Route::delete('delete/{id}',[PlaceController::class,'delete']);
     
             Route::get('menu/{id}',[PlaceController::class,'placeMenu']);
+        });
+
+        Route::prefix('menu')->group(function(){
+            Route::get('/',[MenuController::class,'index']);
+            Route::post('store',[MenuController::class, 'store']);
         });
 
         Route::prefix('cuisine')->group(function(){
