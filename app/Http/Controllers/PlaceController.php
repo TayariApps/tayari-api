@@ -105,7 +105,6 @@ class PlaceController extends Controller
 
     public function delete($id){
         Place::where('id', $id)->delete();
-
         return response()->json('Place deleted',200);
     }
 
