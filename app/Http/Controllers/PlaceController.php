@@ -28,7 +28,7 @@ class PlaceController extends Controller
             'longitude' => 'required',
             'description'=> 'required',
             'display_name' => 'required',
-            'cuisine' => 'required'
+            'cuisine_id' => 'required'
         ]);
  
         if ($validator->fails()) {
@@ -60,7 +60,7 @@ class PlaceController extends Controller
             'longitude' => $request->longitude,
             'description'=> $request->description,
             'display_name' => $request->display_name,
-            'cuisine' => $request->cuisine,
+            'cuisine_id' => $request->cuisine_id,
             'banner_url' => $bannerPath,
             'logo_url' => $logoPath
         ]);
@@ -95,12 +95,17 @@ class PlaceController extends Controller
             'longitude' => $request->longitude,
             'description'=> $request->description,
             'display_name' => $request->display_name,
-            'cuisine' => $request->cuisine,
+            'cuisine_id' => $request->cuisine_id,
             'banner_url' => $bannerPath,
             'logo_url' => $logoPath
         ]);
 
         return response()->json('Place updated', 200);
+    }
+
+    public function placeMenu(Request $request, $id){
+        $place = Place::where('id', $id)->with('menus')->first();
+        return response()->json($place->menus, 200);
     }
 
     public function delete($id){

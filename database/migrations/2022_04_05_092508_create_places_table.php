@@ -29,7 +29,7 @@ class CreatePlacesTable extends Migration
             $table->string('longitude');
             $table->text('description');
             $table->string('display_name');
-            $table->string('cuisine');
+            $table->foreignId('cuisine_id')->constrained();
             $table->timestamps();
         });
     }

@@ -27,7 +27,7 @@ class PlaceSeeder extends Seeder
             'longitude' => '300',
             'description'=> 'Best seafood location in dar',
             'display_name' => 'CTFM',
-            'cuisine' => 'Seafood',
+            'cuisine_id' => 1,
             'banner_url' => 'banner',
             'logo_url' => 'logo'
         ]);
@@ -45,7 +45,7 @@ class PlaceSeeder extends Seeder
             'longitude' => '300',
             'description'=> 'Best fishspot in dar',
             'display_name' => 'Samaki Masaki',
-            'cuisine' => 'Seafood',
+            'cuisine_id' => 1,
             'banner_url' => 'banner',
             'logo_url' => 'logo'
         ]);
@@ -63,7 +63,7 @@ class PlaceSeeder extends Seeder
             'longitude' => '300',
             'description'=> 'Best chicken spot in dar',
             'display_name' => 'Kukukuku',
-            'cuisine' => 'Chicken',
+            'cuisine_id' => 2,
             'banner_url' => 'banner',
             'logo_url' => 'logo'
         ]);
@@ -82,7 +82,7 @@ class PlaceSeeder extends Seeder
             'longitude' => '300',
             'description'=> 'Best food spot in dar',
             'display_name' => 'Cheif Kile',
-            'cuisine' => 'Meat',
+            'cuisine_id' => 2,
             'banner_url' => 'banner',
             'logo_url' => 'logo'
         ]);

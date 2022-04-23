@@ -16,7 +16,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CountrySeeder::class,
             UserSeeder::class,
-            PlaceSeeder::class
+            CuisineSeeder::class,
+            PlaceSeeder::class,
+            TableSeeder::class,
+            MenuSeeder::class
         ]);
     }
 }

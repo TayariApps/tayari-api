@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\CuisineController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,20 +30,29 @@ Route::prefix('v1')->group(function(){
     Route::prefix('countries')->group(function(){
         Route::get('/',[CountryController::class,'countries']);
         Route::post('store',[CountryController::class,'store']);
-        Route::post('update/{id}',[CountryController::class,'update']);
+        Route::patch('update/{id}',[CountryController::class,'update']);
         Route::delete('delete/{id}',[CountryController::class,'delete']);
-    });
-
-    Route::prefix('place')->group(function(){
-        Route::get('/',[PlaceController::class,'index']);
-        Route::get('store',[PlaceController::class,'store']);
-        Route::get('update/{id}',[PlaceController::class,'update']);
-        Route::get('delete/{id}',[PlaceController::class,'delete']);
     });
 
     Route::middleware('auth:sanctum')->group(function(){
         Route::post('updateUser',[AuthController::class,'updateUser']);
         Route::post('logout',[AuthController::class,'logout']);
+
+        Route::prefix('place')->group(function(){
+            Route::get('/',[PlaceController::class,'index']);
+            Route::post('store',[PlaceController::class,'store']);
+            Route::patch('update/{id}',[PlaceController::class,'update']);
+            Route::delete('delete/{id}',[PlaceController::class,'delete']);
+    
+            Route::get('menu/{id}',[PlaceController::class,'placeMenu']);
+        });
+
+        Route::prefix('cuisine')->group(function(){
+            Route::get('/',[CuisineController::class,'index']);
+            Route::post('store',[CuisineController::class,'store']);
+            Route::patch('update/{id}',[CuisineController::class,'update']);
+            Route::delete('delete/{id}',[CuisineController::class,'delete']);
+        });
 
     });
 
