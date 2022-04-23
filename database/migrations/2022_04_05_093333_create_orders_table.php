@@ -26,7 +26,7 @@ class CreateOrdersTable extends Migration
             $table->integer('discount_percentage')->default(0);
             $table->float('discount_value', 8,2)->nullable();
             $table->boolean('payment_status')->default(false);
-            $table->foreignId('deliverer_id')->constrained('users')->nullable();
+            $table->foreignId('deliverer_id')->nullable()->constrained('users');
             $table->integer('payment_method')->nullable();
             $table->timestamps();
         });

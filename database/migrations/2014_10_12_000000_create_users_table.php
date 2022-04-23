@@ -21,9 +21,9 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable();
             $table->integer('role')->default(3);
             $table->string('phone')->unique()->nullable();
-            $table->foreignId('country_id')->constrained()->nullable();
-            $table->foreignId('region_id')->constrained()->nullable();
-            $table->foreignId('district_id')->constrained()->nullable();
+            $table->foreignId('country_id')->nullable()->constrained();
+            $table->foreignId('region_id')->nullable()->constrained();
+            $table->foreignId('district_id')->nullable()->constrained();
             $table->string('user_image')->nullable();
             $table->rememberToken();
             $table->timestamps();
