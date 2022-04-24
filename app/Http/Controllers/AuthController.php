@@ -27,6 +27,10 @@ class AuthController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
+                'country_id' => null,
+                'phone' => null,
+                'region_id' => null,
+                'district_id' => null
             ]);
 
             return response()->json([
