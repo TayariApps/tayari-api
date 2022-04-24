@@ -47,6 +47,8 @@ class AuthController extends Controller
         User::where('id', $request->id)->update([
             'country_id' => $request->country_id,
             'phone' => $request->phone,
+            'email' => $request->email,
+            'name' => $request->name
         ]);
 
         return \response()->json('User updated', 200);
