@@ -17,6 +17,7 @@ class CreatePlacesTable extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('country_id')->constrained();
+            $table->boolean('active')->default(true);
             $table->string('address');
             $table->foreignId('owner_id')->constrained('users');
             $table->string('logo_url');

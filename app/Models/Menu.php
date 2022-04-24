@@ -10,12 +10,12 @@ class Menu extends Model
     use HasFactory;
 
     protected $fillable = [
-        'menu_name', 'description', 'size', 'type', 'banner',
-        'price', 'time_takes_to_make', 'place_id'
+        'menu_name', 'description', 'size', 'type_id', 'banner',
+        'price', 'time_takes_to_make'
     ];
 
-    public function place(){
-        return $this->belongsTo(Place::class);
+    public function type(){
+        return $this->belongsTo(Type::class);
     }
 
 }

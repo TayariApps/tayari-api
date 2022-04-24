@@ -15,11 +15,11 @@ class CreateMenusTable extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('place_id')->constrained();
+            // $table->foreignId('place_id')->constrained();
+            $table->foreignId('type_id')->nullable()->constrained();
             $table->string('menu_name');
             $table->text('description')->nullable();
             $table->string('size');
-            $table->integer('type');
             $table->string('banner');
             $table->float('price', 8,2);
             $table->integer('time_takes_to_make');

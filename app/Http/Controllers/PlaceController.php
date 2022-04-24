@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Place;
+use App\Models\Type;
 use Illuminate\Support\Facades\Validator;
 
 class PlaceController extends Controller
@@ -104,8 +105,10 @@ class PlaceController extends Controller
     }
 
     public function placeMenu(Request $request, $id){
-        $place = Place::where('id', $id)->with('menus')->first();
-        return response()->json($place->menus, 200);
+        $place = Place::where('id', $id)->with([
+            'types.menus'
+            ])->first();
+        return response()->json($place->types, 200);
     }
 
     public function delete($id){

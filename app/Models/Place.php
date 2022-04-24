@@ -19,9 +19,9 @@ class Place extends Model
         return $this->belongsTo(User::class,'owner_id', 'id');
     }
 
-    public function menus(){
-        return $this->hasMany(Menu::class);
-    }
+    // public function menus(){
+    //     return $this->hasMany(Menu::class);
+    // }
 
     public function cuisine(){
         return $this->belongsTo(Cuisine::class);
@@ -29,6 +29,10 @@ class Place extends Model
 
     public function tables(){
         return $this->hasMany(Table::class);
+    }
+
+    public function types(){
+        return $this->hasMany(Type::class);
     }
 
 }

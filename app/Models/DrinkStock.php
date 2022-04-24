@@ -12,5 +12,6 @@ class DrinkStock extends Model
     protected $fillable = [
         'place_id', 'drink_id', 'quantity', 'buying_price', 'selling_price'
     ];
+    
 
 }

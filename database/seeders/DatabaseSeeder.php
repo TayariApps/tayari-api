@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             CuisineSeeder::class,
             PlaceSeeder::class,
             TableSeeder::class,
+            TypeSeeder::class,
             MenuSeeder::class
         ]);
     }
