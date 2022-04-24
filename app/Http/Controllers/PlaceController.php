@@ -106,9 +106,12 @@ class PlaceController extends Controller
 
     public function placeMenu(Request $request, $id){
         $place = Place::where('id', $id)->with([
-            'types.menus'
+            'types.menus','drinks'
             ])->first();
-        return response()->json($place->types, 200);
+        return response()->json([
+            'food' => $place->types,
+            'drinks' => $place->drinks
+        ], 200);
     }
 
     public function delete($id){

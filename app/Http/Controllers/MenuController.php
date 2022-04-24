@@ -21,7 +21,8 @@ class MenuController extends Controller
             'banner' => 'required',
             'price' => 'required', 
             'time_takes_to_make' => 'required', 
-            'place_id' => 'required'
+            'place_id' => 'required',
+            'type_id' => 'required'
         ]);
 
         if($validator->fails()){

@@ -35,4 +35,8 @@ class Place extends Model
         return $this->hasMany(Type::class);
     }
 
+    public function drinks(){
+        return $this->belongsToMany(Drink::class,'drink_stocks','place_id','drink_id')->withPivot('quantity', 'buying_price', 'selling_price');
+    }
+
 }

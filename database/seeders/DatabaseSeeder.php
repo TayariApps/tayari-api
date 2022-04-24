@@ -20,7 +20,9 @@ class DatabaseSeeder extends Seeder
             PlaceSeeder::class,
             TableSeeder::class,
             TypeSeeder::class,
-            MenuSeeder::class
+            MenuSeeder::class,
+            DrinkSeeder::class,
+            DrinkStockSeeder::class
         ]);
     }
 }
