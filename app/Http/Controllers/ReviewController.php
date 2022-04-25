@@ -16,6 +16,14 @@ class ReviewController extends Controller
         return response()->json(FoodReview::get(),200);
     }
 
+    public function getPlaceReview($placeID){
+        return \response(Review::where('place_id', $placeID)->with('reviews')->get(),200);
+    }
+
+    public function getMenuReview($menuID){
+        return \response(FoodReview::where('menu_id', $menuID)->with('reviews')->get(),200);
+    }
+
     public function storePlaceReview(Request $request){
         Review::create([
             'place_id' => $request->place_id, 

@@ -18,7 +18,7 @@ class CreateDrinksTable extends Migration
             $table->string('name');
             $table->integer('volume');
             $table->string('image');
-            $table->integer('type');
+            $table->integer('type'); //1-->soda, 2--> water, 3-->local beer, 4-->imported beer
             $table->timestamps();
         });
     }

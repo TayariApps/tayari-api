@@ -18,4 +18,8 @@ class Menu extends Model
         return $this->belongsTo(Type::class);
     }
 
+    public function reviews(){
+        return $this->belongsToMany(User::class,'food_reviews','menu_id','user_id')->withPivot('content','rating','status', 'is_anonymous');
+    }
+
 }
