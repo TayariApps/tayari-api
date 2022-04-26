@@ -70,8 +70,8 @@ Route::prefix('v1')->group(function(){
             Route::get('menus',[ReviewController::class,'menuReviews']);
             Route::post('place/store',[ReviewController::class,'storePlaceReview']);
             Route::post('menu/store',[ReviewController::class,'storeFoodReview']);
-            Route::get('place/review/{placeID}',[ReviewController::class,'getPlaceReview']);
-            Route::get('menu/review/{menuID}',[ReviewController::class,'getMenuReview']);
+            Route::get('place/{placeID}',[ReviewController::class,'getPlaceReview']);
+            Route::get('menu/{menuID}',[ReviewController::class,'getMenuReview']);
         });
 
         Route::prefix('table')->group(function(){

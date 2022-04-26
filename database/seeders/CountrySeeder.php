@@ -19,5 +19,17 @@ class CountrySeeder extends Seeder
             'currency' => 'TZS',
             'rate' => 0.00043
         ]);
+
+        Country::create([
+            'name' => 'Kenya',
+            'currency' => 'KES',
+            'rate' => 0.0092
+        ]);
+
+        Country::create([
+            'name' => 'Uganda',
+            'currency' => 'UGX',
+            'rate' => 0.00028
+        ]);
     }
 }
