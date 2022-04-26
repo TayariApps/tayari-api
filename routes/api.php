@@ -43,6 +43,15 @@ Route::prefix('v1')->group(function(){
         Route::delete('delete/{id}',[CountryController::class,'delete']);
     });
 
+    Route::prefix('review')->group(function(){
+        Route::get('places', [ReviewController::class,'placeReviews']);
+        Route::get('menus',[ReviewController::class,'menuReviews']);
+        Route::post('place/store',[ReviewController::class,'storePlaceReview']);
+        Route::post('menu/store',[ReviewController::class,'storeFoodReview']);
+        Route::get('place/{placeID}',[ReviewController::class,'getPlaceReview']);
+        Route::get('menu/{menuID}',[ReviewController::class,'getMenuReview']);
+    });
+
     Route::middleware('auth:sanctum')->group(function(){
 
         Route::post('updateUser',[AuthController::class,'updateUser']);
@@ -65,14 +74,7 @@ Route::prefix('v1')->group(function(){
             Route::get('menu/{id}',[PlaceController::class,'placeMenu']);
         });
 
-        Route::prefix('review')->group(function(){
-            Route::get('places', [ReviewController::class,'placeReviews']);
-            Route::get('menus',[ReviewController::class,'menuReviews']);
-            Route::post('place/store',[ReviewController::class,'storePlaceReview']);
-            Route::post('menu/store',[ReviewController::class,'storeFoodReview']);
-            Route::get('place/{placeID}',[ReviewController::class,'getPlaceReview']);
-            Route::get('menu/{menuID}',[ReviewController::class,'getMenuReview']);
-        });
+        
 
         Route::prefix('table')->group(function(){
             Route::get('/',[TableController::class,'index']);
