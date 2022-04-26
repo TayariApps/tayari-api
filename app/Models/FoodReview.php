@@ -12,4 +12,12 @@ class FoodReview extends Model
     protected $fillable = [
         'menu_id', 'user_id', 'content', 'rating', 'status', 'is_anonymous'
     ];
+
+    public function menu(){
+        return $this->belongsTo(Menu::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

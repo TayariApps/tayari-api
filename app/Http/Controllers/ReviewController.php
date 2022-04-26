@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Review;
 use App\Models\FoodReview;
-use App\Models\Place;
-use App\Models\Menu;
 
 class ReviewController extends Controller
 {
@@ -19,13 +17,11 @@ class ReviewController extends Controller
     }
 
     public function getPlaceReview($placeID){
-        $place = Place::where('id', $placeID)->with('reviews')->get();
-        return \response($place,200);
+        return \response(Review::where('place_id', $placeID)->with('user')->get(),200);
     }
 
     public function getMenuReview($menuID){
-        $menu = Menu::where('id', $menuID)->with('reviews')->get();
-        return \response($menu,200);
+        return \response(FoodReview::where('menu_id', $MenuID)->with('user')->get(),200);
     }
 
     public function storePlaceReview(Request $request){

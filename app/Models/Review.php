@@ -13,5 +13,13 @@ class Review extends Model
         'place_id', 'user_id', 'content', 'rating', 'status', 'is_anonymous'
     ];
 
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function place(){
+        return $this->belongsTo(Place::class);
+    }
+
 }
 
