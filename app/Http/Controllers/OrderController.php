@@ -16,6 +16,19 @@ class OrderController extends Controller
         return response()->json(Order::all(),200);
     }
 
+    public function userOrders(Request $request){
+        
+        $checkIfOrderExists = Order::where('customer_id', $request->user()->id)->exists();
+
+        if($checkIfOrderExists){
+            $orders = Order::where('customer_id', $request->user()->id)->with(['food','drinks','table.place'])->get();
+            return \response()->json($orders,200);
+        }
+
+        return \response()->json([],200);
+       
+    }
+
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
             'table_id' => 'required', 
@@ -94,7 +107,6 @@ class OrderController extends Controller
 
         $newOrder = Order::where('id', $order->id)->with(['food','drinks','table.place'])->first();
 
-        return response()->json($newOrder, 200);
-
+        return response()->json($newOrder, 201);
     }
 }
