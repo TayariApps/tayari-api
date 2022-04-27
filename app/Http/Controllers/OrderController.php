@@ -37,10 +37,10 @@ class OrderController extends Controller
         $cost = 0.00;
 
         $order = Order::create([
-            'table_id' => $table->id,
+            'table_id' => (int)$cont->table_id,
             'executed_time' => $cont->executed_time,
-            'customer_id' => $cont->customer_id,
-            'waiting_time' => $cont->waiting_time,
+            'customer_id' => (int)$cont->customer_id,
+            'waiting_time' => (int)$cont->waiting_time,
             'order_created_by' => $request->user()->id
         ]);
 
@@ -68,7 +68,6 @@ class OrderController extends Controller
             }
     
         }
-
         
         foreach ($cont->foods as $item) {
             OrderItem::create([
