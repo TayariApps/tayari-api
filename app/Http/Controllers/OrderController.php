@@ -37,17 +37,20 @@ class OrderController extends Controller
         $cost = 0.00;
 
         $order = Order::create([
-            'table_id' => (int)$cont->table_id,
+            'table_id' => $table->id,
             'executed_time' => $cont->executed_time,
-            'customer_id' => (int)$cont->customer_id,
-            'waiting_time' => (int)$cont->waiting_time,
+            'customer_id' => $cont->customer_id,
+            'waiting_time' => $cont->waiting_time,
             'order_created_by' => $request->user()->id
         ]);
 
 
         if($request->has('drinks')){
             foreach ($cont->drinks as $drink) {
-                $drinkstock = DrinkStock::where(['drink_id' => $drink->id, 'place_id' => $table->place_id])->first();
+                $drinkstock = DrinkStock::where([
+                    'drink_id' => $drink->id, 
+                    'place_id' => $table->place_id
+                ])->first();
 
                 $drinkstock->update([
                     'quantity' => $drinkstock->quantity - $drink->quantity
@@ -55,7 +58,10 @@ class OrderController extends Controller
             }
 
             foreach ($cont->drinks as $drink) {
-                $drinkstock = DrinkStock::where(['drink_id' => $drink->id, 'place_id' => $table->place_id])->first();
+                $drinkstock = DrinkStock::where([
+                    'drink_id' => $drink->id, 
+                    'place_id' => $table->place_id
+                ])->first();
     
                 DrinkOrder::create([
                     'drink_id' => $drink->id,

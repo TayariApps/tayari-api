@@ -13,7 +13,14 @@ class TableController extends Controller
     }
 
     public function placeTables($placeID){
-        return \response()->json(Table::where('place_id', $placeID)->get(),200);
+
+        $checkIfTablesExists = Table::where('place_id', $placeID)->exists();
+
+        if($checkIfTablesExists){
+            return \response()->json(Table::where('place_id', $placeID)->get(),200);
+        }
+
+        return \response()->json([],200);
     }
 
     public function store(Request $request){
