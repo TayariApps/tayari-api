@@ -48,7 +48,7 @@ class AuthController extends Controller
     }
 
     public function updateUser(Request $request){
-        User::where('id', $request->id)->update([
+        User::where('id', $request->user()->id)->update([
             'country_id' => $request->country_id,
             'phone' => $request->phone,
             'email' => $request->email,
