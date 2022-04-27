@@ -70,7 +70,7 @@ class AuthController extends Controller
         }
 
         User::where('id', $request->user()->id)->update([
-            'user_image' => $imagePath
+            'user_image' => $filename
         ]);
 
         return \response()->json('Profile image updated',200);

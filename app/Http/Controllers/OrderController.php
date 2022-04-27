@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\DrinkStock;
 use App\Models\DrinkOrder;
+use App\Models\Table;
 use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
@@ -27,9 +28,11 @@ class OrderController extends Controller
             return response()->json('Please enter all details', 400);
         }
 
+        $table = Table::where('id', $request->table_id)->first();
+
         if($request->has('drinks')){
             foreach ($request->drinks as $key => $drink) {
-                $drinkstock = DrinkStock::where(['drink_id' => $drink->drink_id, 'place_id' => $request->place_id])->first();
+                $drinkstock = DrinkStock::where(['drink_id' => $drink->drink_id, 'place_id' => $table->place_id])->first();
                 $drinkstock->update([
                     'quantity' => $drinkstock->quantity - $drink->quantity
                 ]);
