@@ -92,7 +92,7 @@ class OrderController extends Controller
             'product_total' => count($cont->foods)
         ]);
 
-        $newOrder = Order::where('id', $order->id)->with(['food','drinks'])->first();
+        $newOrder = Order::where('id', $order->id)->with(['food','drinks','table.place'])->first();
 
         return response()->json($newOrder, 200);
 
