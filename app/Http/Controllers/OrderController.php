@@ -18,7 +18,7 @@ class OrderController extends Controller
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
             'table_id' => 'required', 
-            'excecuted_time' => 'required', 
+            'executed_time' => 'required', 
             'customer_id' => 'required',
             'items' => 'required'
         ]);

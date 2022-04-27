@@ -28,6 +28,7 @@ class CreateDeliveriesTable extends Migration
             $table->boolean('payment_status')->default(false);
             $table->integer('payment_method')->nullable();
             $table->foreignId('deliverer_id')->nullable()->constrained('users');
+            $table->boolean('review_done')->default(false);
             $table->timestamps();
         });
     }

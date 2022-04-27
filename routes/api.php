@@ -15,6 +15,7 @@ use App\Http\Controllers\JuiceController;
 use App\Http\Controllers\LiquorController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,7 @@ Route::prefix('v1')->group(function(){
     Route::middleware('auth:sanctum')->group(function(){
 
         Route::post('updateUser',[AuthController::class,'updateUser']);
+        Route::post('updateUserImage',[AuthController::class,'updateProfileImage']);
         Route::post('logout',[AuthController::class,'logout']);
 
         Route::prefix('employee')->group(function(){
@@ -73,6 +75,13 @@ Route::prefix('v1')->group(function(){
             Route::delete('delete/{id}',[PlaceController::class,'delete']);
     
             Route::get('menu/{id}',[PlaceController::class,'placeMenu']);
+        });
+
+        Route::prefix('reservation')->group(function(){
+            Route::get('/',[ReservationController::class,'index']);
+            Route::post('store',[ReservationController::class,'store']);
+            Route::patch('update/{id}',[ReservationController::class,'update']);
+            Route::delete('delete/{id}',[ReservationController::class,'delete']);
         });
 
         Route::prefix('table')->group(function(){

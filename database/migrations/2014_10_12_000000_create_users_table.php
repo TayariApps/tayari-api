@@ -25,6 +25,8 @@ class CreateUsersTable extends Migration
             $table->foreignId('region_id')->nullable()->constrained();
             $table->foreignId('district_id')->nullable()->constrained();
             $table->string('user_image')->nullable();
+            $table->enum('gender',['male','female'])->nullable();
+            $table->string('dob')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

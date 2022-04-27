@@ -21,6 +21,8 @@ class CreateFoodReviewsTable extends Migration
             $table->float('rating', 2,1);
             $table->boolean('status')->default(true);
             $table->boolean('is_anonymous')->default(false);
+            $table->foreignId('order_id')->nullable()->constrained();
+            $table->foreignId('delivery_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

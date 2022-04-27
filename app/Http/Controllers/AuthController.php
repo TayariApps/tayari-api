@@ -52,10 +52,26 @@ class AuthController extends Controller
             'country_id' => $request->country_id,
             'phone' => $request->phone,
             'email' => $request->email,
-            'name' => $request->name
+            'name' => $request->name,
+            'gender' => $request->gender,
+            'dob' => $request->dob
         ]);
 
         return \response()->json('User updated', 200);
+    }
+
+    public function updateProfileImage(Request $request){
+        if($request->hasFile('image')){
+            $img_ext = $request->file('image')->getClientOriginalExtension();
+            $filename = time() . '.' . $img_ext;
+            $imagePath = $request->file('image')->move(public_path(), $filename);//image save public folder
+        }
+
+        User::where('id', $request->user()->id)->update([
+            'user_image' => $imagePath
+        ]);
+
+        return \response()->json('Profile image updated',200);
     }
 
     public function clientRegister(Request $request){
