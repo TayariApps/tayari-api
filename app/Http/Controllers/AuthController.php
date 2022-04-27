@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -74,6 +75,32 @@ class AuthController extends Controller
         ]);
 
         return \response()->json('Profile image updated',200);
+    }
+
+    public function ownerRegister(Request $request){
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'password' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json('Please enter all details', 400);
+        }
+
+        $user = User::create([
+            'country_id' => $request->country_id,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'name' => $request->name,
+            'password' => Hash::make($request->password)
+        ]);
+
+        return response()->json([
+            'user' => $user,
+            'token' => $user->createToken(time())->plainTextToken
+        ],201);
     }
 
     public function clientRegister(Request $request){

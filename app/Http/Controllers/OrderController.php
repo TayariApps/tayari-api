@@ -21,7 +21,7 @@ class OrderController extends Controller
             'table_id' => 'required', 
             'executed_time' => 'required', 
             'customer_id' => 'required',
-            'items' => 'required'
+            'foods' => 'required'
         ]);
 
         if($validator->fails()){
@@ -61,7 +61,7 @@ class OrderController extends Controller
             $cost += $drinkstock->selling_price;
         }
 
-        foreach ($request->items as $key => $item) {
+        foreach ($request->foods as $key => $item) {
             OrderItem::create([
                 'menu_id' => $item->menu_id, 
                 'order_id' => $order->id, 
@@ -75,7 +75,7 @@ class OrderController extends Controller
         $order->update([
             'cost' => $cost,
             'total_cost' => $cost,
-            'product_total' => count($request->items)
+            'product_total' => count($request->foods)
         ]);
 
         return response()->json('Order created', 200);

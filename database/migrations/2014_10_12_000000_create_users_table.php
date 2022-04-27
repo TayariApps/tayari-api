@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
-            $table->integer('role')->default(3); //1-->admin, 2--> waiter, 3--> customer, 4-->restaurant owner
+            $table->integer('role')->default(3); //1-->super admin, 2--> waiter, 3--> customer, 4-->restaurant owner
             $table->string('phone')->unique()->nullable();
             $table->foreignId('country_id')->nullable()->constrained();
             $table->foreignId('region_id')->nullable()->constrained();
