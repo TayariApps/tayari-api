@@ -10,7 +10,7 @@ class Reservation extends Model
     use HasFactory;
 
     protected $fillable = [
-    'user_id', 'table_id', 'time', 'note', 'arrived'
+    'user_id', 'table_id', 'time', 'note', 'arrived','place_id'
     ];
 
     public function user(){
@@ -20,11 +20,8 @@ class Reservation extends Model
     public function table(){
         return $this->belongsTo(Table::class);
     }
+
+    public function place(){
+        return $this->belongsTo(Place::class);
+    }
 }
-
-
-$table->foreignId('user_id')->constrained();
-            $table->foreignId('table_id')->constrained();
-            $table->dateTime('time');
-            $table->text('note')->nullable();
-            $table->boolean('arrived')->default(false);

@@ -17,6 +17,7 @@ class CreateReservationsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('table_id')->constrained();
+            $table->foreignId('place_id')->constrained();
             $table->dateTime('time');
             $table->text('note')->nullable();
             $table->boolean('arrived')->default(false);

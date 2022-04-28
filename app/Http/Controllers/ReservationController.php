@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Reservation;
+use App\Models\Place;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class ReservationController extends Controller
@@ -12,9 +14,16 @@ class ReservationController extends Controller
         \response()->json(Reservation::with(['user', 'table'])->get(),200);
     }
 
+    public function getPlaceReservations($id){
+        $reservations = Reservation::where('place_id', $id)->get();
+
+        return \response()->json($reservations,200);
+    }
+
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
-            'table_id' => 'required', 
+            'table_id' => 'required',
+            'place_id' => 'required', 
             'time' => 'required', 
         ]);
 
@@ -22,10 +31,24 @@ class ReservationController extends Controller
             return response()->json('Please enter all details', 400);
         }
 
+        $mil = (int)$request->time;
+        $seconds = $mil / 1000000;
+        $new = date('Y-m-d H:i:s', $seconds);
+
+        $checkIfDateIsBooked = Reservation::where([
+            'table_id' => $request->table_id, 
+            'arrived' => false, 
+            ])->whereDate('time',date('Y-m-d', $seconds))->exists();
+
+        if($checkIfDateIsBooked){
+            return \response()->json('Table is already booked for today',200);
+        }
+
         Reservation::create([
             'user_id' => $request->user()->id, 
             'table_id' => $request->table_id, 
-            'time' => $request->time, 
+            'place_id' => $request->place_id,
+            'time' => $new, 
             'note' => $request->note 
         ]);
 

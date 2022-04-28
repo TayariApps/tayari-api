@@ -80,6 +80,7 @@ Route::prefix('v1')->group(function(){
 
         Route::prefix('reservation')->group(function(){
             Route::get('/',[ReservationController::class,'index']);
+            Route::get('place/{id}',[ReservationController::class,'getPlaceReservations']);
             Route::post('store',[ReservationController::class,'store']);
             Route::patch('update/{id}',[ReservationController::class,'update']);
             Route::delete('delete/{id}',[ReservationController::class,'delete']);
