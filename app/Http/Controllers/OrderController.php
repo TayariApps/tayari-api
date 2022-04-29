@@ -8,12 +8,18 @@ use App\Models\OrderItem;
 use App\Models\DrinkStock;
 use App\Models\DrinkOrder;
 use App\Models\Table;
+use App\Models\Place;
 use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
     public function index(){
         return response()->json(Order::all(),200);
+    }
+
+    public function placeOrders($id){
+        $orders = Order::where('place_id', $id)->get();
+        return \response()->json($orders,200);
     }
 
     public function userOrders(Request $request){
@@ -51,10 +57,12 @@ class OrderController extends Controller
 
         $order = Order::create([
             'table_id' => $table->id,
+            'place_id' => $request->place_id,
             'executed_time' => $cont->executed_time,
             'customer_id' => $cont->customer_id,
             'waiting_time' => $cont->waiting_time,
-            'order_created_by' => $request->user()->id
+            'order_created_by' => $request->user()->id,
+            'type' => $request->type
         ]);
 
 

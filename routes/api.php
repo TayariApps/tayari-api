@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('v1')->group(function(){
      Route::post('register',[AuthController::class,'clientRegister']);
      Route::post('login',[AuthController::class, 'login']);
+     Route::post('loginOwner',[AuthController::class,'ownerLogin']);
      Route::post('registerOwner',[AuthController::class,'ownerRegister']);
 
     Route::prefix('countries')->group(function(){
@@ -74,8 +75,11 @@ Route::prefix('v1')->group(function(){
             Route::post('store',[PlaceController::class,'store']);
             Route::patch('update/{id}',[PlaceController::class,'update']);
             Route::delete('delete/{id}',[PlaceController::class,'delete']);
-    
+            Route::get('owner',[PlaceController::class,'ownerPlaces']);
             Route::get('menu/{id}',[PlaceController::class,'placeMenu']);
+
+
+            Route::get('restaurantData/{id}',[PlaceController::class,'dashboardData']);
         });
 
         Route::prefix('reservation')->group(function(){
@@ -126,6 +130,7 @@ Route::prefix('v1')->group(function(){
         Route::prefix('order')->group(function(){
             Route::get('/',[OrderController::class,'index']);
             Route::get('user',[OrderController::class,'userOrders']);
+            Route::get('place/{id}',[OrderController::class,'placeOrders']);
             Route::post('store',[OrderController::class,'store']);
         });
 

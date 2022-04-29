@@ -15,9 +15,12 @@ class CreateReservationsTable extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('table_id')->constrained();
+            $table->foreignId('user_id')->nullable()->constrained();
+            $table->foreignId('table_id')->nullable()->constrained();
             $table->foreignId('place_id')->constrained();
+            $table->boolean('confirmed')->default(false);
+            $table->string('customer_name')->nullable();
+            $table->string('customer_phone')->nullabe();
             $table->dateTime('time');
             $table->text('note')->nullable();
             $table->boolean('arrived')->default(false);

@@ -22,10 +22,10 @@ class CreateOffersTable extends Migration
             $table->string('banner')->nullable();
             $table->float('current_price',8,2);
             $table->float('offer_percentage',8,2);
-            $table->dateTime('start_date');
+            $table->dateTime('start_date')->nullable();
             $table->dateTime('end_date')->nullable();
             $table->boolean('ongoing')->default(false);
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

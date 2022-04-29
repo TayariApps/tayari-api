@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Place;
 use App\Models\Type;
+use App\Models\Order;
+use App\Models\Reservation;
 use Illuminate\Support\Facades\Validator;
 
 class PlaceController extends Controller
@@ -13,12 +15,26 @@ class PlaceController extends Controller
         return \response()->json(Place::all(), 200);
     }
 
+    public function dashboardData($id){
+        $orders = Order::where('place_id', $id)->get();
+        $reservations = Reservation::where('place_id', $id)->get();
+
+        return response()->json([
+            'orders' => $orders,
+            'reservations' => $reservations
+        ],200);
+    }
+
+    public function ownerPlaces(Request $request){
+        $places  = Place::where('owner_id', $request->user()->id)->with('country')->get();
+        return \response()->json($places,200);
+    }
+
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required', 
             'country_id' => 'required', 
             'address' => 'required',
-            'owner_id' => 'required',
             'logo' => 'required',
             'banner' => 'required', 
             'policy_url' => 'required', 
@@ -33,28 +49,28 @@ class PlaceController extends Controller
         ]);
  
         if ($validator->fails()) {
-            return response()->json('Failed to save place', 200);
+            return response()->json('Failed to save place', 400);
         }
 
         if($request->hasFile('logo')){
             $img_ext = $request->file('logo')->getClientOriginalExtension();
-            $filename = time() . '.' . $img_ext;
-            $logoPath = $request->file('logo')->move(public_path(), $filename);//image save public folder
+            $logoFilename = time() . '.' . $img_ext;
+            $logoPath = $request->file('logo')->move(public_path('images/logos'), $logoFilename);//image save public folder
         }
 
-        if($request->hasFile('logo')){
-            $img_ext = $request->file('logo')->getClientOriginalExtension();
-            $filename = time() . '.' . $img_ext;
-            $bannerPath = $request->file('logo')->move(public_path(), $filename);//image save public folder
+        if($request->hasFile('banner')){
+            $img_ext = $request->file('banner')->getClientOriginalExtension();
+            $bannerFilename = time() . '.' . $img_ext;
+            $bannerPath = $request->file('banner')->move(public_path('images/banners'), $bannerFilename);//image save public folder
         }
 
-        Place::create([
+        $place = Place::create([
             'name' => $request->name,
             'country_id' => $request->country_id,
             'address' => $request->address,
-            'owner_id' => $request->owner_id,
+            'owner_id' => $request->user()->id,
             'policy_url' => $request->policy_url,
-            'phone_number' => $request->phone,
+            'phone_number' => $request->phone_number,
             'email' => $request->email,
             'location' => $request->location,
             'latitude' => $request->latitude,
@@ -62,8 +78,8 @@ class PlaceController extends Controller
             'description'=> $request->description,
             'display_name' => $request->display_name,
             'cuisine_id' => $request->cuisine_id,
-            'banner_url' => $bannerPath,
-            'logo_url' => $logoPath
+            'banner_url' => $bannerFilename,
+            'logo_url' => $logoFilename
         ]);
 
         return response()->json('Place created', 201);

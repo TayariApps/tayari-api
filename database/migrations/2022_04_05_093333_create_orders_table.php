@@ -16,7 +16,8 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('table_id')->constrained();
-            $table->foreignId('customer_id')->constrained('users');
+            $table->foreignId('customer_id')->nullable()->constrained('users');
+            $table->foreignId('place_id')->constrained();
             $table->foreignId('order_created_by')->constrained('users');
             $table->integer('waiting_time');
             $table->bigInteger('executed_time');
@@ -30,6 +31,7 @@ class CreateOrdersTable extends Migration
             $table->integer('payment_method')->nullable();
             $table->boolean('has_offer')->default(false);
             $table->boolean('review_done')->default(false);
+            $table->integer('type'); //1--> pre-order, 2--> dine-in , 3-->reservation
             $table->timestamps();
         });
     }

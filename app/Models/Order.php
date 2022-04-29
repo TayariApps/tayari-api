@@ -12,7 +12,7 @@ class Order extends Model
     protected $fillable = [
         'table_id', 'executed_time', 'cost', 'total_cost','product_total','paid',
         'discount_percentage', 'disount_value', 'payment_status', 'payment_method', 'customer_id',
-        'order_created_by','waiting_time'
+        'order_created_by','waiting_time','place_id'
     ];
 
     public function table(){

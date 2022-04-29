@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Place;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -67,7 +68,7 @@ class AuthController extends Controller
         if($request->hasFile('image')){
             $img_ext = $request->file('image')->getClientOriginalExtension();
             $filename = time() . '.' . $img_ext;
-            $imagePath = $request->file('image')->move(public_path(), $filename);//image save public folder
+            $imagePath = $request->file('image')->move(public_path('images/profile'), $filename);//image save public folder
         }
 
         User::where('id', $request->user()->id)->update([
@@ -77,6 +78,29 @@ class AuthController extends Controller
         return \response()->json('Profile image updated',200);
     }
 
+    public function ownerLogin(Request $request){
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json('Please enter all details', 400);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+           return \response()->json('The credentials are incorrect',400);
+        }
+     
+        return \response()->json([
+            'token' => $user->createToken(time())->plainTextToken,
+            'user' => $user
+        ], 200);
+    }
+
+    
     public function ownerRegister(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required',

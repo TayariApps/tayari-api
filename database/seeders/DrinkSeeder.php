@@ -18,21 +18,21 @@ class DrinkSeeder extends Seeder
             'name' => 'Fanta Orange', 
             'volume' => 350, 
             'image' => 'image', 
-            'type' => 1
+            'type_id' => 1
         ]);
 
         Drink::create([
             'name' => 'Coca Cola', 
             'volume' => 350, 
             'image' => 'image', 
-            'type' => 1
+            'type_id' => 1
         ]);
 
         Drink::create([
             'name' => 'Pepsi', 
             'volume' => 350, 
             'image' => 'image', 
-            'type' => 1
+            'type_id' => 1
         ]);
     }
 }

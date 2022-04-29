@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Drink;
 use App\Models\DrinkStock;
+use App\Models\DrinkType;
 use Illuminate\Support\Facades\Validator;
 
 class DrinkController extends Controller
 {
     public function index(){
-        return \response()->json(Drink::all(),200);
+
+        $drinks = DrinkType::with('drinks')->get();
+
+        return \response()->json($drinks,200);
     }
 
     public function store(Request $request){

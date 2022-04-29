@@ -33,6 +33,8 @@ class CreatePlacesTable extends Migration
             $table->string('opening_time')->nullable();
             $table->string('closing_time')->nullable();
             $table->foreignId('cuisine_id')->constrained();
+            $table->boolean('reservation_payable')->default(false);
+            $table->integer('reservation_price')->nullable();
             $table->timestamps();
         });
     }

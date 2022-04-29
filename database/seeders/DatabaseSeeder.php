@@ -17,10 +17,11 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             UserSeeder::class,
             CuisineSeeder::class,
-            PlaceSeeder::class,
-            TableSeeder::class,
-            TypeSeeder::class,
-            MenuSeeder::class,
+            // PlaceSeeder::class,
+            // TableSeeder::class,
+            // TypeSeeder::class,
+            // MenuSeeder::class,
+            DrinkTypeSeeder::class,
             DrinkSeeder::class,
             DrinkStockSeeder::class
         ]);
