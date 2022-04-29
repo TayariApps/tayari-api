@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             UserSeeder::class,
             CuisineSeeder::class,
-            // PlaceSeeder::class,
+            PlaceSeeder::class,
             // TableSeeder::class,
             // TypeSeeder::class,
             // MenuSeeder::class,
