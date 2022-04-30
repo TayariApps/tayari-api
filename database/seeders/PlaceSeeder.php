@@ -28,8 +28,8 @@ class PlaceSeeder extends Seeder
             'description'=> 'Best seafood location in dar',
             'display_name' => 'CTFM',
             'cuisine_id' => 1,
-            'banner_url' => 'banner',
-            'logo_url' => 'logo'
+            'banner_url' => 'samakibanner',
+            'logo_url' => 'samakilogo'
         ]);
 
         Place::create([
@@ -46,8 +46,8 @@ class PlaceSeeder extends Seeder
             'description'=> 'Best fishspot in dar',
             'display_name' => 'Samaki Masaki',
             'cuisine_id' => 1,
-            'banner_url' => 'banner',
-            'logo_url' => 'logo'
+            'banner_url' => 'samakibanner',
+            'logo_url' => 'samakilogo'
         ]);
 
         Place::create([
@@ -64,8 +64,8 @@ class PlaceSeeder extends Seeder
             'description'=> 'Best chicken spot in dar',
             'display_name' => 'Kukukuku',
             'cuisine_id' => 2,
-            'banner_url' => 'banner',
-            'logo_url' => 'logo'
+            'banner_url' => 'samakibanner',
+            'logo_url' => 'samakilogo'
         ]);
 
 
@@ -83,8 +83,8 @@ class PlaceSeeder extends Seeder
             'description'=> 'Best food spot in dar',
             'display_name' => 'Cheif Kile',
             'cuisine_id' => 2,
-            'banner_url' => 'banner',
-            'logo_url' => 'logo'
+            'banner_url' => 'samakibanner',
+            'logo_url' => 'samakilogo'
         ]);
     }
 }

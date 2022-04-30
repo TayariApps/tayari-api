@@ -10,7 +10,7 @@ class Drink extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'volume', 'image', 'type'
+        'name', 'volume', 'image', 'type_id'
     ];
 
     public function places(){

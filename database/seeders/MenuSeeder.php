@@ -19,7 +19,7 @@ class MenuSeeder extends Seeder
             'description' => 'Chicken with cheese and vegetable salad',
             'size' => 'Large',
             'type_id' => 1,
-            'banner' => 'banner',
+            'banner' => 'burgerimage.jpeg',
             'price' => 10000,
             'time_takes_to_make' => 15
         ]);
@@ -29,7 +29,7 @@ class MenuSeeder extends Seeder
             'description' => 'Beef burger with cheese',
             'size' => 'Medium',
             'type_id' => 2,
-            'banner' => 'banner',
+            'banner' => 'burgerimage.jpeg',
             'price' => 10000,
             'time_takes_to_make' => 15
         ]);
@@ -39,7 +39,7 @@ class MenuSeeder extends Seeder
             'description' => 'Just cheese in a burger',
             'size' => 'Medium',
             'type_id' => 2,
-            'banner' => 'banner',
+            'banner' => 'burgerimage.jpeg',
             'price' => 10000,
             'time_takes_to_make' => 15
         ]);

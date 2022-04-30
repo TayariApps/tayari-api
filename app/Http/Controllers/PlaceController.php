@@ -7,6 +7,7 @@ use App\Models\Place;
 use App\Models\Type;
 use App\Models\Order;
 use App\Models\Reservation;
+use App\Models\DrinkType;
 use Illuminate\Support\Facades\Validator;
 
 class PlaceController extends Controller
@@ -121,12 +122,28 @@ class PlaceController extends Controller
     }
 
     public function placeMenu(Request $request, $id){
-        $place = Place::where('id', $id)->with([
-            'types.menus','drinks'
-            ])->first();
+
+        if(Place::where('id', $id)->with([
+            'types.menus'
+            ])->exists()){
+                $place = Place::where('id', $id)->with([
+                    'types.menus'
+                    ])->first();
+
+                $food = $place->types;
+            } else{
+                $food = [];
+            }
+
+        if(DrinkType::has('drinks.places','=',$id)->exists()){
+            $drinks = DrinkType::has('drinks.places','=',$id)->get();
+        }else{
+            $drinks = [];
+        }
+
         return response()->json([
-            'food' => $place->types,
-            'drinks' => $place->drinks
+            'food' => $food,
+            'drinks' => $drinks
         ], 200);
     }
 
