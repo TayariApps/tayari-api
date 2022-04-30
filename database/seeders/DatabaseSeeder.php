@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
             MenuSeeder::class,
             DrinkTypeSeeder::class,
             DrinkSeeder::class,
-            DrinkStockSeeder::class
+            DrinkStockSeeder::class,
+            PlaceTypeSeeder::class,
         ]);
     }
 }

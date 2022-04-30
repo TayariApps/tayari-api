@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Place extends Model
 {
     use HasFactory;
+    protected $placeId;
 
     protected $fillable = [
         'name', 'country_id', 'address','owner_id','logo_url',
@@ -36,7 +37,13 @@ class Place extends Model
     }
 
     public function types(){
-        return $this->hasMany(Type::class);
+        return $this->belongsToMany(Type::class,'place_food_types','place_id','type_id');
+    }
+
+    public function typePlaces($placeId){
+        return $this->belongsToMany(Type::class)
+                ->as('place_food_types')
+                ->wherePivot('place_id', $placeId);
     }
 
     public function orders(){

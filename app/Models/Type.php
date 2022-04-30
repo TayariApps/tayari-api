@@ -10,14 +10,14 @@ class Type extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'place_id'
+        'name'
     ];
 
-    public function place(){
-        return $this->belongsTo(Place::class);
+    public function places(){
+        return $this->belongsToMany(Place::class,'place_food_types','type_id','place_id')->using(PlaceFoodType::class);
     }
 
     public function menus(){
-        return $this->hasMany(Menu::class);
+        return $this->hasMany(Menu::class,'type_id', 'id');
     }
 }

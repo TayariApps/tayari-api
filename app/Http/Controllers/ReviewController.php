@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Review;
 use App\Models\FoodReview;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ReviewController extends Controller
 {
@@ -39,6 +40,23 @@ class ReviewController extends Controller
     }
 
     public function storePlaceReview(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'place_id' => 'required', 
+            'content' => 'required', 
+            'rating' => 'required'
+        ]);
+ 
+        if ($validator->fails()) {
+            return \response()->json('Enter all fields',400);
+        }
+
+        $checkIfUserAlreadyPosted = Review::where('user_id', $request->user()->id)->exists();
+
+        if($checkIfUserAlreadyPosted){
+            return \response()->json('You already reviewed this place',200);
+        }
+
         Review::create([
             'place_id' => $request->place_id, 
             'user_id' => $request->user()->id, 

@@ -16,6 +16,8 @@ use App\Http\Controllers\LiquorController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\TypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -100,6 +102,7 @@ Route::prefix('v1')->group(function(){
 
         Route::prefix('menu')->group(function(){
             Route::get('/',[MenuController::class,'index']);
+            Route::get('place/{id}',[MenuController::class,'place']);
             Route::post('store',[MenuController::class, 'store']);
         });
 
@@ -145,6 +148,16 @@ Route::prefix('v1')->group(function(){
             Route::patch('update/{id}',[CuisineController::class,'update']);
             Route::delete('delete/{id}',[CuisineController::class,'delete']);
         });
+
+        Route::prefix('type')->group(function(){
+            Route::get('/',[TypeController::class,'index']);
+            Route::post('store',[TypeController::class,'store']);
+            Route::get('place/{id}',[TypeController::class,'place']);
+            Route::patch('update/{id}',[TypeController::class,'update']);
+            Route::delete('delete/{id}',[TypeController::class,'delete']);
+        });
+
+        Route::get('customers',[UserController::class,'getCustomers']);
 
     });
 
