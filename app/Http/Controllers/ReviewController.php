@@ -50,11 +50,19 @@ class ReviewController extends Controller
     }
 
     public function storeFoodReview(Request $request){
+        
+           $validated = $request->validate([
+           'menu_id'=>"required",
+           'content'=>"required",
+           'rating'=>'required'
+       ]);
+       
+
         FoodReview::create([
-            'menu_id' => $request->menu_id, 
+            'menu_id' => $validated['menu_id'], 
             'user_id' => $request->user()->id, 
-            'content' => $request->content, 
-            'rating' => $request->rating
+            'content' => $validated['content'], 
+            'rating' => $validated['rating']
         ]);
 
         return response()->json('Review added', 201);
