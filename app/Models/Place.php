@@ -27,12 +27,20 @@ class Place extends Model
         return $this->belongsTo(Cuisine::class);
     }
 
+    public function country(){
+        return $this->belongsTo(Country::class);
+    }
+
     public function tables(){
         return $this->hasMany(Table::class);
     }
 
     public function types(){
         return $this->hasMany(Type::class);
+    }
+
+    public function orders(){
+        return $this->hasMany(Order::class);
     }
 
     public function drinks(){

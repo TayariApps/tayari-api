@@ -7,6 +7,8 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\DrinkStock;
 use App\Models\DrinkOrder;
+use App\Models\Table;
+use App\Models\Place;
 use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
@@ -15,67 +17,104 @@ class OrderController extends Controller
         return response()->json(Order::all(),200);
     }
 
+    public function placeOrders($id){
+        $orders = Order::where('place_id', $id)->get();
+        return \response()->json($orders,200);
+    }
+
+    public function userOrders(Request $request){
+        
+        $checkIfOrderExists = Order::where('customer_id', $request->user()->id)->exists();
+
+        if($checkIfOrderExists){
+            $orders = Order::where('customer_id', $request->user()->id)->with(['food','drinks','table.place'])->get();
+            return \response()->json($orders,200);
+        }
+
+        return \response()->json([],200);
+       
+    }
+
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
             'table_id' => 'required', 
-            'excecuted_time' => 'required', 
+            'executed_time' => 'required', 
             'customer_id' => 'required',
-            'items' => 'required'
+            'foods' => 'required'
         ]);
 
         if($validator->fails()){
             return response()->json('Please enter all details', 400);
         }
 
+        $somedata = $request->input();
+        $somedata = file_get_contents("php://input");
+        $cont = json_decode($somedata);
+
+        $table = Table::where('id', $cont->table_id)->first();
+
+        $cost = 0.00;
+
+        $order = Order::create([
+            'table_id' => $table->id,
+            'place_id' => $request->place_id,
+            'executed_time' => $cont->executed_time,
+            'customer_id' => $cont->customer_id,
+            'waiting_time' => $cont->waiting_time,
+            'order_created_by' => $request->user()->id,
+            'type' => $request->type
+        ]);
+
+
         if($request->has('drinks')){
-            foreach ($request->drinks as $key => $drink) {
-                $drinkstock = DrinkStock::where(['drink_id' => $drink->drink_id, 'place_id' => $request->place_id])->first();
+            foreach ($cont->drinks as $drink) {
+                $drinkstock = DrinkStock::where([
+                    'drink_id' => $drink->id, 
+                    'place_id' => $table->place_id
+                ])->first();
+
                 $drinkstock->update([
                     'quantity' => $drinkstock->quantity - $drink->quantity
                 ]);
             }
+
+            foreach ($cont->drinks as $drink) {
+                $drinkstock = DrinkStock::where([
+                    'drink_id' => $drink->id, 
+                    'place_id' => $table->place_id
+                ])->first();
+    
+                DrinkOrder::create([
+                    'drink_id' => $drink->id,
+                    'order_id' => $order->id,
+                    'quantity' => $drink->quantity,
+                    'price' => $drinkstock->selling_price
+                ]);
+    
+                $cost += $drinkstock->selling_price;
+            }
+    
         }
-
-        $order = Order::create([
-            'executed_time' => $request->executed_time,
-            'customer_id' => $request->customer_id,
-            'waiting_time' => $request->waiting_time,
-            'order_created_by' => $request->user()->id
-        ]);
-
-        $cost = 0.00;
-
-        foreach ($request->drinks as $key => $drink) {
-            $drinkstock = DrinkStock::where(['drink_id' => $drink->drink_id, 'place_id' => $request->place_id])->first();
-
-            DrinkOrder::create([
-                'drink_id' => $drink->drink_id,
-                'order_id' => $order->id,
-                'quantity' => $drink->quantity,
-                'price' => $drinkstock->selling_price
-            ]);
-
-            $cost += $drinkstock->selling_price;
-        }
-
-        foreach ($request->items as $key => $item) {
+        
+        foreach ($cont->foods as $item) {
             OrderItem::create([
-                'menu_id' => $item->menu_id, 
+                'menu_id' => $item->id, 
                 'order_id' => $order->id, 
                 'quantity' => $item->quantity, 
-                'cost' => $item->cost
+                'cost' => $item->price
             ]);
 
-            $cost += $item->cost;
+            $cost += $item->price;
         }
 
         $order->update([
             'cost' => $cost,
             'total_cost' => $cost,
-            'product_total' => count($request->items)
+            'product_total' => count($cont->foods)
         ]);
 
-        return response()->json('Order created', 200);
+        $newOrder = Order::where('id', $order->id)->with(['food','drinks','table.place'])->first();
 
+        return response()->json($newOrder, 201);
     }
 }

@@ -26,7 +26,8 @@ class User extends Authenticatable
         'country_id',
         'region_id',
         'district_id',
-        'user_image'
+        'user_image',
+        'gender','dob'
     ];
 
     /**

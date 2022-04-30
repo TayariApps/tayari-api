@@ -17,7 +17,7 @@ class DrinkStockSeeder extends Seeder
         DrinkStock::create([
             'place_id' => 1, 
             'drink_id' => 1, 
-            'quantity' => 5, 
+            'quantity' => 10, 
             'buying_price' => 400, 
             'selling_price' => 1000
         ]);
@@ -25,7 +25,7 @@ class DrinkStockSeeder extends Seeder
         DrinkStock::create([
             'place_id' => 1, 
             'drink_id' => 2, 
-            'quantity' => 5, 
+            'quantity' => 10, 
             'buying_price' => 400, 
             'selling_price' => 1000
         ]);
@@ -33,7 +33,7 @@ class DrinkStockSeeder extends Seeder
         DrinkStock::create([
             'place_id' => 1, 
             'drink_id' => 3, 
-            'quantity' => 5, 
+            'quantity' => 10, 
             'buying_price' => 400, 
             'selling_price' => 1000
         ]);

@@ -15,6 +15,7 @@ use App\Http\Controllers\JuiceController;
 use App\Http\Controllers\LiquorController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('v1')->group(function(){
      Route::post('register',[AuthController::class,'clientRegister']);
      Route::post('login',[AuthController::class, 'login']);
+     Route::post('loginOwner',[AuthController::class,'ownerLogin']);
+     Route::post('registerOwner',[AuthController::class,'ownerRegister']);
 
     Route::prefix('countries')->group(function(){
         Route::get('/',[CountryController::class,'countries']);
@@ -46,6 +49,7 @@ Route::prefix('v1')->group(function(){
     Route::middleware('auth:sanctum')->group(function(){
 
         Route::post('updateUser',[AuthController::class,'updateUser']);
+        Route::post('updateUserImage',[AuthController::class,'updateProfileImage']);
         Route::post('logout',[AuthController::class,'logout']);
 
         Route::prefix('employee')->group(function(){
@@ -56,22 +60,34 @@ Route::prefix('v1')->group(function(){
             Route::delete('delete/{id}',[EmployeeController::class,'delete']);
         });
 
-        Route::prefix('place')->group(function(){
-            Route::get('/',[PlaceController::class,'index']);
-            Route::post('store',[PlaceController::class,'store']);
-            Route::patch('update/{id}',[PlaceController::class,'update']);
-            Route::delete('delete/{id}',[PlaceController::class,'delete']);
-    
-            Route::get('menu/{id}',[PlaceController::class,'placeMenu']);
-        });
-
         Route::prefix('review')->group(function(){
             Route::get('places', [ReviewController::class,'placeReviews']);
             Route::get('menus',[ReviewController::class,'menuReviews']);
             Route::post('place/store',[ReviewController::class,'storePlaceReview']);
             Route::post('menu/store',[ReviewController::class,'storeFoodReview']);
-            Route::get('place/review/{placeID}',[ReviewController::class,'getPlaceReview']);
-            Route::get('menu/review/{menuID}',[ReviewController::class,'getMenuReview']);
+            Route::get('place/{placeID}',[ReviewController::class,'getPlaceReview']);
+            Route::get('menu/{menuID}',[ReviewController::class,'getMenuReview']);
+        });
+    
+
+        Route::prefix('place')->group(function(){
+            Route::get('/',[PlaceController::class,'index']);
+            Route::post('store',[PlaceController::class,'store']);
+            Route::patch('update/{id}',[PlaceController::class,'update']);
+            Route::delete('delete/{id}',[PlaceController::class,'delete']);
+            Route::get('owner',[PlaceController::class,'ownerPlaces']);
+            Route::get('menu/{id}',[PlaceController::class,'placeMenu']);
+
+
+            Route::get('restaurantData/{id}',[PlaceController::class,'dashboardData']);
+        });
+
+        Route::prefix('reservation')->group(function(){
+            Route::get('/',[ReservationController::class,'index']);
+            Route::get('place/{id}',[ReservationController::class,'getPlaceReservations']);
+            Route::post('store',[ReservationController::class,'store']);
+            Route::patch('update/{id}',[ReservationController::class,'update']);
+            Route::delete('delete/{id}',[ReservationController::class,'delete']);
         });
 
         Route::prefix('table')->group(function(){
@@ -113,6 +129,8 @@ Route::prefix('v1')->group(function(){
 
         Route::prefix('order')->group(function(){
             Route::get('/',[OrderController::class,'index']);
+            Route::get('user',[OrderController::class,'userOrders']);
+            Route::get('place/{id}',[OrderController::class,'placeOrders']);
             Route::post('store',[OrderController::class,'store']);
         });
 

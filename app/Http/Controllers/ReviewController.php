@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Review;
 use App\Models\FoodReview;
+use Illuminate\Support\Facades\DB;
 
 class ReviewController extends Controller
 {
@@ -17,11 +18,24 @@ class ReviewController extends Controller
     }
 
     public function getPlaceReview($placeID){
-        return \response(Review::where('place_id', $placeID)->with('reviews')->get(),200);
+
+        $reviews = DB::table('reviews')
+                        ->join('places',function($join) use ($placeID){
+                            $join->on('places.id','=','reviews.place_id')
+                                ->where('reviews.place_id','=', $placeID);
+                        })->join('users','users.id','=','reviews.user_id')
+                        ->select(
+                            'reviews.id as id',
+                            'users.name as name',
+                            'reviews.content as content',
+                            'reviews.rating as rating'
+                            )->get();
+
+        return \response()->json($reviews,200);
     }
 
     public function getMenuReview($menuID){
-        return \response(FoodReview::where('menu_id', $menuID)->with('reviews')->get(),200);
+        return \response()->json(FoodReview::where('menu_id', $MenuID)->with('user')->get(),200);
     }
 
     public function storePlaceReview(Request $request){
