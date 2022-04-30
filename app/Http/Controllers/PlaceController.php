@@ -136,7 +136,7 @@ class PlaceController extends Controller
             }
 
         if(DrinkType::has('drinks.places','=',$id)->exists()){
-            $drinks = DrinkType::has('drinks.places','=',$id)->get();
+            $drinks = DrinkType::has('drinks.places','=',$id)->with('drinks.stocks')->get();
         }else{
             $drinks = [];
         }
