@@ -59,6 +59,11 @@ class MenuController extends Controller
         ]);
 
         return \response()->json('Menu created',200);
-
     }
+
+    public function delete($id){
+        Menu::where('id',$id)->delete();
+        return \response()->json('Food deleted',200);
+    }
+
 }

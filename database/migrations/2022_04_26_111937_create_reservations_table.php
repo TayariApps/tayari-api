@@ -20,7 +20,7 @@ class CreateReservationsTable extends Migration
             $table->foreignId('place_id')->constrained();
             $table->boolean('confirmed')->default(false);
             $table->string('customer_name')->nullable();
-            $table->string('customer_phone')->nullabe();
+            $table->string('customer_phone')->nullable();
             $table->dateTime('time');
             $table->text('note')->nullable();
             $table->boolean('arrived')->default(false);

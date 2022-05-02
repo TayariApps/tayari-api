@@ -18,6 +18,7 @@ use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TypeController;
+use App\Http\Controllers\HelpController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,9 +72,13 @@ Route::prefix('v1')->group(function(){
             Route::get('menu/{menuID}',[ReviewController::class,'getMenuReview']);
         });
     
+        Route::prefix('help')->group(function(){
+            Route::post('store',[HelpController::class, 'store']);
+        });
 
         Route::prefix('place')->group(function(){
             Route::get('/',[PlaceController::class,'index']);
+            Route::get('{id}',[PlaceController::class,'getPlace']);
             Route::post('store',[PlaceController::class,'store']);
             Route::patch('update/{id}',[PlaceController::class,'update']);
             Route::delete('delete/{id}',[PlaceController::class,'delete']);
@@ -87,6 +92,7 @@ Route::prefix('v1')->group(function(){
         Route::prefix('reservation')->group(function(){
             Route::get('/',[ReservationController::class,'index']);
             Route::get('place/{id}',[ReservationController::class,'getPlaceReservations']);
+            Route::post('restaurantStore',[ReservationController::class,'restaurantStore']);
             Route::post('store',[ReservationController::class,'store']);
             Route::patch('update/{id}',[ReservationController::class,'update']);
             Route::delete('delete/{id}',[ReservationController::class,'delete']);
@@ -104,6 +110,7 @@ Route::prefix('v1')->group(function(){
             Route::get('/',[MenuController::class,'index']);
             Route::get('place/{id}',[MenuController::class,'place']);
             Route::post('store',[MenuController::class, 'store']);
+            Route::delete('delete/{id}',[MenuController::class,'delete']);
         });
 
         Route::prefix('juice')->group(function(){
@@ -157,7 +164,11 @@ Route::prefix('v1')->group(function(){
             Route::delete('delete/{id}',[TypeController::class,'delete']);
         });
 
-        Route::get('customers',[UserController::class,'getCustomers']);
+        Route::prefix('customers')->group(function(){
+            Route::get('/',[UserController::class,'getCustomers']);
+            Route::get('place/{id}',[UserController::class,'getPlaceCustomers']);
+        });
+        
 
     });
 

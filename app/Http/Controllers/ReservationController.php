@@ -7,6 +7,7 @@ use App\Models\Reservation;
 use App\Models\Place;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
 {
@@ -15,14 +16,34 @@ class ReservationController extends Controller
     }
 
     public function getPlaceReservations($id){
-        $reservations = Reservation::where('place_id', $id)->get();
-
+        $reservations = Reservation::where('place_id', $id)->with('user')->get();
         return \response()->json($reservations,200);
     }
 
+   public function restaurantStore(Request $request){
+
+    $reservation = new Reservation;
+    if($request->has('person')){
+        $reservation->user_id = $request->person;
+    }
+    if($request->has('customer_name')){
+        $reservation->customer_name = $request->customer_name;
+    }
+    if($request->has('customer_phone')){
+        $reservation->customer_phone !== '' && $request->customer_phone;
+    }
+
+    $reservation->place_id = $request->place_id;
+    $reservation->time = \Carbon\Carbon::parse($request->time)->toDateTimeString(); 
+    $reservation->note = $request->note;
+    $reservation->save();
+
+    return \response()->json('Reservation created',201);
+   }
+   
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
-            'table_id' => 'required',
+            // 'table_id' => 'required',
             'place_id' => 'required', 
             'time' => 'required', 
         ]);
@@ -35,18 +56,18 @@ class ReservationController extends Controller
         $seconds = $mil / 1000000;
         $new = date('Y-m-d H:i:s', $seconds);
 
-        $checkIfDateIsBooked = Reservation::where([
-            'table_id' => $request->table_id, 
-            'arrived' => false, 
-            ])->whereDate('time',date('Y-m-d', $seconds))->exists();
+        // $checkIfDateIsBooked = Reservation::where([
+        //     'table_id' => $request->table_id, 
+        //     'arrived' => false, 
+        //     ])->whereDate('time',date('Y-m-d', $seconds))->exists();
 
-        if($checkIfDateIsBooked){
-            return \response()->json('Table is already booked for today',200);
-        }
+        // if($checkIfDateIsBooked){
+        //     return \response()->json('Table is already booked for today',200);
+        // }
 
         Reservation::create([
             'user_id' => $request->user()->id, 
-            'table_id' => $request->table_id, 
+            // 'table_id' => $request->table_id, 
             'place_id' => $request->place_id,
             'time' => $new, 
             'note' => $request->note 
@@ -58,7 +79,7 @@ class ReservationController extends Controller
     public function update(Request $request,$id){
         Reservation::where('id',$id)->update([
             'user_id' => $request->user_id, 
-            'table_id' => $request->table_id, 
+            // 'table_id' => $request->table_id, 
             'time' => $request->time, 
             'note' => $request->note, 
             'arrived' => $request->arrived

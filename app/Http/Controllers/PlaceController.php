@@ -8,6 +8,7 @@ use App\Models\Type;
 use App\Models\Order;
 use App\Models\Reservation;
 use App\Models\DrinkType;
+use App\Models\Menu;
 use Illuminate\Support\Facades\Validator;
 
 class PlaceController extends Controller
@@ -19,11 +20,17 @@ class PlaceController extends Controller
     public function dashboardData($id){
         $orders = Order::where('place_id', $id)->get();
         $reservations = Reservation::where('place_id', $id)->get();
+        $menuItems = Menu::where('place_id',$id)->get();
 
         return response()->json([
             'orders' => $orders,
-            'reservations' => $reservations
+            'reservations' => $reservations,
+            'menuItemsCount' => count($menuItems)
         ],200);
+    }
+
+    public function getPlace($id){
+        return \response()->json(Place::where('id', $id)->first(),200);
     }
 
     public function ownerPlaces(Request $request){
@@ -86,36 +93,43 @@ class PlaceController extends Controller
         return response()->json('Place created', 201);
     }
 
-    public function update(Request $request, $id){
+    public function update($id,Request $request){
+
+        $bannerfilename = '';
+        $logofilename = '';
 
         if($request->hasFile('logo')){
             $img_ext = $request->file('logo')->getClientOriginalExtension();
-            $filename = time() . '.' . $img_ext;
-            $logoPath = $request->file('logo')->move(public_path(), $filename);//image save public folder
+            $logofilename = time() . '.' . $img_ext;
+            $logoPath = $request->file('logo')->move(public_path(), $logofilename);//image save public folder
         }
 
         if($request->hasFile('banner')){
             $img_ext = $request->file('banner')->getClientOriginalExtension();
-            $filename = time() . '.' . $img_ext;
-            $bannerPath = $request->file('banner')->move(public_path(), $filename);//image save public folder
+            $bannerfilename = time() . '.' . $img_ext;
+            $bannerPath = $request->file('banner')->move(public_path(), $bannerfilename);//image save public folder
         }
 
         Place::where('id', $id)->update([
             'name' => $request->name,
             'country_id' => $request->country_id,
             'address' => $request->address,
-            'owner_id' => $request->owner_id,
+            // 'owner_id' => $request->owner_id,
             'policy_url' => $request->policy_url,
             'phone_number' => $request->phone,
             'email' => $request->email,
             'location' => $request->location,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
+            // 'latitude' => $request->latitude,
+            // 'longitude' => $request->longitude,
             'description'=> $request->description,
             'display_name' => $request->display_name,
-            'cuisine_id' => $request->cuisine_id,
-            'banner_url' => $bannerPath,
-            'logo_url' => $logoPath
+            'bank_swift_code' => $request->bank_swift_code,
+            'account_name' => $request->account_name,
+            'account_number' => $request->account_number,
+            'opening_time' => $request->opening_time,
+            'closing_time' => $request->closing_time,
+            'reservation_price' => $request->reservation_price,
+            'bank_name' => $request->bank_name
         ]);
 
         return response()->json('Place updated', 200);

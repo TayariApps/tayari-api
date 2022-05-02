@@ -18,7 +18,7 @@ class OrderController extends Controller
     }
 
     public function placeOrders($id){
-        $orders = Order::where('place_id', $id)->get();
+        $orders = Order::where('place_id', $id)->with(['customer', 'drinks', 'food','table'])->get();
         return \response()->json($orders,200);
     }
 

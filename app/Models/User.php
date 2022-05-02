@@ -52,4 +52,8 @@ class User extends Authenticatable
     public function places(){
         return $this->hasMany(Place::class,'owner_id','id');
     }
+
+    public function orders(){
+        return $this->hasMany(Order::class,'customer_id','id');
+    }
 }

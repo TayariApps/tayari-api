@@ -29,7 +29,8 @@ class ReviewController extends Controller
                             'reviews.id as id',
                             'users.name as name',
                             'reviews.content as content',
-                            'reviews.rating as rating'
+                            'reviews.rating as rating',
+                            'reviews.created_at as date'
                             )->get();
 
         return \response()->json($reviews,200);
