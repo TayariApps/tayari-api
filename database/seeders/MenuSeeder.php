@@ -19,9 +19,11 @@ class MenuSeeder extends Seeder
             'description' => 'Chicken with cheese and vegetable salad',
             'size' => 'Large',
             'type_id' => 1,
+            'place_id' => 1,
             'banner' => 'burgerimage.jpeg',
             'price' => 10000,
-            'time_takes_to_make' => 15
+            'time_takes_to_make' => 15,
+            'ingredients' => 'burger'
         ]);
 
         Menu::create([
@@ -31,7 +33,9 @@ class MenuSeeder extends Seeder
             'type_id' => 2,
             'banner' => 'burgerimage.jpeg',
             'price' => 10000,
-            'time_takes_to_make' => 15
+            'place_id' => 1,
+            'time_takes_to_make' => 15,
+            'ingredients' => 'burger'
         ]);
 
         Menu::create([
@@ -41,7 +45,9 @@ class MenuSeeder extends Seeder
             'type_id' => 2,
             'banner' => 'burgerimage.jpeg',
             'price' => 10000,
-            'time_takes_to_make' => 15
+            'place_id' => 1,
+            'time_takes_to_make' => 15,
+            'ingredients' => 'burger'
         ]);
     }
 }

@@ -16,7 +16,6 @@ class CreateTypesTable extends Migration
         Schema::create('types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('place_id')->constrained();
             $table->timestamps();
         });
     }
