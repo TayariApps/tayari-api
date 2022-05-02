@@ -18,7 +18,7 @@ class OrderController extends Controller
     }
 
     public function placeOrders($id){
-        $orders = Order::where('place_id', $id)->with(['customer', 'drinks', 'food','table'])->get();
+        $orders = Order::where('place_id', $id)->with(['customer', 'drinks', 'food','table'])->withCount('food')->get();
         return \response()->json($orders,200);
     }
 
@@ -54,6 +54,7 @@ class OrderController extends Controller
         $table = Table::where('id', $cont->table_id)->first();
 
         $cost = 0.00;
+        $productTotal = 0;
 
         $order = Order::create([
             'table_id' => $table->id,
@@ -76,6 +77,8 @@ class OrderController extends Controller
                 $drinkstock->update([
                     'quantity' => $drinkstock->quantity - $drink->quantity
                 ]);
+
+                $productTotal += $drink->quantity;
             }
 
             foreach ($cont->drinks as $drink) {
@@ -97,20 +100,21 @@ class OrderController extends Controller
         }
         
         foreach ($cont->foods as $item) {
-            OrderItem::create([
+            $orderItem = OrderItem::create([
                 'menu_id' => $item->id, 
                 'order_id' => $order->id, 
                 'quantity' => $item->quantity, 
-                'cost' => $item->price
+                'cost' => $item->price * $item->quantity
             ]);
 
-            $cost += $item->price;
+            $cost += $orderItem->cost;
+            $productTotal += $orderItem->quantity;
         }
 
         $order->update([
             'cost' => $cost,
             'total_cost' => $cost,
-            'product_total' => count($cont->foods)
+            'product_total' => $productTotal
         ]);
 
         $newOrder = Order::where('id', $order->id)->with(['food','drinks','table.place'])->first();

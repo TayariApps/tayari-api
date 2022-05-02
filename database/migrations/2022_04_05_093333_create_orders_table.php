@@ -28,7 +28,7 @@ class CreateOrdersTable extends Migration
             $table->integer('discount_percentage')->default(0);
             $table->float('discount_value', 8,2)->nullable();
             $table->boolean('payment_status')->default(false);
-            $table->integer('payment_method')->nullable();
+            $table->integer('payment_method')->nullable(); //1 -->cash, 2-->mobile
             $table->boolean('has_offer')->default(false);
             $table->boolean('review_done')->default(false);
             $table->integer('type'); //1--> pre-order, 2--> dine-in , 3-->reservation

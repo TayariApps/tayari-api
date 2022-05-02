@@ -82,7 +82,7 @@ Route::prefix('v1')->group(function(){
             Route::post('store',[PlaceController::class,'store']);
             Route::patch('update/{id}',[PlaceController::class,'update']);
             Route::delete('delete/{id}',[PlaceController::class,'delete']);
-            Route::get('owner',[PlaceController::class,'ownerPlaces']);
+            Route::get('owner/{id}',[PlaceController::class,'ownerPlaces']);
             Route::get('menu/{id}',[PlaceController::class,'placeMenu']);
 
 

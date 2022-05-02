@@ -16,6 +16,11 @@ class PlaceTypeSeeder extends Seeder
     {
         PlaceFoodType::create([
             'place_id' => 1,
+            'type_id' => 1
+        ]);
+        
+        PlaceFoodType::create([
+            'place_id' => 1,
             'type_id' => 2
         ]);
     }

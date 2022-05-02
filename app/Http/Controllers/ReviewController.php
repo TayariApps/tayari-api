@@ -52,7 +52,10 @@ class ReviewController extends Controller
             return \response()->json('Enter all fields',400);
         }
 
-        $checkIfUserAlreadyPosted = Review::where('user_id', $request->user()->id)->exists();
+        $checkIfUserAlreadyPosted = Review::where([
+            'user_id' => $request->user()->id,
+            'place_id' => $request->place_id
+            ])->exists();
 
         if($checkIfUserAlreadyPosted){
             return \response()->json('You already reviewed this place',200);
