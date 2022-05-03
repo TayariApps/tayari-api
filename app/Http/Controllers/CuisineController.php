@@ -11,6 +11,13 @@ class CuisineController extends Controller
         return \response()->json(Cuisine::all(), 200);
     }
 
+    public function getPlacesFromCuisine($id){
+
+        $cuisine = Cuisine::where('id',$id)->with('places')->get();
+
+        return \response()->json($cuisine,200);
+    }
+
     public function store(Request $request){
 
         if($request->hasFile('image')){

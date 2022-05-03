@@ -151,6 +151,7 @@ Route::prefix('v1')->group(function(){
 
         Route::prefix('cuisine')->group(function(){
             Route::get('/',[CuisineController::class,'index']);
+            Route::get('place/{id}',[CuisineController::class,'getPlacesFromCuisine']);
             Route::post('store',[CuisineController::class,'store']);
             Route::patch('update/{id}',[CuisineController::class,'update']);
             Route::delete('delete/{id}',[CuisineController::class,'delete']);

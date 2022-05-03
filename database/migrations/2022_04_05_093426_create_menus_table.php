@@ -24,6 +24,7 @@ class CreateMenusTable extends Migration
             $table->float('price', 8,2);
             $table->integer('time_takes_to_make');
             $table->text('ingredients');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
