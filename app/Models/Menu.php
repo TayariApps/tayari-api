@@ -22,4 +22,8 @@ class Menu extends Model
         return $this->belongsToMany(User::class,'food_reviews','menu_id','user_id')->withPivot('content','rating','status', 'is_anonymous');
     }
 
+    public function orders(){
+        return $this->hasMany(OrderItem::class);
+    }
+
 }

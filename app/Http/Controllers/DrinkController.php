@@ -16,7 +16,7 @@ class DrinkController extends Controller
 
         return \response()->json($drinks,200);
     }
-
+    
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required', 

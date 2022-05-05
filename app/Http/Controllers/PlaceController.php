@@ -23,12 +23,18 @@ class PlaceController extends Controller
         $reservations = Reservation::where('place_id', $id)->get();
         $menuItems = Menu::where('place_id',$id)->get();
         $sales = Sale::where('place_id',$id)->get();
+        $mostSold = [];
+
+        if(Menu::where('place_id', $id)->has('orders')->exists()){
+            $mostSold = Menu::where('place_id', $id)->with('orders')->get();
+        }
 
         return response()->json([
             'sales' => $sales,
             'orders' => $orders,
             'reservations' => $reservations,
-            'menuItemsCount' => count($menuItems)
+            'menuItemsCount' => count($menuItems),
+            'mostSold' => $mostSold
         ],200);
     }
 
