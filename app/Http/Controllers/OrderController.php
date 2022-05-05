@@ -54,7 +54,9 @@ class OrderController extends Controller
         $checkIfOrderExists = Order::where('customer_id', $request->user()->id)->exists();
 
         if($checkIfOrderExists){
-            $orders = Order::where('customer_id', $request->user()->id)->with(['food','drinks','table','place'])->get();
+            $orders = Order::where('customer_id', $request->user()->id)->with([
+                'food','drinks','table','place'
+                ])->get();
             return \response()->json($orders,200);
         }
 
@@ -92,7 +94,8 @@ class OrderController extends Controller
             'waiting_time' => $cont->waiting_time,
             'order_created_by' => $request->user()->id,
             'completed_time' => $now->addMinutes($cont->waiting_time)->toDateTimeString(),
-            'type' => $request->type
+            'type' => $request->type,
+            'payment_method' => $request->method //method of payment
         ]);
 
 
@@ -150,7 +153,7 @@ class OrderController extends Controller
             'product_total' => $productTotal
         ]);
 
-        $newOrder = Order::where('id', $order->id)->with(['food','drinks','table.place'])->first();
+        $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place'])->first();
 
         return response()->json($newOrder, 201);
     }
