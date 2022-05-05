@@ -30,6 +30,7 @@ class ReviewController extends Controller
                             'users.name as name',
                             'reviews.content as content',
                             'reviews.rating as rating',
+                            'users.user_image as image',
                             'reviews.created_at as date'
                             )->get();
 
