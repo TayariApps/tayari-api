@@ -34,7 +34,8 @@ class ReservationController extends Controller
             'place_id' => $request->place_id,
             'note' => $request->note,
             'people_count' => $request->person,
-            'time' => \Carbon\Carbon::parse($time)->toDateTimeString()
+            'time' => \Carbon\Carbon::parse($time)->toDateTimeString(),
+            'table_id' => $request->table_id
         ]);
 
         return \response()->json('Reservation added', 200);
