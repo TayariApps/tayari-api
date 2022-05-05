@@ -27,6 +27,17 @@ class ReservationController extends Controller
 
     public function mobileStore(Request $request){
         
+        $time = $request->restaurantDate. ' '.$request->restaurantTime;
+
+        Reservation::create([
+            'user_id' => $request->user()->id,
+            'place_id' => $request->place_id,
+            'note' => $request->note,
+            'people_count' => $request->person,
+            'time' => \Carbon\Carbon::parse($time)->toDateTimeString()
+        ]);
+
+        return \response()->json('Reservation added', 200);
     }
 
    public function restaurantStore(Request $request){
@@ -45,6 +56,7 @@ class ReservationController extends Controller
     $reservation->place_id = $request->place_id;
     $reservation->time = \Carbon\Carbon::parse($request->time)->toDateTimeString(); 
     $reservation->note = $request->note;
+    $reservation->people_count= $request->count;
     $reservation->save();
 
     return \response()->json('Reservation created',201);

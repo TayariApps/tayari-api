@@ -95,7 +95,7 @@ Route::prefix('v1')->group(function(){
             Route::post('restaurantStore',[ReservationController::class,'restaurantStore']);
             Route::post('store',[ReservationController::class,'store']);
             Route::post('user',[ReservationController::class,'getUserReservation']);
-            Route::post('mobile/store',[ReservationController::class,]);
+            Route::post('mobile/store',[ReservationController::class,'mobileStore']);
             Route::patch('update/{id}',[ReservationController::class,'update']);
             Route::delete('delete/{id}',[ReservationController::class,'delete']);
         });
