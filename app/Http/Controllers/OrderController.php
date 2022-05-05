@@ -127,17 +127,21 @@ class OrderController extends Controller
             }
     
         }
-        
-        foreach ($cont->foods as $item) {
-            $orderItem = OrderItem::create([
-                'menu_id' => $item->id, 
-                'order_id' => $order->id, 
-                'quantity' => $item->quantity, 
-                'cost' => $item->price * $item->quantity
-            ]);
 
-            $cost += $orderItem->cost;
-            $productTotal += $orderItem->quantity;
+        if($request->has('foods')){
+
+            foreach ($cont->foods as $item) {
+                $orderItem = OrderItem::create([
+                    'menu_id' => $item->id, 
+                    'order_id' => $order->id, 
+                    'quantity' => $item->quantity, 
+                    'cost' => $item->price * $item->quantity
+                ]);
+    
+                $cost += $orderItem->cost;
+                $productTotal += $orderItem->quantity;
+            }
+
         }
 
         $order->update([
