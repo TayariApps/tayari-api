@@ -54,7 +54,7 @@ class OrderController extends Controller
         $checkIfOrderExists = Order::where('customer_id', $request->user()->id)->exists();
 
         if($checkIfOrderExists){
-            $orders = Order::where('customer_id', $request->user()->id)->with(['food','drinks','table.place'])->get();
+            $orders = Order::where('customer_id', $request->user()->id)->with(['food','drinks','table','place'])->get();
             return \response()->json($orders,200);
         }
 

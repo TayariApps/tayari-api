@@ -27,6 +27,10 @@ class Order extends Model
         return $this->belongsToMany(Menu::class,'order_items','order_id','menu_id')->withPivot('quantity', 'cost');
     }
 
+    public function place(){
+        return $this->belongsTo(Place::class);
+    }
+
     public function drinks(){
         return $this->belongsToMany(Drink::class,'drink_orders','order_id','drink_id')->withPivot('quantity','price');
     }
