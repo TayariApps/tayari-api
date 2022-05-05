@@ -10,6 +10,7 @@ use App\Models\DrinkOrder;
 use App\Models\Table;
 use App\Models\Place;
 use Carbon\Carbon;
+use App\Models\Sale;
 use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
@@ -19,9 +20,24 @@ class OrderController extends Controller
     }
 
     public function restaurantConfirmPayment($id){
-        Order::where('id', $id)->update([
+
+        $order = Order::where('id', $id)->first();
+        
+        $order->update([
             'payment_method' => 1,
             'payment_status' => true
+        ]);
+
+        $time = time();
+
+        Sale::create([
+            'order_id' => $order->id , 
+            'code' => $time, 
+            'amount' => $order->cost, 
+            'reference_id' => $time, 
+            'remarks' => 'Paid with cash', 
+            'type' => 1, 
+            'place_id' => $order->place_id
         ]);
 
         return response()->json('Payment complete',200);

@@ -19,6 +19,7 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\HelpController;
+use App\Http\Controllers\SaleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -171,6 +172,11 @@ Route::prefix('v1')->group(function(){
         Route::prefix('customers')->group(function(){
             Route::get('/',[UserController::class,'getCustomers']);
             Route::get('place/{id}',[UserController::class,'getPlaceCustomers']);
+        });
+
+        Route::prefix('sale')->group(function(){
+            Route::get('/',[SaleController::class,'index']);
+            Route::get('place/{placeID}',[SaleController::class,'place']);
         });
         
 

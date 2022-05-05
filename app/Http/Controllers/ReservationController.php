@@ -21,7 +21,7 @@ class ReservationController extends Controller
     }
 
     public function getUserReservation(Request $request){
-        $reservations = Reservation::where('user_id', $request->user()->id)->get();
+        $reservations = Reservation::where('user_id', $request->user()->id)->with('place')->get();
         return \response()->json($reservations,200);
     }
 

@@ -11,6 +11,9 @@ class SaleController extends Controller
         return \response()->json(Sale::get(),200);
     }
 
+    public function place($placeID){
+        return \response()->json(Sale::where('place_id',$placeID)->get(),200);
+    }
     
 
 }
