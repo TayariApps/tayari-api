@@ -33,7 +33,7 @@ class ReservationController extends Controller
             'user_id' => $request->user()->id,
             'place_id' => $request->place_id,
             'note' => $request->note,
-            'people_count' => $request->person,
+            'people_count' => $request->people_count,
             'time' => \Carbon\Carbon::parse($time)->toDateTimeString(),
             'table_id' => $request->table_id
         ]);

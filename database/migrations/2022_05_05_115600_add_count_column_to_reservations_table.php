@@ -14,7 +14,7 @@ class AddCountColumnToReservationsTable extends Migration
     public function up()
     {
         Schema::table('reservations', function (Blueprint $table) {
-            $table->integer('people_count')->nullable();
+            $table->integer('people_count')->default(0);
         });
     }
 
