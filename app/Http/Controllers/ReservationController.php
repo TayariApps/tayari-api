@@ -20,6 +20,15 @@ class ReservationController extends Controller
         return \response()->json($reservations,200);
     }
 
+    public function getUserReservation(Request $request){
+        $reservations = Reservation::where('user_id', $request->user()->id)->get();
+        return \response()->json($reservations,200);
+    }
+
+    public function mobileStore(Request $request){
+        
+    }
+
    public function restaurantStore(Request $request){
 
     $reservation = new Reservation;

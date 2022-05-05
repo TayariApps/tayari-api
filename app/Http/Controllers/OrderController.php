@@ -9,12 +9,22 @@ use App\Models\DrinkStock;
 use App\Models\DrinkOrder;
 use App\Models\Table;
 use App\Models\Place;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
     public function index(){
         return response()->json(Order::all(),200);
+    }
+
+    public function restaurantConfirmPayment($id){
+        Order::where('id', $id)->update([
+            'payment_method' => 1,
+            'payment_status' => true
+        ]);
+
+        return response()->json('Payment complete',200);
     }
 
     public function placeOrders($id){
@@ -51,6 +61,7 @@ class OrderController extends Controller
         $somedata = file_get_contents("php://input");
         $cont = json_decode($somedata);
 
+        $now = Carbon::now();
         $table = Table::where('id', $cont->table_id)->first();
 
         $cost = 0.00;
@@ -63,6 +74,7 @@ class OrderController extends Controller
             'customer_id' => $cont->customer_id,
             'waiting_time' => $cont->waiting_time,
             'order_created_by' => $request->user()->id,
+            'completed_time' => $now->addMinutes($cont->waiting_time)->toDateTimeString(),
             'type' => $request->type
         ]);
 

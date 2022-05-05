@@ -82,7 +82,7 @@ Route::prefix('v1')->group(function(){
             Route::post('store',[PlaceController::class,'store']);
             Route::patch('update/{id}',[PlaceController::class,'update']);
             Route::delete('delete/{id}',[PlaceController::class,'delete']);
-            Route::get('owner/{id}',[PlaceController::class,'ownerPlaces']);
+            Route::post('owner',[PlaceController::class,'ownerPlaces']);
             Route::get('menu/{id}',[PlaceController::class,'placeMenu']);
 
 
@@ -94,6 +94,8 @@ Route::prefix('v1')->group(function(){
             Route::get('place/{id}',[ReservationController::class,'getPlaceReservations']);
             Route::post('restaurantStore',[ReservationController::class,'restaurantStore']);
             Route::post('store',[ReservationController::class,'store']);
+            Route::post('user',[ReservationController::class,'getUserReservation']);
+            Route::post('mobile/store',[ReservationController::class,]);
             Route::patch('update/{id}',[ReservationController::class,'update']);
             Route::delete('delete/{id}',[ReservationController::class,'delete']);
         });
@@ -142,6 +144,7 @@ Route::prefix('v1')->group(function(){
             Route::get('user',[OrderController::class,'userOrders']);
             Route::get('place/{id}',[OrderController::class,'placeOrders']);
             Route::post('store',[OrderController::class,'store']);
+            Route::get('restaurantConfirmPayment/{id}',[OrderController::class,'restaurantConfirmPayment']);
         });
 
         Route::prefix('delivery')->group(function(){

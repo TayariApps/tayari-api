@@ -33,8 +33,9 @@ class PlaceController extends Controller
         return \response()->json(Place::where('id', $id)->first(),200);
     }
 
-    public function ownerPlaces($id){
-        $places  = Place::where('owner_id', $id)->with('country')->get();
+    public function ownerPlaces(Request $request){
+
+        $places  = Place::where('owner_id', $request->user()->id)->with('country')->get();
         return \response()->json($places,200);
     }
 
