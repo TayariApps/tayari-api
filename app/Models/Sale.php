@@ -11,7 +11,7 @@ class Sale extends Model
 
     protected $fillable = [
         'order_id', 'delivery_id', 'code', 'amount', 
-        'reference_id', 'remarks', 'type', 'phone_number', 'place_id'
+        'reference_id', 'remarks', 'type', 'phone_number', 'place_id', 'paid'
     ];
 
     public function order(){

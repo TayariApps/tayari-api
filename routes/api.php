@@ -177,6 +177,8 @@ Route::prefix('v1')->group(function(){
         Route::prefix('sale')->group(function(){
             Route::get('/',[SaleController::class,'index']);
             Route::get('place/{placeID}',[SaleController::class,'place']);
+            Route::post('mobilePayment', [SalesController::class,'mobilePayment']);
+            Route::post('mobileCallback',[SalesController::class,'mobileCallback']);
         });
         
 

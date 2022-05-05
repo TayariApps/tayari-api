@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Reservation;
 use App\Models\DrinkType;
 use App\Models\Menu;
+use App\Models\Sale;
 use Illuminate\Support\Facades\Validator;
 
 class PlaceController extends Controller
@@ -21,8 +22,10 @@ class PlaceController extends Controller
         $orders = Order::where('place_id', $id)->withCount('food')->get();
         $reservations = Reservation::where('place_id', $id)->get();
         $menuItems = Menu::where('place_id',$id)->get();
+        $sales = Sale::where('place_id',$id)->get();
 
         return response()->json([
+            'sales' => $sales,
             'orders' => $orders,
             'reservations' => $reservations,
             'menuItemsCount' => count($menuItems)
@@ -141,14 +144,22 @@ class PlaceController extends Controller
         if(Place::where('id', $id)->with([
             'types.menus'
             ])->exists()){
-                $place = Place::where('id', $id)->with([
-                    'types.menus'
-                    ])->first();
+
+                $place = Place::where('id', $id)->with('types.menus', function($q) use ($id){
+
+                    $q->where('menus.place_id', '=', $id);
+
+                })->first();
 
                 $food = $place->types;
+
+
             } else{
                 $food = [];
             }
+
+
+
 
         if(DrinkType::has('drinks.places','=',$id)->exists()){
             $drinks = DrinkType::has('drinks.places','=',$id)->with('drinks.stocks')->get();
