@@ -147,25 +147,12 @@ class PlaceController extends Controller
 
     public function placeMenu(Request $request, $id){
 
-        if(Place::where('id', $id)->with([
-            'types.menus'
-            ])->exists()){
-
-                $place = Place::where('id', $id)->with('types.menus', function($q) use ($id){
-
-                    $q->where('menus.place_id', '=', $id);
-
-                })->first();
-
-                $food = $place->types;
-
-
-            } else{
-                $food = [];
-            }
-
-
-
+        if(Place::where('id', $id)->has('types')->exists()){
+            $place = Place::where('id', $id)->with('types')->get();
+            $food = $place->types;
+        } else{
+            $food = [];
+        }
 
         if(DrinkType::has('drinks.places','=',$id)->exists()){
             $drinks = DrinkType::has('drinks.places','=',$id)->with('drinks.stocks')->get();
@@ -183,6 +170,5 @@ class PlaceController extends Controller
         Place::where('id', $id)->delete();
         return response()->json('Place deleted',200);
     }
-
 
 }

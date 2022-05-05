@@ -24,6 +24,7 @@ class CreateReservationsTable extends Migration
             $table->dateTime('time');
             $table->text('note')->nullable();
             $table->boolean('arrived')->default(false);
+            $table->integer('people_count')->default(0);
             $table->timestamps();
         });
     }

@@ -24,6 +24,7 @@ class CreateSalesTable extends Migration
             $table->text('remarks')->nullable();
             $table->integer('type'); //1-->cash, 2-->mobile
             $table->string('phone_number')->nullable();
+            $table->boolean('paid')->default(false);
             $table->timestamps();
         });
     }

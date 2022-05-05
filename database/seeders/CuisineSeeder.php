@@ -15,17 +15,32 @@ class CuisineSeeder extends Seeder
     public function run()
     {
         Cuisine::create([
-            'name' => 'Seafood',
+            'name' => 'Swahili & African',
             'image' => 'image'
         ]);
 
         Cuisine::create([
-            'name' => 'Indian',
+            'name' => 'Far East Cuisine',
             'image' => 'image'
         ]);
 
         Cuisine::create([
-            'name' => 'Ethiopean',
+            'name' => 'Asian Cuisine',
+            'image' => 'image'
+        ]);
+
+        Cuisine::create([
+            'name' => 'European Cuisine',
+            'image' => 'image'
+        ]);
+
+        Cuisine::create([
+            'name' => 'Fast Foods',
+            'image' => 'image'
+        ]);
+
+        Cuisine::create([
+            'name' => 'Cafes & Pastries',
             'image' => 'image'
         ]);
     }

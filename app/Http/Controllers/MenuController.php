@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Menu;
-use App\Models\PlaceFoodType;
 use App\Models\Place;
 use Illuminate\Support\Facades\Validator;
 
@@ -51,11 +50,6 @@ class MenuController extends Controller
             'place_id' => $request->place_id,
             'type_id' => $request->type_id,
             'ingredients' => $request->ingredients
-        ]);
-
-        PlaceFoodType::firstOrCreate([
-            'place_id' => $menu->place_id,
-            'type_id' => $menu->type_id
         ]);
 
         return \response()->json('Menu created',200);

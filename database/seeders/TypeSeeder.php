@@ -15,11 +15,13 @@ class TypeSeeder extends Seeder
     public function run()
     {
         Type::create([
-            'name' => 'Salads'
+            'name' => 'Salads',
+            'place_id' => 1
         ]); 
         
         Type::create([
-            'name' => 'Burgers'
+            'name' => 'Burgers',
+            'place_id' => 1
         ]); 
     }
 }

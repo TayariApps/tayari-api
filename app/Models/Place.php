@@ -21,9 +21,9 @@ class Place extends Model
         return $this->belongsTo(User::class,'owner_id', 'id');
     }
 
-    // public function menus(){
-    //     return $this->hasMany(Menu::class);
-    // }
+    public function menus(){
+        return $this->hasMany(Menu::class);
+    }
 
     public function cuisine(){
         return $this->belongsTo(Cuisine::class);
@@ -38,14 +38,9 @@ class Place extends Model
     }
 
     public function types(){
-        return $this->belongsToMany(Type::class,'place_food_types','place_id','type_id');
+        return $this->hasMany(Type::class);
     }
 
-    public function typePlaces($placeId){
-        return $this->belongsToMany(Type::class)
-                ->as('place_food_types')
-                ->wherePivot('place_id', $placeId);
-    }
 
     public function orders(){
         return $this->hasMany(Order::class);

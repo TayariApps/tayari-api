@@ -21,6 +21,7 @@ class CreateOrdersTable extends Migration
             $table->foreignId('order_created_by')->constrained('users');
             $table->integer('waiting_time');
             $table->bigInteger('executed_time');
+            $table->dateTime('completed_time');
             $table->float('cost', 8,2)->default(0.00);
             $table->float('total_cost', 8,2)->default(0.00);
             $table->integer('product_total')->default(0);

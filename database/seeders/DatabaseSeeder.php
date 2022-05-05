@@ -24,7 +24,6 @@ class DatabaseSeeder extends Seeder
             DrinkTypeSeeder::class,
             DrinkSeeder::class,
             DrinkStockSeeder::class,
-            PlaceTypeSeeder::class,
         ]);
     }
 }

@@ -35,6 +35,10 @@ class CreatePlacesTable extends Migration
             $table->foreignId('cuisine_id')->constrained();
             $table->boolean('reservation_payable')->default(false);
             $table->integer('reservation_price')->nullable();
+            $table->string('bank_name')->nullable();
+            $table->string('account_name')->nullable();
+            $table->string('account_number')->nullable();
+            $table->string('bank_swift_code')->nullable();
             $table->timestamps();
         });
     }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Type;
 use App\Models\Menu;
-use App\Models\PlaceFoodType;
 use App\Models\Place;
 
 class TypeController extends Controller
@@ -15,10 +14,13 @@ class TypeController extends Controller
     }
 
     public function place($id){
-        $checkIfTypesExist = Place::where('id', $id)->with('types')->exists();
+        $checkIfTypesExist = Place::where('id', $id)->has('types')->exists();
 
         if($checkIfTypesExist){
-           $types = PlaceFoodType::where('place_id', $id)->with('type')->get();
+
+            $place = Place::where('id', $id)->with('types')->get();
+
+           $types = $place->types;
            $food = Menu::where('place_id', $id)->get();
         } else{
             $food = [];
@@ -33,7 +35,8 @@ class TypeController extends Controller
     
     public function store(Request $request){
         Type::create([
-            'name' => $request->name
+            'name' => $request->name,
+            'place_id' => $request->place_id
         ]);
 
         return \response()->json('Type created',201);
