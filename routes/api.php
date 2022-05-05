@@ -142,7 +142,7 @@ Route::prefix('v1')->group(function(){
 
         Route::prefix('order')->group(function(){
             Route::get('/',[OrderController::class,'index']);
-            Route::get('user',[OrderController::class,'userOrders']);
+            Route::post('user',[OrderController::class,'userOrders']);
             Route::get('place/{id}',[OrderController::class,'placeOrders']);
             Route::post('store',[OrderController::class,'store']);
             Route::get('restaurantConfirmPayment/{id}',[OrderController::class,'restaurantConfirmPayment']);

@@ -71,7 +71,9 @@ class AuthController extends Controller
             $imagePath = $request->file('image')->move(public_path('images/profile'), $filename);//image save public folder
         }
 
-        User::where('id', $request->user()->id)->update([
+        $user = User::where('id', $request->user()->id)->first();
+
+        $user->update([
             'user_image' => $filename
         ]);
 
