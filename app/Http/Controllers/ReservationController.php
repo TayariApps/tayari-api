@@ -39,7 +39,7 @@ class ReservationController extends Controller
         $somedata = file_get_contents("php://input");
         $cont = json_decode($somedata);
         
-        $time = $cont->restaurantDate. ' '.$cont->restaurantTime;
+        $time = $cont->reservationDate. ' '.$cont->reservationTime;
 
         $reservation = Reservation::create([
             'user_id' => $request->user()->id,

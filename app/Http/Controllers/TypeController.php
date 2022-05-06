@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Type;
 use App\Models\Menu;
 use App\Models\Place;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class TypeController extends Controller
 {
@@ -40,6 +41,12 @@ class TypeController extends Controller
 
         return \response()->json('Type updated',200);
     }
+
+    public function generateQRCode($id){
+
+        $table = Table::where('id', $id)->with('place')->first();
+
+    }   
 
     public function delete($id){
         Type::where('id', $id)->delete();

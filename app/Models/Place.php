@@ -38,7 +38,7 @@ class Place extends Model
     }
 
     public function types(){
-        return $this->hasMany(Type::class);
+        return $this->hasMany(Type::class,'type_id','id');
     }
 
     public function employees(){
