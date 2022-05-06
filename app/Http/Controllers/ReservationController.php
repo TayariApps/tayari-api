@@ -35,6 +35,42 @@ class ReservationController extends Controller
         return \response()->json($reservations,200);
     }
 
+    public function addItemsToReservation(Request $request){
+
+        $somedata = $request->input();
+        $somedata = file_get_contents("php://input");
+        $cont = json_decode($somedata);
+
+        $reservation = Reservation::where('id', $id)->first();
+
+        if($request->has('food')){
+
+            foreach ($cont->food as $item) {
+                ReservationFood::create([
+                    'menu_id' => $item->id, 
+                    'quantity' => $item->quantity, 
+                    'cost' => $item->price, 
+                    'reservation_id' => $reservation->id
+                ]);
+            } 
+        }
+
+        if($request->has('drinks')){
+                
+            foreach ($cont->drinks as $drink) {
+                ReservationDrink::create([
+                    'drink_id' => $drink->id, 
+                    'reservation_id' => $reservation->id, 
+                    'quantity' => $drink->quantity, 
+                    'cost' => $drink->price
+                ]);
+            }
+
+        }
+
+        return \response()->json('Reservation items added', 200);
+    }
+    
     public function mobileStore(Request $request){
 
         $somedata = $request->input();

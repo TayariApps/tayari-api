@@ -114,6 +114,7 @@ class OrderController extends Controller
             }
 
             foreach ($cont->drinks as $drink) {
+                
                 $drinkstock = DrinkStock::where([
                     'drink_id' => $drink->id, 
                     'place_id' => $table->place_id

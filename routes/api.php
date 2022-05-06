@@ -96,6 +96,7 @@ Route::prefix('v1')->group(function(){
             Route::get('/',[ReservationController::class,'index']);
             Route::get('place/{id}',[ReservationController::class,'getPlaceReservations']);
             Route::post('restaurantStore',[ReservationController::class,'restaurantStore']);
+            Route::post('addItemsToReservation',[ReservationController::class,'addItemsToReservation']);
             Route::post('store',[ReservationController::class,'store']);
             Route::post('user',[ReservationController::class,'getUserReservation']);
             Route::post('mobile/store',[ReservationController::class,'mobileStore']);
