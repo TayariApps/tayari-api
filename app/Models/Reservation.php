@@ -24,4 +24,8 @@ class Reservation extends Model
     public function place(){
         return $this->belongsTo(Place::class);
     }
+
+    public function order(){
+        return $this->hasOne(Order::class);
+    }
 }

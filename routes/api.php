@@ -50,6 +50,8 @@ Route::prefix('v1')->group(function(){
         Route::delete('delete/{id}',[CountryController::class,'delete']);
     });
 
+    Route::post('employeeRegister',[EmployeeController::class,'store']);
+
     Route::middleware('auth:sanctum')->group(function(){
 
         Route::post('updateUser',[AuthController::class,'updateUser']);
@@ -58,9 +60,9 @@ Route::prefix('v1')->group(function(){
 
         Route::prefix('employee')->group(function(){
             Route::get('/',[EmployeeController::class,'index']);
-            Route::post('store',[EmployeeController::class,'store']);
+            // Route::post('store',[EmployeeController::class,'store']);
             Route::get('{place_id}',[EmployeeController::class,'getEmployeesByPlace']);
-            Route::patch('update',[EmployeeController::class,'update']);
+            Route::post('update/{id}',[EmployeeController::class,'update']);
             Route::delete('delete/{id}',[EmployeeController::class,'delete']);
         });
 
@@ -133,10 +135,13 @@ Route::prefix('v1')->group(function(){
 
         Route::prefix('drink')->group(function(){
             Route::get('/', [DrinkController::class,'index']);
+            Route::get('items',[DrinkController::class,'getDrinks']);
             Route::post('store',[DrinkController::class,'store']);
+            Route::get('place/{id}',[DrinkController::class,'place']);
             Route::patch('update',[DrinkController::class,'update']);
             Route::patch('update/stock',[DrinkController::class,'updateStock']);
             Route::patch('addStock',[DrinkController::class,'addStock']);
+            Route::post('createStock',[DrinkController::class,'createStock']);
             Route::delete('delete/{id}',[DrinkController::class,'delete']);
         });
 

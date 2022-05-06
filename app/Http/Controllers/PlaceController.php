@@ -10,6 +10,7 @@ use App\Models\Reservation;
 use App\Models\DrinkType;
 use App\Models\Menu;
 use App\Models\Sale;
+use App\Models\Table;
 use Illuminate\Support\Facades\Validator;
 
 class PlaceController extends Controller
@@ -34,7 +35,9 @@ class PlaceController extends Controller
             'orders' => $orders,
             'reservations' => $reservations,
             'menuItemsCount' => count($menuItems),
-            'mostSold' => $mostSold
+            'mostSold' => $mostSold,
+            'tablesCount' => Table::where('place_id', $id)->count(),
+            'typesCount' => Type::where('place_id', $id)->count()
         ],200);
     }
 
@@ -120,7 +123,8 @@ class PlaceController extends Controller
             $bannerPath = $request->file('banner')->move(public_path(), $bannerfilename);//image save public folder
         }
 
-        Place::where('id', $id)->update([
+        $place = Place::where('id', $id)->first();
+        $place->update([
             'name' => $request->name,
             'country_id' => $request->country_id,
             'address' => $request->address,

@@ -14,18 +14,9 @@ class TypeController extends Controller
     }
 
     public function place($id){
-        $checkIfTypesExist = Place::where('id', $id)->has('types')->exists();
 
-        if($checkIfTypesExist){
-
-            $place = Place::where('id', $id)->with('types')->get();
-
-           $types = $place->types;
-           $food = Menu::where('place_id', $id)->get();
-        } else{
-            $food = [];
-            $types = [];
-        }
+        $types = Type::where('place_id', $id)->with('menus')->get();
+        $food = Menu::where('place_id', $id)->get();
 
         return \response()->json([
             'food' => $food,

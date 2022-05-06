@@ -41,6 +41,9 @@ class Place extends Model
         return $this->hasMany(Type::class);
     }
 
+    public function employees(){
+        return $this->hasMany(Employee::class);
+    }
 
     public function orders(){
         return $this->hasMany(Order::class);

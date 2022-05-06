@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Drink;
+use App\Models\Place;
 use App\Models\DrinkStock;
 use App\Models\DrinkType;
 use Illuminate\Support\Facades\Validator;
@@ -15,6 +16,15 @@ class DrinkController extends Controller
         $drinks = DrinkType::with('drinks')->get();
 
         return \response()->json($drinks,200);
+    }
+
+    public function getDrinks(){
+        return \response()->json(Drink::get(),200);
+    }
+
+    public function place($id){
+        $place = Place::where('id', $id)->with('drinks')->first();
+        return response()->json($place->drinks,200);
     }
     
     public function store(Request $request){

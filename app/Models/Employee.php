@@ -12,4 +12,13 @@ class Employee extends Model
     protected $fillable = [
         'place_id', 'user_id', 'role'
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function place(){
+        return $this->belongsTo(Place::class);
+    }
+
 }
