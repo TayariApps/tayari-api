@@ -10,7 +10,7 @@ class Table extends Model
     use HasFactory;
 
     protected $fillable = [
-        'place_id', 'table_name'
+        'place_id', 'table_name','qr_code'
     ];
 
     public function place(){

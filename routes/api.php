@@ -109,6 +109,8 @@ Route::prefix('v1')->group(function(){
             Route::post('store',[TableController::class,'store']);
             Route::patch('update/{id}',[TableController::class,'update']);
             Route::delete('delete/{id}',[TableController::class,'delete']);
+
+            Route::get('qrcode/{id}',[TableController::class,'generateQRCode']);
         });
 
         Route::prefix('menu')->group(function(){
