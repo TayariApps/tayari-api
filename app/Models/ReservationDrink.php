@@ -10,7 +10,7 @@ class ReservationDrink extends Model
     use HasFactory;
 
     protected $fillable = [
-        'drink_id', 'reservation_id', 'quantity', 'price'
+        'drink_id', 'reservation_id', 'quantity', 'cost'
     ];
 
 }
