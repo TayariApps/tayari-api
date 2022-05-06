@@ -52,7 +52,7 @@ class TableController extends Controller
             return response()->json('Please enter all details', 400);
         }
 
-        $table = Table::create([
+        $table = Table::firstOrCreate([
             'place_id' => $request->place_id, 
             'table_name' => $request->table_name
         ]);
@@ -62,7 +62,7 @@ class TableController extends Controller
             ->generate("https://tayari.co.tz|$table->place_id|$table->id", 'images/tables/'.$table->id.$table->place_id.'.svg');
 
         $table->update([
-            'qr_code' => 'images/tables/'.$table->id.$table->place_id.'.svg'
+            'qr_code' => 'images/tables/'.$table->id.'table'.$table->place_id.'.svg'
         ]);
 
         return \response()->json('Table created',201);
