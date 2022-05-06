@@ -25,6 +25,14 @@ class Reservation extends Model
         return $this->belongsTo(Place::class);
     }
 
+    public function food(){
+        return $this->hasMany(ReservationFood::class);
+    }
+
+    public function drinks(){
+        return $this->hasMany(ReservationDrink::class);
+    }
+
     public function order(){
         return $this->hasOne(Order::class);
     }

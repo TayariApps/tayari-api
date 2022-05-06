@@ -58,11 +58,11 @@ class TableController extends Controller
         ]);
 
         \QrCode::size(100)
-            ->format('svg')
-            ->generate("https://tayari.co.tz|$table->place_id|$table->id", 'images/tables/'.$table->id.$table->place_id.'.svg');
+            ->format('svg')->size(200)
+            ->generate("https://tayari.co.tz|$table->place_id|$table->id", "images/tables/$table->id-table-$table->place_id.svg");
 
         $table->update([
-            'qr_code' => 'images/tables/'.$table->id.'table'.$table->place_id.'.svg'
+            'qr_code' => "images/tables/$table->id-table-$table->place_id.svg"
         ]);
 
         return \response()->json('Table created',201);

@@ -10,6 +10,8 @@ use App\Models\DrinkStock;
 use App\Models\DrinkOrder;
 use App\Models\Table;
 use App\Models\Place;
+use App\Models\ReservationFood;
+use App\Models\ReservationDrink;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +31,7 @@ class ReservationController extends Controller
 
     public function getUserReservation(Request $request){
         $reservations = Reservation::where('user_id', $request->user()->id)
-                            ->with('place')->get();
+                            ->with(['place','food','drinks'])->get();
         return \response()->json($reservations,200);
     }
 
@@ -50,80 +52,28 @@ class ReservationController extends Controller
             'table_id' => $cont->table_id
         ]);
 
-        if($request->has('foods') || $request->has('drinks')){
+        if($request->has('foods')){
 
-            $now = Carbon::now();
-            $table = Table::where('id', $cont->table_id)->first();
+            foreach ($cont->foods as $item) {
+                ReservationFood::create([
+                    'menu_id' => $item->id, 
+                    'quantity' => $item->quantity, 
+                    'cost' => $item->price, 
+                    'reservation_id' => $reservation->id
+                ]);
+            } 
+        }
 
-            $cost = 0.00;
-            $productTotal = 0;
-
-            $order = Order::create([
-                'table_id' => $table->id,
-                'place_id' => $request->place_id,
-                'executed_time' => $cont->executed_time,
-                'customer_id' => $cont->customer_id,
-                'waiting_time' => $cont->waiting_time,
-                'order_created_by' => $request->user()->id,
-                'completed_time' => $now->addMinutes($cont->waiting_time)->toDateTimeString(),
-                'type' => $request->type,
-                'payment_method' => $request->method, //method of payment,
-                'reservation_id' => $reservation->id
-            ]);
-
-            if($request->has('drinks')){
-                foreach ($cont->drinks as $drink) {
-                    $drinkstock = DrinkStock::where([
-                        'drink_id' => $drink->id, 
-                        'place_id' => $table->place_id
-                    ])->first();
-    
-                    $drinkstock->update([
-                        'quantity' => $drinkstock->quantity - $drink->quantity
-                    ]);
-    
-                    $productTotal += $drink->quantity;
-                }
-    
-                foreach ($cont->drinks as $drink) {
-                    $drinkstock = DrinkStock::where([
-                        'drink_id' => $drink->id, 
-                        'place_id' => $table->place_id
-                    ])->first();
-        
-                    DrinkOrder::create([
-                        'drink_id' => $drink->id,
-                        'order_id' => $order->id,
-                        'quantity' => $drink->quantity,
-                        'price' => $drinkstock->selling_price
-                    ]);
-        
-                    $cost += $drinkstock->selling_price;
-                }
-        
+        if($request->has('drinks')){
+                
+            foreach ($cont->drinks as $drink) {
+                ReservationDrink::create([
+                    'drink_id' => $drink->id, 
+                    'reservation_id' => $reservation->id, 
+                    'quantity' => $drink->quantity, 
+                    'cost' => $drink->price
+                ]);
             }
-    
-            if($request->has('foods')){
-    
-                foreach ($cont->foods as $item) {
-                    $orderItem = OrderItem::create([
-                        'menu_id' => $item->id, 
-                        'order_id' => $order->id, 
-                        'quantity' => $item->quantity, 
-                        'cost' => $item->price * $item->quantity
-                    ]);
-        
-                    $cost += $orderItem->cost;
-                    $productTotal += $orderItem->quantity;
-                }
-    
-            }
-    
-            $order->update([
-                'cost' => $cost,
-                'total_cost' => $cost,
-                'product_total' => $productTotal
-            ]);    
 
         }
 
