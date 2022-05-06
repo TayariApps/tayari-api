@@ -151,9 +151,9 @@ class PlaceController extends Controller
 
     public function placeMenu(Request $request, $id){
 
-        if(Place::where('id', $id)->has('types')->exists()){
-            $place = Place::where('id', $id)->with('types')->get();
-            $food = $place->types;
+
+        if(Type::where('place_id', $id)->exists()){
+            $food = Type::where('place_id', $id)->with('menus')->get();
         } else{
             $food = [];
         }
