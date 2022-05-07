@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Place;
 use App\Models\User;
+use App\Models\Cuisine;
 
 class DashboardController extends Controller
 {
@@ -16,7 +17,7 @@ class DashboardController extends Controller
     }   
 
     public function getPlaces(){
-        return \response()->json(Place::where('active', true)->get(), 200);
+        return \response()->json(Place::where('active', true)->withAvg('reviewed as reviewAverage', 'rating')->get(), 200);
     }
 
     public function customers(){
@@ -29,5 +30,9 @@ class DashboardController extends Controller
 
     public function owners(){
         return \response()->json(User::where('role',4)->get(),200);
+    }
+
+    public function cuisines(){
+        return \response()->json(Cuisine::get(),200);
     }
 }

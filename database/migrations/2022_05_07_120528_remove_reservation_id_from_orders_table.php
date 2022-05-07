@@ -14,6 +14,7 @@ class RemoveReservationIdFromOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
+            $table->dropForeign(['reservation_id']);
             $table->dropColumn('reservation_id');
         });
     }
