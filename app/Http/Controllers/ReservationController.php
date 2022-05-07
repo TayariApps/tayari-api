@@ -37,11 +37,30 @@ class ReservationController extends Controller
         return \response()->json($reservation,200);
     }
 
+    public function deleteFoodFromReservation(Request $request){
+        ReservationFood::where([
+            'reservation_id' => $request->reservation_id,
+            'menu_id' => $request->menu_id
+            ])->delete();
+
+            return \response()->json('Food removed from reservation',200);
+    }
+
+    public function deleteDrinkFromReservation(Request $request){
+        ReservationDrink::where([
+            'reservation_id' => $request->reservation_id,
+            'drink_id' => $request->drink_id
+        ])->delete();
+
+        return \response()->json('Drink removed from reservation',200);
+    }
+
     public function getUserReservation(Request $request){
         $reservations = Reservation::where('user_id', $request->user()->id)
                             ->with(['place','food.menu','drinks.drink'])->get();
         return \response()->json($reservations,200);
     }
+
 
     public function addItemsToReservation(Request $request){
 

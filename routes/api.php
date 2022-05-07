@@ -103,6 +103,9 @@ Route::prefix('v1')->group(function(){
             Route::post('mobile/store',[ReservationController::class,'mobileStore']);
             Route::patch('update/{id}',[ReservationController::class,'update']);
             Route::delete('delete/{id}',[ReservationController::class,'delete']);
+
+            Route::post('deleteFoodFromReservation',[ReservationController::class,'deleteFoodFromReservation']);
+            Route::post('deleteDrinkFromReservation',[ReservationController::class,'deleteDrinkFromReservation']);
         });
 
         Route::prefix('table')->group(function(){
