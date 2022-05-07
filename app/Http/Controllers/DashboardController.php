@@ -7,6 +7,7 @@ use App\Models\Place;
 use App\Models\User;
 use App\Models\Cuisine;
 use App\Models\Drink;
+use App\Models\Country;
 
 class DashboardController extends Controller
 {
@@ -40,4 +41,9 @@ class DashboardController extends Controller
     public function drinks(){
         return \response()->json(Drink::get(),200);
     }
+
+    public function countries(){
+        return \response()->json(Country::get(),200);
+    }
+
 }

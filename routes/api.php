@@ -59,6 +59,7 @@ Route::prefix('v1')->group(function(){
         Route::get('waiters',[DashboardController::class,'waiters']);
         Route::get('cuisines',[DashboardController::class,'cuisines']);
         Route::get('drinks',[DashboardController::class,'drinks']);
+        Route::get('countries',[DashboardController::class,'countries']);
     });
 
     Route::post('employeeRegister',[EmployeeController::class,'store']);
