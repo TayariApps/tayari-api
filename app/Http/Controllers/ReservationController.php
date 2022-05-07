@@ -24,7 +24,7 @@ class ReservationController extends Controller
 
     public function getPlaceReservations($id){
         $reservations = Reservation::where('place_id', $id)->with([
-            'user','order','order.food', 'order.drinks'
+            'user','food.menu', 'drinks.drink'
             ])->get();
         return \response()->json($reservations,200);
     }

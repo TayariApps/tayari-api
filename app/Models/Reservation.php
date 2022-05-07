@@ -33,7 +33,4 @@ class Reservation extends Model
         return $this->hasMany(ReservationDrink::class);
     }
 
-    public function order(){
-        return $this->hasOne(Order::class);
-    }
 }
