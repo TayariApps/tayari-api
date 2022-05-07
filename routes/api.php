@@ -94,6 +94,7 @@ Route::prefix('v1')->group(function(){
 
         Route::prefix('reservation')->group(function(){
             Route::get('/',[ReservationController::class,'index']);
+            Route::get('{id}',[ReservationController::class,'getReservationData']);
             Route::get('place/{id}',[ReservationController::class,'getPlaceReservations']);
             Route::post('restaurantStore',[ReservationController::class,'restaurantStore']);
             Route::post('addItemsToReservation',[ReservationController::class,'addItemsToReservation']);
