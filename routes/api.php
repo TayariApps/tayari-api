@@ -73,6 +73,7 @@ Route::prefix('v1')->group(function(){
 
         Route::prefix('review')->group(function(){
             Route::get('places', [ReviewController::class,'placeReviews']);
+            Route::get('topreviews',[ReviewController::class,'bestReviewedPlaces']);
             Route::get('menus',[ReviewController::class,'menuReviews']);
             Route::post('place/store',[ReviewController::class,'storePlaceReview']);
             Route::post('menu/store',[ReviewController::class,'storeFoodReview']);

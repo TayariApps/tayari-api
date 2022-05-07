@@ -34,4 +34,8 @@ class Order extends Model
     public function drinks(){
         return $this->belongsToMany(Drink::class,'drink_orders','order_id','drink_id')->withPivot('quantity','price');
     }
+
+    public function reservation(){
+        return $this->belongsToMany(Reservation::class,'order_reservations','order_id','reservation_id');
+    }
 }

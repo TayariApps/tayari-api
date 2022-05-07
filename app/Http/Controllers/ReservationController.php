@@ -61,7 +61,6 @@ class ReservationController extends Controller
         return \response()->json($reservations,200);
     }
 
-
     public function addItemsToReservation(Request $request){
 
         $somedata = $request->input();

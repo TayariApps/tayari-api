@@ -18,6 +18,14 @@ class ReviewController extends Controller
         return response()->json(FoodReview::get(),200);
     }
 
+    public function bestReviewedPlaces(){
+        $data = Review::select(DB::raw('place_id, AVG(rating) as ratingavg'))
+            ->groupBy('place_id')
+            ->orderBy('ratingavg', 'DESC')->get();
+
+        return \response()->json($data,200);
+    }
+
     public function getPlaceReview($placeID){
 
         $reviews = DB::table('reviews')
