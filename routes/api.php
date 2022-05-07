@@ -53,6 +53,7 @@ Route::prefix('v1')->group(function(){
 
     Route::prefix('admin')->group(function(){
         Route::get('cardCount',[DashboardController::class,'getCardCount']);
+        Route::get('places',[DashboardController::class,'getPlaces']);
     });
 
     Route::post('employeeRegister',[EmployeeController::class,'store']);

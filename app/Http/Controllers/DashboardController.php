@@ -14,4 +14,8 @@ class DashboardController extends Controller
             'customers' => User::where('role',3)->count() 
         ]);
     }   
+
+    public function getPlaces(){
+        return \response()->json(Place::where('active', true)->get(), 200);
+    }
 }
