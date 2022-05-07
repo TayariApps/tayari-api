@@ -13,4 +13,8 @@ class ReservationDrink extends Model
         'drink_id', 'reservation_id', 'quantity', 'cost'
     ];
 
+
+    public function drink(){
+        return $this->belongsTo(Drink::class);
+    }
 }

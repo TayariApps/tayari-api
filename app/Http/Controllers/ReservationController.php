@@ -31,7 +31,7 @@ class ReservationController extends Controller
 
     public function getReservationData($id){
         $reservation = Reservation::where('id', $id)->with([
-            'place', 'food', 'drinks'
+            'place', 'food.menu', 'drinks.drink'
         ])->first();
 
         return \response()->json($reservation,200);

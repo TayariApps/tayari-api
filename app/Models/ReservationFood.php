@@ -12,4 +12,8 @@ class ReservationFood extends Model
     protected $fillable = [
         'menu_id', 'quantity', 'cost', 'reservation_id'
     ];
+
+    public function menu(){
+        return $this->belongsTo(Menu::class);
+    }
 }
