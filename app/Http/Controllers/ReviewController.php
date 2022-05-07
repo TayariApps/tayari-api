@@ -20,8 +20,8 @@ class ReviewController extends Controller
 
     public function bestReviewedPlaces(){
         $data = \App\Models\Place::has('reviewed')
-                    ->withAvg('reviewed as placeReview', 'rating')
-                    ->orderBy('placeReview', 'DESC')->take(4)->get();
+                    ->withAvg('reviewed as reviewAverage', 'rating')
+                    ->orderBy('reviewAverage', 'DESC')->take(4)->get();
         return \response()->json($data,200);
     }
 
