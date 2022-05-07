@@ -20,6 +20,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,10 @@ Route::prefix('v1')->group(function(){
         Route::post('store',[CountryController::class,'store']);
         Route::patch('update/{id}',[CountryController::class,'update']);
         Route::delete('delete/{id}',[CountryController::class,'delete']);
+    });
+
+    Route::prefix('admin')->group(function(){
+        Route::get('cardCount',[DashboardController::class,'getCardCount']);
     });
 
     Route::post('employeeRegister',[EmployeeController::class,'store']);
