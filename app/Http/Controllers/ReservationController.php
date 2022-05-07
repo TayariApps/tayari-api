@@ -41,7 +41,7 @@ class ReservationController extends Controller
         $somedata = file_get_contents("php://input");
         $cont = json_decode($somedata);
 
-        $reservation = Reservation::where('id', $reservation_id)->first();
+        $reservation = Reservation::where('id', $request->reservation_id)->first();
 
         if($request->has('food')){
 
