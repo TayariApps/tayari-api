@@ -53,6 +53,10 @@ class Place extends Model
         return $this->belongsToMany(Drink::class,'drink_stocks','place_id','drink_id')->withPivot('quantity', 'buying_price', 'selling_price');
     }
 
+    public function reviewed(){
+        return $this->hasMany(Review::class,'place_id','id');
+    }
+
     public function reviews(){
         return $this->belongsToMany(User::class,'reviews','place_id','user_id')->withPivot('content','rating','status','is_anonymous');
     }

@@ -19,10 +19,9 @@ class ReviewController extends Controller
     }
 
     public function bestReviewedPlaces(){
-        $data = Review::select(DB::raw('place_id, AVG(rating) as ratingavg'))
-            ->groupBy('place_id')
-            ->orderBy('ratingavg', 'DESC')->get();
-
+        $data = \App\Models\Place::has('reviewed')
+                    ->withAvg('reviewed as placeReview', 'rating')
+                    ->orderBy('placeReview', 'DESC')->take(4)->get();
         return \response()->json($data,200);
     }
 
