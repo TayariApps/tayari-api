@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Place;
 use App\Models\User;
 use App\Models\Cuisine;
+use App\Models\Drink;
 
 class DashboardController extends Controller
 {
@@ -34,5 +35,9 @@ class DashboardController extends Controller
 
     public function cuisines(){
         return \response()->json(Cuisine::get(),200);
+    }
+
+    public function drinks(){
+        return \response()->json(Drink::get(),200);
     }
 }
