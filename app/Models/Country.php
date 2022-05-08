@@ -12,4 +12,8 @@ class Country extends Model
     protected $fillable = [
         'name', 'currency', 'rate'
     ];
+
+    public function places(){
+        return $this->hasMany(Place::class);
+    }
 }

@@ -43,7 +43,7 @@ class DashboardController extends Controller
     }
 
     public function countries(){
-        return \response()->json(Country::get(),200);
+        return \response()->json(Country::with('places')->get(),200);
     }
 
 }

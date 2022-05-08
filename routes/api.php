@@ -171,6 +171,7 @@ Route::prefix('v1')->group(function(){
             Route::get('place/{id}',[OrderController::class,'placeOrders']);
             Route::post('store',[OrderController::class,'store']);
             Route::get('restaurantConfirmPayment/{id}',[OrderController::class,'restaurantConfirmPayment']);
+            Route::post('updateStatus',[OrderController::class,'changeStatus']);
         });
 
         Route::prefix('delivery')->group(function(){

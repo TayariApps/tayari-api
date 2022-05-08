@@ -32,6 +32,7 @@ class PlaceController extends Controller
 
         return response()->json([
             'sales' => $sales,
+            'types' => Type::where('place_id',$id)->withCount('menus')->get(),
             'orders' => $orders,
             'reservations' => $reservations,
             'menuItemsCount' => count($menuItems),

@@ -64,6 +64,16 @@ class OrderController extends Controller
        
     }
 
+    public function changeStatus(Request $request){
+        $order = Order::where('id', $request->order_id)->first();
+
+        $order->update([
+            'status' => $request->status
+        ]);
+
+        return \response()->json('Order status updated',200);
+    }
+
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
             'table_id' => 'required', 
@@ -114,7 +124,7 @@ class OrderController extends Controller
             }
 
             foreach ($cont->drinks as $drink) {
-                
+
                 $drinkstock = DrinkStock::where([
                     'drink_id' => $drink->id, 
                     'place_id' => $table->place_id

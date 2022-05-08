@@ -64,6 +64,57 @@ class AuthController extends Controller
         return \response()->json('User updated', 200);
     }
 
+    public function waiterRegistration(Request $request){
+        $validator = Validator::make($request->all(), [
+            'phone' => 'required',
+            'password' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json('Please enter all details', 400);
+        }
+
+        $user = User::where([
+            'phone' => $request->phone,
+            ])->first();
+
+            if (! $user || ! Hash::check($request->password, $user->password)) {
+                $user = User::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'country_id' => null,
+                    'phone' => null,
+                    'role' => 2,
+                    'region_id' => null,
+                    'district_id' => null
+                ]);
+             }
+
+        if (!$user) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'country_id' => null,
+                'phone' => null,
+                'region_id' => null,
+                'district_id' => null
+            ]);
+
+            return response()->json([
+                'status' => 'New',
+                'user' => $user,
+                'token' => $user->createToken(time())->plainTextToken
+            ], 200);
+        }
+     
+        return response()->json([
+            'status' => 'Exists',
+            'user' => $user,
+            'token' => $user->createToken(time())->plainTextToken
+        ], 200);
+
+    }
+
     public function updateProfileImage(Request $request){
         if($request->hasFile('image')){
             $img_ext = $request->file('image')->getClientOriginalExtension();
