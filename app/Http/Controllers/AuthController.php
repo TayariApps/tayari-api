@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Place;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -64,7 +65,8 @@ class AuthController extends Controller
         return \response()->json('User updated', 200);
     }
 
-    public function waiterRegistration(Request $request){
+    public function waiterLogin(Request $request){
+
         $validator = Validator::make($request->all(), [
             'phone' => 'required',
             'password' => 'required',
@@ -76,43 +78,55 @@ class AuthController extends Controller
 
         $user = User::where([
             'phone' => $request->phone,
-            ])->first();
+        ])->first();
 
-            if (! $user || ! Hash::check($request->password, $user->password)) {
-                $user = User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'country_id' => null,
-                    'phone' => null,
-                    'role' => 2,
-                    'region_id' => null,
-                    'district_id' => null
-                ]);
-             }
+        $employee = Employee::where('user_id', $user->id)->first();
 
-        if (!$user) {
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'country_id' => null,
-                'phone' => null,
-                'region_id' => null,
-                'district_id' => null
-            ]);
-
-            return response()->json([
-                'status' => 'New',
-                'user' => $user,
-                'token' => $user->createToken(time())->plainTextToken
-            ], 200);
+        if (! $user || ! Hash::check($request->password, $user->password) || !$employee->status) {
+            return \response()->json('Wrong credentials', 400);
         }
-     
+
         return response()->json([
-            'status' => 'Exists',
             'user' => $user,
             'token' => $user->createToken(time())->plainTextToken
-        ], 200);
+        ], 200);             
+    }
 
+    public function waiterRegistration(Request $request){
+        $validator = Validator::make($request->all(), [
+            'place_id' => 'required', 
+            'name' => 'required', 
+            'phone' => 'required',
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json('Please enter all details', 400);
+        }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+            'role' => 2,
+            'country_id' => null,
+            'region_id' => null,
+            'district_id' => null
+        ]);
+
+        Employee::create([
+            'place_id' => $request->place_id, 
+            'user_id' => $user->id, 
+            'role' => 1
+        ]);
+
+        return response()->json([
+            'user' => $user,
+            'token' => $user->createToken(time())->plainTextToken,
+            'message' => "Waiter created"
+        ],201);
     }
 
     public function updateProfileImage(Request $request){

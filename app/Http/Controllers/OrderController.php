@@ -38,7 +38,8 @@ class OrderController extends Controller
             'remarks' => 'Paid with cash', 
             'type' => 1, 
             'place_id' => $order->place_id,
-            'paid' => true
+            'paid' => true,
+            'status' => 4
         ]);
 
         return response()->json('Payment complete',200);

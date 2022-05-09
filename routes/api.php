@@ -64,6 +64,12 @@ Route::prefix('v1')->group(function(){
 
     Route::post('employeeRegister',[EmployeeController::class,'store']);
 
+    Route::prefix('waiter')->group(function(){
+        Route::post('register',[AuthController::class,'waiterRegistration']);
+        Route::post('login',[AuthController::class,'waiterLogin']);
+        Route::post('statusUpdate',[UserController::class,'updateWaiterStatus']);
+    });
+
     Route::middleware('auth:sanctum')->group(function(){
 
         Route::post('updateUser',[AuthController::class,'updateUser']);
@@ -191,7 +197,7 @@ Route::prefix('v1')->group(function(){
             Route::get('/',[TypeController::class,'index']);
             Route::post('store',[TypeController::class,'store']);
             Route::get('place/{id}',[TypeController::class,'place']);
-            Route::patch('update/{id}',[TypeController::class,'update']);
+            Route::post('update/{id}',[TypeController::class,'update']);
             Route::delete('delete/{id}',[TypeController::class,'delete']);
         });
 
