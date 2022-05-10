@@ -160,6 +160,10 @@ class AuthController extends Controller
         if (! $user || ! Hash::check($request->password, $user->password)) {
            return \response()->json('The credentials are incorrect',400);
         }
+
+        if($user->role != 4){
+            return \response()->json('You are not a restaurant owner',400);
+        }
      
         return \response()->json([
             'token' => $user->createToken(time())->plainTextToken,

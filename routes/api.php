@@ -211,6 +211,7 @@ Route::prefix('v1')->group(function(){
             Route::get('place/{placeID}',[SaleController::class,'place']);
             Route::post('mobilePayment', [SalesController::class,'mobilePayment']);
             Route::post('mobileCallback',[SalesController::class,'mobileCallback']);
+            Route::get('checkOrder/{orderID}',[SaleController::class,'checkOrder']);
         });
         
 

@@ -25,7 +25,8 @@ class OrderController extends Controller
         
         $order->update([
             'payment_method' => 1,
-            'payment_status' => true
+            'payment_status' => true,
+            'status' => 4
         ]);
 
         $time = time();
@@ -39,7 +40,6 @@ class OrderController extends Controller
             'type' => 1, 
             'place_id' => $order->place_id,
             'paid' => true,
-            'status' => 4
         ]);
 
         return response()->json('Payment complete',200);

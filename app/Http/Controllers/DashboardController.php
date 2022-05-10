@@ -8,34 +8,61 @@ use App\Models\User;
 use App\Models\Cuisine;
 use App\Models\Drink;
 use App\Models\Country;
+use App\Models\Sale;
+use App\Models\Employee;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     public function getCardCount(){
         return \response()->json([
             'places' => Place::where('active', true)->count(),
-            'customers' => User::where('role',3)->count() 
+            'customers' => User::where('role',3)->count(),
+            'sales' => Sale::where('paid', true)->sum('amount')
         ]);
     }   
 
     public function getPlaces(){
-        return \response()->json(Place::where('active', true)->withAvg('reviewed as reviewAverage', 'rating')->get(), 200);
+        return \response()->json(
+            DB::table('places')
+                ->leftJoin('users','places.owner_id','=','users.id')
+                ->leftJoin('countries','places.country_id','=','countries.id')
+                ->select(
+                    'places.id as id',
+                    'places.name as name',
+                    'places.active as active',
+                    'countries.name as country',
+                    'users.name as owner'
+                )->get(),
+            200);
     }
 
     public function customers(){
-        return \response()->json(User::where('role',3)->get(),200);
+        return \response()->json(
+            User::where('role',3)->select('id','name','phone','email','created_at')->get()
+            ,200);
     }
 
     public function waiters(){
-        return \response()->json(User::where('role',2)->get(),200);
+        return \response()->json(Employee::where('role',1)->with('user')->get(),200);
     }
 
     public function owners(){
-        return \response()->json(User::where('role',4)->get(),200);
+        return \response()->json(
+            DB::table('users')->where('role','=',4)
+            ->leftJoin('places','users.id','=','places.owner_id')
+            ->select(
+                'users.id',
+                'users.name',
+                'users.email',
+                'users.phone',
+                'places.name as restaurant'
+                )->get()
+            ,200);
     }
 
     public function cuisines(){
-        return \response()->json(Cuisine::get(),200);
+        return \response()->json(Cuisine::select('name','created_at')->get(),200);
     }
 
     public function drinks(){
@@ -43,7 +70,13 @@ class DashboardController extends Controller
     }
 
     public function countries(){
-        return \response()->json(Country::with('places')->get(),200);
+        return \response()->json(Country::withCount('places')->get(),200);
+    }
+
+    public function sales(){
+        return response()->json(
+            Sale::where('paid',true)->with('place')->get()
+        ,200);
     }
 
 }

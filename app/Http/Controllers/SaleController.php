@@ -16,6 +16,16 @@ class SaleController extends Controller
         return \response()->json(Sale::where('place_id',$placeID)->get(),200);
     }
 
+    public function checkOrder($orderID){
+        $sale = Sale::where('order_id', $orderID)->first();
+
+        return \response()->json([
+            'order' => $sale->order,
+            'sale' => $sale
+        ],200);
+        
+    }
+
     public function mobilePayment(Request $request){
 
         $order = Order::where('id', $request->orderID)->first();
