@@ -79,4 +79,8 @@ class DashboardController extends Controller
         ,200);
     }
 
+    public function placesTransactionAmounts(){
+        $sales = Place::whereColumn('buy_invoices.id','buy_invoice_id')->sum('weight');
+    }
+
 }

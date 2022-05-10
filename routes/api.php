@@ -63,6 +63,8 @@ Route::prefix('v1')->group(function(){
         Route::get('sales',[DashboardController::class,'sales']);
     });
 
+    Route::post('sale/mobileCallback',[SaleController::class,'mobileCallback']);
+
     Route::post('employeeRegister',[EmployeeController::class,'store']);
 
     Route::prefix('waiter')->group(function(){
@@ -211,7 +213,6 @@ Route::prefix('v1')->group(function(){
             Route::get('/',[SaleController::class,'index']);
             Route::get('place/{placeID}',[SaleController::class,'place']);
             Route::post('mobilePayment', [SaleController::class,'mobilePayment']);
-            Route::post('mobileCallback',[SaleController::class,'mobileCallback']);
             Route::get('checkOrder/{orderID}',[SaleController::class,'checkOrder']);
         });
         
