@@ -34,10 +34,10 @@ class SaleController extends Controller
             'order_id' => $order->id, 
             'code' => $request->ResponseCode, 
             'amount' => $request->amount, 
-            'reference_id' => $request->ResponseID, 
+            'reference_id' => $request->ReferenceID, 
             'type' => 2, 
             'phone_number' => $request->CustomerMSIDN, 
-            'place_id' => $order->id
+            'place_id' => $order->place_id
         ]);
 
         return \response()->json('Response saved', 200);

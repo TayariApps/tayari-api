@@ -60,6 +60,7 @@ Route::prefix('v1')->group(function(){
         Route::get('cuisines',[DashboardController::class,'cuisines']);
         Route::get('drinks',[DashboardController::class,'drinks']);
         Route::get('countries',[DashboardController::class,'countries']);
+        Route::get('sales',[DashboardController::class,'sales']);
     });
 
     Route::post('employeeRegister',[EmployeeController::class,'store']);
