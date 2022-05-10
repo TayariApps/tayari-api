@@ -21,6 +21,7 @@ class Sale extends Model
     public function delivery(){
         return $this->belongsTo(Delivery::class);
     }
+    
 
     public function place(){
         return $this->belongsTo(Place::class);
