@@ -80,7 +80,13 @@ class DashboardController extends Controller
     }
 
     public function placesTransactionAmounts(){
-        $sales = Place::whereColumn('buy_invoices.id','buy_invoice_id')->sum('weight');
+        $sales = Place::withSum([
+            'sales' => function($query){
+                $query->where('sales.paid','=',true);
+            }
+        ], 'amount')->get();
+
+        return response()->json($sales,200);
     }
 
 }

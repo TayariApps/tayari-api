@@ -48,7 +48,12 @@ class SaleController extends Controller
         $checkIfReferenceIDexists = Sale::where('reference_id', $request->ReferenceID)->exists();
 
         if(!$checkIfReferenceIDexists){
-            return;
+            return \response()->json([
+                "ResponseCode" => "BILLER-18-3020-E",
+                "ResponseStatus" => false,
+                "ResponseDescription" => "Callback failed",
+                "Message" => "Reference ID does not exist"
+            ],400);
         }
           
         if($request->Status == true){

@@ -61,6 +61,7 @@ Route::prefix('v1')->group(function(){
         Route::get('drinks',[DashboardController::class,'drinks']);
         Route::get('countries',[DashboardController::class,'countries']);
         Route::get('sales',[DashboardController::class,'sales']);
+        Route::get('placeTransactions',[DashboardController::class,'placesTransactionAmounts']);
     });
 
     Route::post('sale/mobileCallback',[SaleController::class,'mobileCallback']);
