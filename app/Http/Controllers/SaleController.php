@@ -62,13 +62,24 @@ class SaleController extends Controller
         
             $order->update([
                 'payment_method' => 2,
-                'payment_status' => true
+                'payment_status' => true,
+                'status' => 4
             ]);
 
-            return \response()->json('Callback success',200);
+            return \response()->json([
+                "ResponseCode" => "BILLER-18-0000-S",
+                "ResponseStatus" => true,
+                "ResponseDescription" => "Callback successful",
+                "ReferenceID" => $sale->reference_id
+            ],200);
         }
 
-        return \response()->json('Callback failed',400);
+        return \response()->json([
+            "ResponseCode" => "BILLER-18-3020-E",
+            "ResponseStatus" => false,
+            "ResponseDescription" => "Callback failed",
+            "ReferenceID" => $sale->reference_id
+        ],400);
     }
     
 
