@@ -7,6 +7,7 @@ use App\Models\Place;
 use App\Models\User;
 use App\Models\Cuisine;
 use App\Models\Drink;
+use App\Models\DrinkType;
 use App\Models\Country;
 use App\Models\Sale;
 use App\Models\Employee;
@@ -66,7 +67,10 @@ class DashboardController extends Controller
     }
 
     public function drinks(){
-        return \response()->json(Drink::get(),200);
+        return \response()->json([
+            'drinks' => Drink::get(),
+            'types' => DrinkType::get()
+        ],200);
     }
 
     public function countries(){
@@ -81,7 +85,7 @@ class DashboardController extends Controller
 
     public function placesTransactionAmounts(){
         $sales = Place::withSum([
-            'sales' => function($query){
+            'sales as paid_sum' => function($query){
                 $query->where('sales.paid','=',true);
             }
         ], 'amount')->get();

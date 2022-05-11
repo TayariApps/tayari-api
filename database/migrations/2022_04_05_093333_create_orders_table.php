@@ -33,6 +33,7 @@ class CreateOrdersTable extends Migration
             $table->boolean('has_offer')->default(false);
             $table->boolean('review_done')->default(false);
             $table->integer('type'); //1--> pre-order, 2--> dine-in , 3-->reservation
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

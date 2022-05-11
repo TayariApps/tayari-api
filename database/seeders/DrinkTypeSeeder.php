@@ -15,19 +15,35 @@ class DrinkTypeSeeder extends Seeder
     public function run()
     {
         DrinkType::create([
-            'name' => 'soda'
+            'name' => 'Soft Drinks' //1
         ]);
 
         DrinkType::create([
-            'name' => 'water'
+            'name' => 'Water' //2
         ]);
 
         DrinkType::create([
-            'name' => 'local beer'
+            'name' => 'Wines' //3
         ]);
 
         DrinkType::create([
-            'name' => 'imported beer'
+            'name' => 'Beer' //4
+        ]);
+
+        DrinkType::create([
+            'name' => 'Gin & Vodka' //5
+        ]);
+
+        DrinkType::create([
+            'name' => 'Rum & Liqour' //6
+        ]);
+
+        DrinkType::create([
+            'name' => 'Whiskey' //7
+        ]);
+
+        DrinkType::create([
+            'name' => 'Brandy' //8
         ]);
     }   
 }

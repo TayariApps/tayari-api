@@ -22,6 +22,14 @@ class DrinkController extends Controller
         return \response()->json(Drink::get(),200);
     }
 
+    public function storeDrinkType(Request $request){
+        DrinkType::firstOrCreate([
+            'name' => $request->name
+        ]);
+
+        return \response()->json('Drink type created',200);
+    }
+
     public function place($id){
         $place = Place::where('id', $id)->with('drinks')->first();
         return response()->json($place->drinks,200);
@@ -42,7 +50,7 @@ class DrinkController extends Controller
         if($request->hasFile('image')){
             $img_ext = $request->file('image')->getClientOriginalExtension();
             $filename = time() . '.' . $img_ext;
-            $path = $request->file('image')->move(public_path(), $filename);//image save public folder
+            $path = $request->file('image')->move(public_path('images/drinks'), $filename);//image save public folder
         }
 
         Drink::create([

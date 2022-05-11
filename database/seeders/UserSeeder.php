@@ -21,10 +21,10 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'name' => 'Samweli Abdallah', 
-            'email' => 'thetrues.live.co.uk',
+            'name' => 'Kevin Misigaro', 
+            'email' => 'kunbata93@gmail.com',
             'role' => 3,
-            'phone' => '+255712395987',
+            'phone' => '+255782835136',
             'country_id' => 1,
         ]);
     }

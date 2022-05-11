@@ -65,6 +65,9 @@ Route::prefix('v1')->group(function(){
     });
 
     Route::post('sale/mobileCallback',[SaleController::class,'mobileCallback']);
+    Route::post('drink/store',[DrinkController::class,'store']);
+    Route::post('drinktype/store',[DrinkController::class,'storeDrinkType']);
+    Route::post('place/status',[PlaceController::class,'changeStatus']);
 
     Route::post('employeeRegister',[EmployeeController::class,'store']);
 
@@ -166,7 +169,7 @@ Route::prefix('v1')->group(function(){
         Route::prefix('drink')->group(function(){
             Route::get('/', [DrinkController::class,'index']);
             Route::get('items',[DrinkController::class,'getDrinks']);
-            Route::post('store',[DrinkController::class,'store']);
+            
             Route::get('place/{id}',[DrinkController::class,'place']);
             Route::patch('update',[DrinkController::class,'update']);
             Route::patch('update/stock',[DrinkController::class,'updateStock']);

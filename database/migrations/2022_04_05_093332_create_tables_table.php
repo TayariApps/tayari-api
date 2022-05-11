@@ -17,6 +17,7 @@ class CreateTablesTable extends Migration
             $table->id();
             $table->foreignId('place_id')->constrained();
             $table->string('table_name');
+            $table->string('qr_code')->nullable();
             $table->timestamps();
         });
     }

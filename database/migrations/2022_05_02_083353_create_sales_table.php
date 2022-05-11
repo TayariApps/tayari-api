@@ -18,13 +18,14 @@ class CreateSalesTable extends Migration
             $table->foreignId('order_id')->nullable()->constrained();
             $table->foreignId('delivery_id')->nullable()->constrained();
             $table->foreignId('place_id');
-            $table->string('code')->unique();
+            $table->string('code');
             $table->float('amount',10,4);
             $table->string('reference_id')->nullable();
             $table->text('remarks')->nullable();
             $table->integer('type'); //1-->cash, 2-->mobile
             $table->string('phone_number')->nullable();
             $table->boolean('paid')->default(false);
+            $table->boolean('disbursed')->default(false);
             $table->timestamps();
         });
     }

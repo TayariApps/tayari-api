@@ -12,7 +12,7 @@ class Place extends Model
 
     protected $fillable = [
         'name', 'country_id', 'address','owner_id','logo_url',
-        'banner_url', 'policy_url', 'phone_number','email',
+        'banner_url', 'policy_url', 'phone_number','email','active',
         'location','latitude','longitude','description','display_name','cuisine_id',
         'account_name', 'account_number', 'bank_swift_code', 'bank_name'
     ];
@@ -27,6 +27,10 @@ class Place extends Model
 
     public function menus(){
         return $this->hasMany(Menu::class);
+    }
+
+    public function disbursements(){
+        return $this->hasMany(Disbursement::class);
     }
 
     public function cuisine(){

@@ -19,6 +19,16 @@ class PlaceController extends Controller
         return \response()->json(Place::withAvg('reviewed as reviewAverage', 'rating')->get(), 200);
     }
 
+    public function changeStatus(Request $request){
+        $place = Place::where('id', $request->place_id)->first();
+
+        $place->update([
+            'active' => !$place->active
+        ]);
+
+        return response()->json('Place status updated',200);
+    }
+
     public function dashboardData($id){
         $orders = Order::where('place_id', $id)->withCount('food')->get();
         $reservations = Reservation::where('place_id', $id)->get();
