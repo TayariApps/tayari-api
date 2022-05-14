@@ -8,6 +8,7 @@ use App\Models\Type;
 use App\Models\Order;
 use App\Models\Reservation;
 use App\Models\DrinkType;
+use App\Models\DrinkStock;
 use App\Models\Menu;
 use App\Models\Sale;
 use App\Models\Table;
@@ -37,7 +38,7 @@ class PlaceController extends Controller
         $mostSold = [];
 
         if(Menu::where('place_id', $id)->has('orders')->exists()){
-            $mostSold = Menu::where('place_id', $id)->with('orders')->get();
+            $mostSold = Menu::where('place_id', $id)->with('orders')->take(3)->get();
         }
 
         return response()->json([
@@ -161,18 +162,30 @@ class PlaceController extends Controller
 
     public function placeMenu(Request $request, $id){
 
+        if(DrinkStock::where('place_id','=',$id)->where('quantity', '>', 0)->exists()){
 
-        if(Type::where('place_id', $id)->exists()){
+            $drinkTypes = DrinkType::with(['drinks' => function($q) use ($id){
+                $q->whereHas('stocks', function($query) use ($id){
+                    $query->where('place_id', $id);
+                });
+            }])->get();
+    
+            $answer = $drinkTypes->filter(function ($value) {
+                return count($value->drinks) > 0;
+            });
+    
+            $drinks = $answer;
+        }else{
+            $drinks = [];
+        }
+
+        if(Type::where('place_id', $id)->has('menus')->exists()){
             $food = Type::where('place_id', $id)->with('menus')->get();
         } else{
             $food = [];
         }
 
-        if(DrinkType::has('drinks.places','=',$id)->exists()){
-            $drinks = DrinkType::has('drinks.places','=',$id)->with('drinks.stocks')->get();
-        }else{
-            $drinks = [];
-        }
+        
 
         return response()->json([
             'food' => $food,

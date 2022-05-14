@@ -55,6 +55,55 @@ class MenuController extends Controller
         return \response()->json('Menu created',200);
     }
 
+    public function changeStatus($menuID){
+
+        $menu = Menu::where('id', $menuID)->first();
+
+        $menu->update([
+            'status' => !$menu->status
+        ]);
+
+        return \response()->json('Status updated',200);
+
+    }
+
+    public function update(Request $request){
+
+        $menu = Menu::where('id', $request->menu_id)->first();
+
+        if($request->hasFile('banner')){
+            $img_ext = $request->file('banner')->getClientOriginalExtension();
+            $bannerFilename = time() . '.' . $img_ext;
+            $bannerPath = $request->file('banner')->move(public_path('images/food'), $bannerFilename);//image save public folder
+
+            $menu->update([
+                'menu_name' => $request->name, 
+                'description' => $request->description, 
+                // 'size' => $request->size, 
+                'banner' => $bannerFilename,
+                'price' => $request->price, 
+                'time_takes_to_make' => $request->time, 
+                'type_id' => $request->type,
+                'ingredients' => $request->ingredients
+            ]);
+    
+            return \response()->json('Menu updated',200);
+        }
+
+        $menu->update([
+            'menu_name' => $request->name, 
+            'description' => $request->description, 
+            // 'size' => $request->size, 
+            'price' => $request->price, 
+            'time_takes_to_make' => $request->time, 
+            'type_id' => $request->type,
+            'ingredients' => $request->ingredients
+        ]);
+
+        return \response()->json('Menu updated',200);
+
+    }
+
     public function delete($id){
         Menu::where('id',$id)->delete();
         return \response()->json('Food deleted',200);

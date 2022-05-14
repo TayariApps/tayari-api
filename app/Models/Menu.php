@@ -11,7 +11,7 @@ class Menu extends Model
 
     protected $fillable = [
         'menu_name', 'description', 'size', 'type_id', 'banner',
-        'price', 'time_takes_to_make','place_id','ingredients'
+        'price', 'time_takes_to_make','place_id','ingredients','status'
     ];
 
     public function type(){

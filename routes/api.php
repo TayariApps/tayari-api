@@ -61,6 +61,7 @@ Route::prefix('v1')->group(function(){
         Route::get('drinks',[DashboardController::class,'drinks']);
         Route::get('countries',[DashboardController::class,'countries']);
         Route::get('sales',[DashboardController::class,'sales']);
+        Route::get('drinkSales',[DashboardController::class,'drinkOrders']);
         Route::get('placeTransactions',[DashboardController::class,'placesTransactionAmounts']);
     });
 
@@ -148,6 +149,8 @@ Route::prefix('v1')->group(function(){
             Route::get('/',[MenuController::class,'index']);
             Route::get('place/{id}',[MenuController::class,'place']);
             Route::post('store',[MenuController::class, 'store']);
+            Route::post('update',[MenuController::class,'update']);
+            Route::get('changeStatus/{menuID}',[MenuController::class,'changeStatus']);
             Route::delete('delete/{id}',[MenuController::class,'delete']);
         });
 
@@ -172,7 +175,7 @@ Route::prefix('v1')->group(function(){
             
             Route::get('place/{id}',[DrinkController::class,'place']);
             Route::patch('update',[DrinkController::class,'update']);
-            Route::patch('update/stock',[DrinkController::class,'updateStock']);
+            Route::post('update/stock',[DrinkController::class,'updateStock']);
             Route::patch('addStock',[DrinkController::class,'addStock']);
             Route::post('createStock',[DrinkController::class,'createStock']);
             Route::delete('delete/{id}',[DrinkController::class,'delete']);

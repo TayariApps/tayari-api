@@ -26,7 +26,8 @@ class OrderController extends Controller
         $order->update([
             'payment_method' => 1,
             'payment_status' => true,
-            'status' => 4
+            'status' => 4,
+            'paid' => $order->cost
         ]);
 
         $time = time();
@@ -111,7 +112,9 @@ class OrderController extends Controller
 
 
         if($request->has('drinks')){
-            foreach ($cont->drinks as $drink) {
+
+            foreach ($cont->drinks as $drink) { 
+                
                 $drinkstock = DrinkStock::where([
                     'drink_id' => $drink->id, 
                     'place_id' => $table->place_id
@@ -121,16 +124,6 @@ class OrderController extends Controller
                     'quantity' => $drinkstock->quantity - $drink->quantity
                 ]);
 
-                $productTotal += $drink->quantity;
-            }
-
-            foreach ($cont->drinks as $drink) {
-
-                $drinkstock = DrinkStock::where([
-                    'drink_id' => $drink->id, 
-                    'place_id' => $table->place_id
-                ])->first();
-    
                 DrinkOrder::create([
                     'drink_id' => $drink->id,
                     'order_id' => $order->id,
@@ -139,6 +132,7 @@ class OrderController extends Controller
                 ]);
     
                 $cost += $drinkstock->selling_price;
+                $productTotal += $drink->quantity;
             }
     
         }

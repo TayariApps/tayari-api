@@ -68,7 +68,8 @@ class SaleController extends Controller
             $order->update([
                 'payment_method' => 2,
                 'payment_status' => true,
-                'status' => 4
+                'status' => 4,
+                'paid' => $sale->amount
             ]);
 
             return \response()->json([

@@ -83,6 +83,12 @@ class DashboardController extends Controller
         ,200);
     }
 
+    public function drinkOrders(){
+        $drinks = Drink::has('orders')->withSum('orders as total_orders','quantity')->get();
+
+        return \response()->json($drinks, 200);
+    }
+
     public function placesTransactionAmounts(){
         $sales = Place::withSum([
             'sales as paid_sum' => function($query){

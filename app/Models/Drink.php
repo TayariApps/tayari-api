@@ -20,5 +20,9 @@ class Drink extends Model
     public function stocks(){
         return $this->hasOne(DrinkStock::class);
     }
+
+    public function orders(){
+        return $this->hasMany(DrinkOrder::class);
+    }
 }
 
