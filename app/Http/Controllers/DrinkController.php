@@ -64,6 +64,16 @@ class DrinkController extends Controller
     }
 
     public function createStock(Request $request){
+
+        $checkIfStockExists = DrinkStock::where([
+            'place_id' => $request->place_id,
+            'drink_id' => $request->drink_id
+        ])->exists();
+
+        if($checkIfStockExists){
+            return \response()->json('Drink stock already exists',400);
+        }
+
         DrinkStock::create([
             'place_id' => $request->place_id,
             'drink_id' => $request->drink_id,
