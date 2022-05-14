@@ -137,6 +137,7 @@ Route::prefix('v1')->group(function(){
 
         Route::prefix('table')->group(function(){
             Route::get('/',[TableController::class,'index']);
+            Route::get('orders/{placeID}',[TableController::class,'getTableOrders']);
             Route::get('places/{placeID}',[TableController::class,'placeTables']);
             Route::post('store',[TableController::class,'store']);
             Route::patch('update/{id}',[TableController::class,'update']);

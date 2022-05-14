@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Table;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -40,6 +41,14 @@ class TableController extends Controller
         }
 
         return \response()->json([],200);
+    }
+
+    public function getTableOrders($placeID){
+        $tables = Table::where('place_id', $placeID)->with(['orders' => function($q){
+            $q->whereDate('created_at', Carbon::today());
+        }])->get();
+
+        return \response()->json($tables,200);
     }
 
     public function store(Request $request){

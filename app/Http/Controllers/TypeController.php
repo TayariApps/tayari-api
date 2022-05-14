@@ -42,6 +42,13 @@ class TypeController extends Controller
     }  
 
     public function delete($id){
+
+        $checkIfTypeHasMenus = Type::where('id', $id)->has('menus')->exists();
+
+        if($checkIfTypeHasMenus){
+            return \response()->json('Type has food items attached, remove the food item first',400);
+        }
+
         Type::where('id', $id)->delete();
         return \response()->json('Type deleted',200);
     }
