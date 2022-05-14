@@ -82,13 +82,14 @@ class AuthController extends Controller
 
         $employee = Employee::where('user_id', $user->id)->first();
 
-        if (! $user || ! Hash::check($request->password, $user->password) || !$employee->status) {
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             return \response()->json('Wrong credentials', 400);
         }
 
         return response()->json([
             'user' => $user,
             'place_id' => $employee->place_id,
+            'status' => $employee->status,
             'token' => $user->createToken(time())->plainTextToken
         ], 200);             
     }
@@ -104,6 +105,14 @@ class AuthController extends Controller
 
         if($validator->fails()){
             return response()->json('Please enter all details', 400);
+        }
+
+        $checkIfUserExists = User::where([
+            'email' => $request->email,
+        ])->exists();
+
+        if($checkIfUserExists){
+            return \response()->json('User already exists',400);
         }
 
         $user = User::create([
