@@ -13,5 +13,5 @@ class DrinkStock extends Model
         'place_id', 'drink_id', 'quantity', 'buying_price', 'selling_price'
     ];
     
-
+    
 }

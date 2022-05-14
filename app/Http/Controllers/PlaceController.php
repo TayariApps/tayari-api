@@ -164,16 +164,16 @@ class PlaceController extends Controller
 
         if(DrinkStock::where('place_id','=',$id)->where('quantity', '>', 0)->exists()){
 
-            $drinkTypes = DrinkType::with(['drinks' => function($q) use ($id){
+            $drinkTypes = DrinkType::with('drinks.stocks')->with(['drinks' => function($q) use ($id){
                 $q->whereHas('stocks', function($query) use ($id){
                     $query->where('place_id', $id);
                 });
             }])->get();
-    
+
             $answer = $drinkTypes->filter(function ($value) {
                 return count($value->drinks) > 0;
-            });
-    
+            })->values()->all();
+
             $drinks = $answer;
         }else{
             $drinks = [];
@@ -184,8 +184,6 @@ class PlaceController extends Controller
         } else{
             $food = [];
         }
-
-        
 
         return response()->json([
             'food' => $food,
