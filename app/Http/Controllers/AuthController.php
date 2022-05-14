@@ -88,6 +88,7 @@ class AuthController extends Controller
 
         return response()->json([
             'user' => $user,
+            'place_id' => $employee->place_id,
             'token' => $user->createToken(time())->plainTextToken
         ], 200);             
     }
@@ -116,7 +117,7 @@ class AuthController extends Controller
             'district_id' => null
         ]);
 
-        Employee::create([
+        $employee = Employee::create([
             'place_id' => $request->place_id, 
             'user_id' => $user->id, 
             'role' => 1
@@ -125,6 +126,7 @@ class AuthController extends Controller
         return response()->json([
             'user' => $user,
             'token' => $user->createToken(time())->plainTextToken,
+            'place_id' => $employee->place_id,
             'message' => "Waiter created"
         ],201);
     }
