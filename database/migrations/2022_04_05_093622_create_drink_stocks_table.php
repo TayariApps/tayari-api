@@ -17,7 +17,7 @@ class CreateDrinkStocksTable extends Migration
             $table->id();
             $table->foreignId('place_id')->constrained();
             $table->foreignId('drink_id')->constrained();
-            $table->integer('quantity')->constrained();
+            $table->integer('quantity')->default(0);
             $table->float('buying_price',8,2);
             $table->float('selling_price',8,2);
             $table->timestamps();

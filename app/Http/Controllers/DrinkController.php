@@ -77,7 +77,7 @@ class DrinkController extends Controller
         DrinkStock::create([
             'place_id' => $request->place_id,
             'drink_id' => $request->drink_id,
-            'quantity' => $request->quantity,
+            'quantity' => $request->quantity ?? 0,
             'buying_price' => $request->buying_price,
             'selling_price' => $request->selling_price
         ]);

@@ -71,6 +71,7 @@ Route::prefix('v1')->group(function(){
     Route::post('drink/store',[DrinkController::class,'store']);
     Route::post('drinktype/store',[DrinkController::class,'storeDrinkType']);
     Route::post('place/status',[PlaceController::class,'changeStatus']);
+    Route::post('cuisine/store',[CuisineController::class,'store']);
 
     Route::post('employeeRegister',[EmployeeController::class,'store']);
 
@@ -201,7 +202,6 @@ Route::prefix('v1')->group(function(){
         Route::prefix('cuisine')->group(function(){
             Route::get('/',[CuisineController::class,'index']);
             Route::get('place/{id}',[CuisineController::class,'getPlacesFromCuisine']);
-            Route::post('store',[CuisineController::class,'store']);
             Route::patch('update/{id}',[CuisineController::class,'update']);
             Route::delete('delete/{id}',[CuisineController::class,'delete']);
         });
