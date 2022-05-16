@@ -67,9 +67,7 @@ class PlaceController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required', 
             'country_id' => 'required', 
-            'address' => 'required',
-            'logo' => 'required',
-            'banner' => 'required',  
+            'address' => 'required',  
             'phone_number' => 'required',
             'email' => 'required',
             'location' => 'required',
@@ -82,6 +80,15 @@ class PlaceController extends Controller
  
         if ($validator->fails()) {
             return response()->json('Failed to save place', 400);
+        }
+
+        $imageValidator = Validator::make($request->all(), [
+            'logo' => 'required|file|size:3000',
+            'banner' => 'required|file|size:3000',  
+        ]);
+
+        if ($imageValidator->fails()) {
+            return response()->json('Logo or banner size should be below 3 MBs', 400);
         }
 
         if($request->hasFile('logo')){

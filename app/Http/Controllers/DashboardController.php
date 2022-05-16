@@ -88,7 +88,7 @@ class DashboardController extends Controller
             Sale::where([
                 'paid' => true,
                 'type' => 1
-            ])->with('order.customer')->get(), 200
+            ])->with(['order.customer','place'])->get(), 200
             );
     }
 
@@ -97,7 +97,7 @@ class DashboardController extends Controller
             Sale::where([
                 'paid' => true,
                 'type' => 2
-            ])->with('order.customer')->get(), 200
+            ])->with(['order.customer','place'])->get(), 200
             );
     }
 
