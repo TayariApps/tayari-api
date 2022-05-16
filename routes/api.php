@@ -61,6 +61,8 @@ Route::prefix('v1')->group(function(){
         Route::get('drinks',[DashboardController::class,'drinks']);
         Route::get('countries',[DashboardController::class,'countries']);
         Route::get('sales',[DashboardController::class,'sales']);
+        Route::get('cashSales',[DashboardController::class,'cashSales']);
+        Route::get('mobileSales',[DashboardController::class,'mobileSales']);
         Route::get('drinkSales',[DashboardController::class,'drinkOrders']);
         Route::get('placeTransactions',[DashboardController::class,'placesTransactionAmounts']);
     });

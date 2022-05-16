@@ -83,6 +83,24 @@ class DashboardController extends Controller
         ,200);
     }
 
+    public function cashSales(){
+        return \response()->json(
+            Sale::where([
+                'paid' => true,
+                'type' => 1
+            ])->with('order.customer')->get(), 200
+            );
+    }
+
+    public function mobileSales(){
+        return \response()->json(
+            Sale::where([
+                'paid' => true,
+                'type' => 2
+            ])->with('order.customer')->get(), 200
+            );
+    }
+
     public function drinkOrders(){
         $drinks = Drink::has('orders')->withSum('orders as total_orders','quantity')->get();
 
