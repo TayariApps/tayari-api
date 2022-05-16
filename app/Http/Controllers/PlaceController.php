@@ -83,8 +83,8 @@ class PlaceController extends Controller
         }
 
         $imageValidator = Validator::make($request->all(), [
-            'logo' => 'required|file|size:3000',
-            'banner' => 'required|file|size:3000',  
+            'logo' => 'required|file|max:3000',
+            'banner' => 'required|file|max:3000',  
         ]);
 
         if ($imageValidator->fails()) {
