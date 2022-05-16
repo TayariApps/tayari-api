@@ -181,27 +181,28 @@ class PlaceController extends Controller
                 return count($value->drinks) > 0;
             })->values()->all();
 
+            $drinks = $answer;
 
-            $drinks = collect($answer)->map(function($item){
+            // $drinks = collect($answer)->map(function($item){
 
-                $newArr = [];
+            //     $newArr = [];
                 
-                 $newArr['id']= $item->id;
-                 $newArr['name']= $item->name;
-                 $newArr['drinks'] = $item->drinks->map(function($d){
-                    $newArrDrinks = [];
+            //      $newArr['id']= $item->id;
+            //      $newArr['name']= $item->name;
+            //      $newArr['drinks'] = $item->drinks->map(function($d){
+            //         $newArrDrinks = [];
 
-                    $newArrDrinks['name'] = $d->name;
-                    $newArrDrinks['image'] = $d->image;
-                    $newArrDrinks['buying_price'] = $d->stocks->buying_price;
-                    $newArrDrinks['selling_price'] = $d->stocks->selling_price;
-                    $newArrDrinks['quantity'] = $d->stocks->quantity;
+            //         $newArrDrinks['name'] = $d->name;
+            //         $newArrDrinks['image'] = $d->image;
+            //         $newArrDrinks['buying_price'] = $d->stocks->buying_price;
+            //         $newArrDrinks['selling_price'] = $d->stocks->selling_price;
+            //         $newArrDrinks['quantity'] = $d->stocks->quantity;
 
-                    return $newArrDrinks;
-                });
+            //         return $newArrDrinks;
+            //     });
 
-                return $newArr;
-            });
+            //     return $newArr;
+            // });
 
         }else{
             $drinks = [];
