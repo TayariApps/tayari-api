@@ -45,7 +45,9 @@ class DrinkController extends Controller
 
             $drink->update([
                 'name' => $request->name,
-                'image' => $filename
+                'image' => $filename,
+                'volume' => $request->volume, 
+                'type_id' => $request->type
             ]);
 
             return \response()->json('Drink updated',200);
@@ -53,6 +55,8 @@ class DrinkController extends Controller
 
         $drink->update([
             'name' => $request->name,
+            'volume' => $request->volume, 
+            'type_id' => $request->type
         ]);
 
         return \response()->json('Drink updated',200);
