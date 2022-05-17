@@ -76,7 +76,7 @@ Route::prefix('v1')->group(function(){
 
     Route::post('sale/mobileCallback',[SaleController::class,'mobileCallback']);
     Route::post('drink/store',[DrinkController::class,'store']);
-    Route::post('update/{id}',[DrinkController::class,'update']);
+    Route::post('drink/update/{id}',[DrinkController::class,'update']);
     Route::post('drinktype/store',[DrinkController::class,'storeDrinkType']);
     Route::post('place/status',[PlaceController::class,'changeStatus']);
     Route::post('cuisine/store',[CuisineController::class,'store']);
