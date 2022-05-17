@@ -67,6 +67,13 @@ Route::prefix('v1')->group(function(){
         Route::get('placeTransactions',[DashboardController::class,'placesTransactionAmounts']);
     });
 
+    Route::prefix('cuisine')->group(function(){
+        Route::get('/',[CuisineController::class,'index']);
+        Route::get('place/{id}',[CuisineController::class,'getPlacesFromCuisine']);
+        Route::post('update/{id}',[CuisineController::class,'update']);
+        Route::delete('delete/{id}',[CuisineController::class,'delete']);
+    });
+
     Route::post('sale/mobileCallback',[SaleController::class,'mobileCallback']);
     Route::post('drink/store',[DrinkController::class,'store']);
     Route::post('drinktype/store',[DrinkController::class,'storeDrinkType']);
@@ -197,13 +204,6 @@ Route::prefix('v1')->group(function(){
         Route::prefix('delivery')->group(function(){
             Route::get('/',[DeliveryController::class,'index']);
             Route::post('store',[DeliveryController::class,'store']);
-        });
-
-        Route::prefix('cuisine')->group(function(){
-            Route::get('/',[CuisineController::class,'index']);
-            Route::get('place/{id}',[CuisineController::class,'getPlacesFromCuisine']);
-            Route::patch('update/{id}',[CuisineController::class,'update']);
-            Route::delete('delete/{id}',[CuisineController::class,'delete']);
         });
 
         Route::prefix('type')->group(function(){
