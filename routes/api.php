@@ -77,6 +77,7 @@ Route::prefix('v1')->group(function(){
     Route::post('sale/mobileCallback',[SaleController::class,'mobileCallback']);
     Route::post('drink/store',[DrinkController::class,'store']);
     Route::post('drink/update/{id}',[DrinkController::class,'update']);
+    Route::delete('drink/delete/{id}',[DrinkController::class,'delete']);
     Route::post('drinktype/store',[DrinkController::class,'storeDrinkType']);
     Route::post('place/status',[PlaceController::class,'changeStatus']);
     Route::post('cuisine/store',[CuisineController::class,'store']);
@@ -190,7 +191,7 @@ Route::prefix('v1')->group(function(){
             Route::post('update/stock',[DrinkController::class,'updateStock']);
             Route::patch('addStock',[DrinkController::class,'addStock']);
             Route::post('createStock',[DrinkController::class,'createStock']);
-            Route::delete('delete/{id}',[DrinkController::class,'delete']);
+            
         });
 
         Route::prefix('order')->group(function(){
