@@ -34,6 +34,29 @@ class DrinkController extends Controller
         $place = Place::where('id', $id)->with('drinks')->first();
         return response()->json($place->drinks,200);
     }
+
+    public function update(Request $request, $id){
+        $drink = Drink::where('id', $id)->first();
+
+        if($request->hasFile('image')){
+            $img_ext = $request->file('image')->getClientOriginalExtension();
+            $filename = time() . '.' . $img_ext;
+            $path = $request->file('image')->move(public_path('images/drinks'), $filename);//image save public folder
+
+            $drink->update([
+                'name' => $request->name,
+                'image' => $filename
+            ]);
+
+            return \response()->json('Drink updated',200);
+        }
+
+        $drink->update([
+            'name' => $request->name,
+        ]);
+
+        return \response()->json('Drink updated',200);
+    }
     
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
@@ -56,7 +79,7 @@ class DrinkController extends Controller
         Drink::create([
             'name' => $request->name, 
             'volume' => $request->volume, 
-            'image' => $path, 
+            'image' => $filename, 
             'type_id' => $request->type
         ]);
 
