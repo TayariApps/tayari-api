@@ -63,7 +63,7 @@ class DashboardController extends Controller
     }
 
     public function cuisines(){
-        return \response()->json(Cuisine::select('name','created_at')->get(),200);
+        return \response()->json(Cuisine::get(),200);
     }
 
     public function drinks(){

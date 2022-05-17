@@ -23,12 +23,12 @@ class CuisineController extends Controller
         if($request->hasFile('image')){
             $img_ext = $request->file('image')->getClientOriginalExtension();
             $filename = time() . '.' . $img_ext;
-            $path = $request->file('image')->move(public_path(), $filename);//image save public folder
+            $path = $request->file('image')->move(public_path('images/cuisines'), $filename);//image save public folder
         }
 
         Cuisine::create([
             'name' => $request->name,
-            'image' => $path
+            'image' => $filename
         ]);
 
         return \response()->json('Cuisine created', 201);
