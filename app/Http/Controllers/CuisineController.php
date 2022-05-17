@@ -49,7 +49,7 @@ class CuisineController extends Controller
             return \response()->json('Cuisine updated', 200);
         }
 
-        Cuisine::where('id', $id)->create([
+        Cuisine::where('id', $id)->update([
             'name' => $request->name,
         ]);
 
