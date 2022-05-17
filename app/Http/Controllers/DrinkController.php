@@ -57,7 +57,7 @@ class DrinkController extends Controller
             'name' => $request->name, 
             'volume' => $request->volume, 
             'image' => $path, 
-            'type' => $request->type
+            'type_id' => $request->type
         ]);
 
         return response()->json('Drink added',201);
