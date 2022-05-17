@@ -41,7 +41,7 @@ class CuisineController extends Controller
             $filename = time() . '.' . $img_ext;
             $path = $request->file('image')->move(public_path('images/cuisines'), $filename);//image save public folder
 
-            Cuisine::where('id', $id)->create([
+            Cuisine::where('id', $id)->update([
                 'name' => $request->name,
                 'image' => $filename
             ]);
