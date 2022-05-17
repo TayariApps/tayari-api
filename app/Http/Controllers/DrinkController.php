@@ -137,6 +137,6 @@ class DrinkController extends Controller
 
     public function delete($id){
         Drink::where('id', $id)->delete();
-        return respose()->json('Delete drink', 200);
+        return response()->json('Delete drink', 200);
     }
 }
