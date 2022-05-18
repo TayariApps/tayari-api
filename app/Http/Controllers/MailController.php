@@ -26,7 +26,7 @@ class MailController extends Controller
         $mail->Port = 465;                          // port - 587/465
 
         $mail->setFrom('register@tayari.co.tz', 'New Owner Registration');
-        $mail->addAddress('adrian@tayari.co.tz');
+        $mail->addAddress('adrian.nzamba@tayari.co.tz');
 
         $mail->isHTML(true);                // Set email content format to HTML
 
