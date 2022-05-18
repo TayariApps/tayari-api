@@ -290,6 +290,12 @@ class AuthController extends Controller
             return response()->json('Please enter all details', 400);
         }
 
+        $checkIfUserExists = User::where('email', $request->email)->exists();
+
+        if(!$checkIfUserExists){
+            return response()->json('No user with this email address exists',200);
+        }
+
         $token = Str::random(64);
 
         DB::table('password_resets')->insert([
