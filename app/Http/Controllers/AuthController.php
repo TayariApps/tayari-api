@@ -5,9 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Place;
 use App\Models\Employee;
+use App\Models\PasswordReset;
+use Carbon\Carbon; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use App\Http\Controllers\MailController;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -204,6 +209,9 @@ class AuthController extends Controller
             'role' => 4
         ]);
 
+        $mailController = new MailController();
+        $mailController->ownerRegisterMail(null, $user);
+
         return response()->json([
             'user' => $user,
             'token' => $user->createToken(time())->plainTextToken
@@ -230,6 +238,70 @@ class AuthController extends Controller
         ]);
 
         return response()->json($user->createToken(time())->plainTextToken(), 201);
+    }
+
+    public function resetPassword(Request $request){
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            'password' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json('Please enter all details', 400);
+        }
+
+
+        $updatePassword  = DB::table('password_resets')->where([
+            'token' => $request->token
+            ])->whereNull('created_at')
+            ->first();
+
+        if(!$updatePassword ){
+            return response()->json('Invalid token',400);
+        }
+
+        $time = Carbon::now();
+
+        DB::table('password_resets')->where([
+            'token' => $request->token
+            ])->whereNull('created_at')
+            ->update([
+            'created_at' => $time
+        ]);
+
+        $details = PasswordReset::where([
+            'token' => $request->token,
+            'created_at' => $time
+            ])->first();
+
+        User::where('email', $details->email)->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        return \response()->json('Password reset', 200);
+    }
+
+    public function passwordResetRequest(Request $request){
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json('Please enter all details', 400);
+        }
+
+        $token = Str::random(64);
+
+        DB::table('password_resets')->insert([
+            'email' => $request->email, 
+            'token' => $token, 
+          ]);
+
+        $mailController = new MailController();
+        $mailController->passwordResetMail(null, $request->email, $token);
+
+        return response()->json('Mail sent',200);
+
     }
 
     public function logout(Request $request){

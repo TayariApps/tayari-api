@@ -82,6 +82,11 @@ Route::prefix('v1')->group(function(){
     Route::post('place/status',[PlaceController::class,'changeStatus']);
     Route::post('cuisine/store',[CuisineController::class,'store']);
 
+    Route::prefix('password')->group(function(){
+        Route::post('forgot',[AuthController::class,'passwordResetRequest']);
+        Route::post('reset',[AuthController::class,'resetPassword']);
+    });
+
     Route::post('employeeRegister',[EmployeeController::class,'store']);
 
     Route::prefix('waiter')->group(function(){
