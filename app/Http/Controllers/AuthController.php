@@ -52,23 +52,59 @@ class AuthController extends Controller
             $smsController->sendMessage(null, "Your TAYARI OTP is $otp", $user->phone);
 
             return response()->json([
-                'status' => 'New',
-                'user' => $user,
-                'token' => $user->createToken(time())->plainTextToken
+                'exists' => false,
             ], 201);
         }
 
+        UserToken::create([
+            'user_id' => $user->id,
+            'otp' => $otp
+        ]);
+
+        $smsController = new SMSController();
+        $smsController->sendMessage(null, "Your TAYARI OTP is $otp", $user->phone);
+
         return response()->json([
-            'status' => 'Exists',
+            'exists' => true
+        ], 200);
+    } 
+    
+    public function existingUserLogin(Request $request){
+        $validator = Validator::make($request->all(), [
+            'phone' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json('Please enter all details', 400);
+        }
+
+        $user = User::where('phone', $request->phone)->first();
+
+        $token = UserToken::where([
+            'user_id' => $user->id,
+            'otp' => (int)$request->otp,
+            'activated' => false
+            ])->first();
+
+        if(!$token){
+            return response()->json('Invalid token', 400);
+        }
+
+        $token->update([
+            'activated' => true
+        ]);
+
+        return \response()->json([
             'user' => $user,
             'token' => $user->createToken(time())->plainTextToken
-        ], 200);
-    }  
+        ],200);
+    }
 
     public function userPhoneLoginUpdate(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required',
+            'phone' => 'required',
             'country_id' => 'required',
             'otp' => 'required'
         ]);
@@ -77,10 +113,10 @@ class AuthController extends Controller
             return response()->json('Please enter all details', 400);
         }
 
-        $user = User::where('id', $request->user()->id)->first();
+        $user = User::where('phone', $request->phone)->first();
 
         $token = UserToken::where([
-            'user_id' => $request->user()->id,
+            'user_id' => $user->id,
             'otp' => (int)$request->otp,
             'activated' => false
             ])->first();
@@ -99,7 +135,10 @@ class AuthController extends Controller
             'country_id' => $request->country_id,
         ]);
 
-        return \response()->json('User updated',200);
+        return \response()->json([
+            'user' => $user,
+            'token' => $user->createToken(time())->plainTextToken
+        ],200);
     }
     
     public function login(Request $request){

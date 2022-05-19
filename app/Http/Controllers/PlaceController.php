@@ -209,36 +209,36 @@ class PlaceController extends Controller
         }
 
         if(Type::where('place_id', $id)->has('menus')->exists()){
-            $result = Type::where('place_id', $id)->with('menus')->get();
+            $food = Type::where('place_id', $id)->with('menus')->get();
 
             //add 10% discount
-            $food = collect($result)->map(function($item){
-                $newFoodTypeArr = [];
+            // $food = collect($result)->map(function($item){
+            //     $newFoodTypeArr = [];
 
-                $newFoodTypeArr['id'] = $item->id;
-                $newFoodTypeArr['name'] = $item->name;
-                $newFoodTypeArr['place_id'] = $item->place_id;
-                $newFoodTypeArr['menus'] = $item->menus->map(function($f){
+            //     $newFoodTypeArr['id'] = $item->id;
+            //     $newFoodTypeArr['name'] = $item->name;
+            //     $newFoodTypeArr['place_id'] = $item->place_id;
+            //     $newFoodTypeArr['menus'] = $item->menus->map(function($f){
 
-                    $newMenuArr = [];
+            //         $newMenuArr = [];
 
-                    $newMenuArr['id'] = $f->id;
-                    $newMenuArr['place_id'] = $f->place_id;
-                    $newMenuArr['type_id'] = $f->type_id;
-                    $newMenuArr['menu_name'] = $f->menu_name;
-                    $newMenuArr['size'] = $f->size;
-                    $newMenuArr['description'] = $f->description;
-                    $newMenuArr['banner'] = $f->banner;
-                    $newMenuArr['time_takes_to_make'] = $f->time_takes_to_make;
-                    $newMenuArr['ingredients'] = $f->ingredients;
-                    $newMenuArr['status'] = $f->status;
-                    $newMenuArr['price'] = $f->price - ($f->price * 0.1);
+            //         $newMenuArr['id'] = $f->id;
+            //         $newMenuArr['place_id'] = $f->place_id;
+            //         $newMenuArr['type_id'] = $f->type_id;
+            //         $newMenuArr['menu_name'] = $f->menu_name;
+            //         $newMenuArr['size'] = $f->size;
+            //         $newMenuArr['description'] = $f->description;
+            //         $newMenuArr['banner'] = $f->banner;
+            //         $newMenuArr['time_takes_to_make'] = $f->time_takes_to_make;
+            //         $newMenuArr['ingredients'] = $f->ingredients;
+            //         $newMenuArr['status'] = $f->status;
+            //         $newMenuArr['price'] = $f->price - ($f->price * 0.1);
 
-                    return $newMenuArr;
-                 });
+            //         return $newMenuArr;
+            //      });
 
-                return $newFoodTypeArr;
-            }); 
+            //     return $newFoodTypeArr;
+            // }); 
 
         } else{
             $food = [];

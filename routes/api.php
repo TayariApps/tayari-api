@@ -97,6 +97,8 @@ Route::prefix('v1')->group(function(){
     });
 
     Route::post('phone/login',[AuthController::class,'phoneLogin']);
+    Route::post('phone/update',[AuthController::class,'userPhoneLoginUpdate']);
+    Route::post('phone/exist',[AuthController::class,'existingUserLogin']);
 
     Route::post('admin/login',[DashboardController::class,'adminLogin']);
 
@@ -104,7 +106,7 @@ Route::prefix('v1')->group(function(){
 
     Route::middleware('auth:sanctum')->group(function(){
 
-        Route::post('phone/update',[AuthController::class,'userPhoneLoginUpdate']);
+        
 
         Route::post('updateUser',[AuthController::class,'updateUser']);
         Route::post('updateUserImage',[AuthController::class,'updateProfileImage']);

@@ -97,7 +97,6 @@ class OrderController extends Controller
 
         $cost = 0.00;
         $productTotal = 0;
-        $totalCost = 0.00;
 
         $order = Order::create([
             'table_id' => $table->id,
@@ -133,12 +132,10 @@ class OrderController extends Controller
                 ]);
     
                 $cost += $drinkstock->selling_price;
-                $totalCost += $drinkstock->selling_price;
                 $productTotal += $drink->quantity;
             }
     
         }
-
         
         if($request->has('foods')){
 
@@ -151,15 +148,14 @@ class OrderController extends Controller
                 ]);
     
                 $cost += $orderItem->cost;
-                $totalCost += $orderItem->cost + ($orderItem->cost * 0.1);
                 $productTotal += $orderItem->quantity;
             }
 
         }
 
         $order->update([
-            'cost' => $cost,
-            'total_cost' => $totalCost,
+            'cost' => $cost - ( $cost * 0.1 ), //10% discount
+            'total_cost' => $cost,
             'product_total' => $productTotal
         ]);
 
