@@ -56,6 +56,8 @@ class AuthController extends Controller
             ], 201);
         }
 
+        $otp = rand( 1000 , 9999 );
+
         UserToken::create([
             'user_id' => $user->id,
             'otp' => $otp
