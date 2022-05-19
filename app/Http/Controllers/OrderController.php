@@ -97,6 +97,7 @@ class OrderController extends Controller
 
         $cost = 0.00;
         $productTotal = 0;
+        $totalCost = 0.00;
 
         $order = Order::create([
             'table_id' => $table->id,
@@ -132,11 +133,13 @@ class OrderController extends Controller
                 ]);
     
                 $cost += $drinkstock->selling_price;
+                $totalCost += $drinkstock->selling_price;
                 $productTotal += $drink->quantity;
             }
     
         }
 
+        
         if($request->has('foods')){
 
             foreach ($cont->foods as $item) {
@@ -148,6 +151,7 @@ class OrderController extends Controller
                 ]);
     
                 $cost += $orderItem->cost;
+                $totalCost += $orderItem->cost + ($orderItem->cost * 0.1);
                 $productTotal += $orderItem->quantity;
             }
 
@@ -155,7 +159,7 @@ class OrderController extends Controller
 
         $order->update([
             'cost' => $cost,
-            'total_cost' => $cost,
+            'total_cost' => $totalCost,
             'product_total' => $productTotal
         ]);
 
