@@ -21,6 +21,7 @@ use App\Http\Controllers\TypeController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SMSController;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,7 +96,15 @@ Route::prefix('v1')->group(function(){
         Route::post('statusUpdate',[UserController::class,'updateWaiterStatus']);
     });
 
+    Route::post('phone/login',[AuthController::class,'phoneLogin']);
+
+    Route::post('admin/login',[DashboardController::class,'adminLogin']);
+
+    Route::post('testSMS',[SMSController::class,'testMessage']);
+
     Route::middleware('auth:sanctum')->group(function(){
+
+        Route::post('phone/update',[AuthController::class,'userPhoneLoginUpdate']);
 
         Route::post('updateUser',[AuthController::class,'updateUser']);
         Route::post('updateUserImage',[AuthController::class,'updateProfileImage']);

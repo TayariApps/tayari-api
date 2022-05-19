@@ -12,9 +12,37 @@ use App\Models\Country;
 use App\Models\Sale;
 use App\Models\Employee;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
 {
+    public function adminLogin(Request $request){
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json('Please enter all details', 400);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            return \response()->json('The credentials are incorrect',400);
+         }
+ 
+         if($user->role != 1){
+             return \response()->json('You are not an admin',400);
+         }
+      
+         return \response()->json([
+             'token' => $user->createToken(time())->plainTextToken,
+             'user' => $user
+         ], 200);
+    }
+    
     public function getCardCount(){
         return \response()->json([
             'places' => Place::where('active', true)->count(),

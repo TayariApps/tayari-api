@@ -7,16 +7,102 @@ use App\Models\Place;
 use App\Models\Employee;
 use App\Models\PasswordReset;
 use Carbon\Carbon; 
+use App\Models\UserToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\SMSController;
 use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
-      public function login(Request $request){
+    public function phoneLogin(Request $request){
+        $validator = Validator::make($request->all(), [
+            'phone' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json('Please enter all details', 400);
+        }
+
+        $user = User::where([
+            'phone' => $request->phone,
+        ])->first();
+
+        if (!$user) {
+            $user = User::create([
+                'name' => null,
+                'email' => null,
+                'country_id' => null,
+                'phone' => $request->phone,
+                'region_id' => null,
+                'district_id' => null
+            ]);
+
+            $otp = rand( 1000 , 9999 );
+
+            UserToken::create([
+                'user_id' => $user->id,
+                'otp' => $otp
+            ]);
+
+            $smsController = new SMSController();
+            $smsController->sendMessage(null, "Your TAYARI OTP is $otp", $user->phone);
+
+            return response()->json([
+                'status' => 'New',
+                'user' => $user,
+                'token' => $user->createToken(time())->plainTextToken
+            ], 201);
+        }
+
+        return response()->json([
+            'status' => 'Exists',
+            'user' => $user,
+            'token' => $user->createToken(time())->plainTextToken
+        ], 200);
+    }  
+
+    public function userPhoneLoginUpdate(Request $request){
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required',
+            'country_id' => 'required',
+            'otp' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json('Please enter all details', 400);
+        }
+
+        $user = User::where('id', $request->user()->id)->first();
+
+        $token = UserToken::where([
+            'user_id' => $request->user()->id,
+            'otp' => (int)$request->otp,
+            'activated' => false
+            ])->first();
+
+        if(!$token){
+            return response()->json('Invalid token', 400);
+        }
+
+        $token->update([
+            'activated' => true
+        ]);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'country_id' => $request->country_id,
+        ]);
+
+        return \response()->json('User updated',200);
+    }
+    
+    public function login(Request $request){
         $validator = Validator::make($request->all(), [
             'email' => 'required',
             'name' => 'required',

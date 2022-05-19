@@ -42,7 +42,7 @@ class TypeController extends Controller
     }  
 
     public function delete($id){
-
+          
         $checkIfTypeHasMenus = Type::where('id', $id)->has('menus')->exists();
 
         if($checkIfTypeHasMenus){
