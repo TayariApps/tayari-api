@@ -14,7 +14,7 @@ class Place extends Model
         'name', 'country_id', 'address','owner_id','logo_url',
         'banner_url', 'policy_url', 'phone_number','email','active',
         'location','latitude','longitude','description','display_name','cuisine_id',
-        'account_name', 'account_number', 'bank_swift_code', 'bank_name'
+        'account_name', 'account_number', 'bank_swift_code', 'bank_name','discount'
     ];
 
     public function user(){

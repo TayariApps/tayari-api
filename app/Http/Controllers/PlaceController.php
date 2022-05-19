@@ -118,7 +118,8 @@ class PlaceController extends Controller
             'display_name' => $request->display_name,
             'cuisine_id' => $request->cuisine_id,
             'banner_url' => $bannerFilename,
-            'logo_url' => $logoFilename
+            'logo_url' => $logoFilename,
+            'discount' => 0.1
         ]);
 
         return response()->json('Place created', 201);
