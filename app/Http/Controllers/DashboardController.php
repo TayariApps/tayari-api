@@ -7,6 +7,7 @@ use App\Models\Place;
 use App\Models\User;
 use App\Models\Cuisine;
 use App\Models\Drink;
+use App\Models\Order;
 use App\Models\DrinkType;
 use App\Models\Country;
 use App\Models\Sale;
@@ -113,20 +114,21 @@ class DashboardController extends Controller
 
     public function cashSales(){
         return \response()->json(
-            Sale::where([
-                'paid' => true,
-                'type' => 1
-            ])->with(['order.customer','place'])->get(), 200
+            $sales = Order::where([
+                'payment_status' => true,
+                'payment_method' => 1
+            ])->with(['customer','place'])->get(), 200
             );
     }
 
     public function mobileSales(){
-        return \response()->json(
-            Sale::where([
-                'paid' => true,
-                'type' => 2
-            ])->with(['order.customer','place'])->get(), 200
-            );
+
+        $sales = Order::where([
+            'payment_status' => true,
+            'payment_method' => 2
+        ])->with(['customer','place'])->get();
+
+        return \response()->json($sales, 200);
     }
 
     public function drinkOrders(){
