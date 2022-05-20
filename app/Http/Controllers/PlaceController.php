@@ -127,21 +127,6 @@ class PlaceController extends Controller
 
     public function update($id,Request $request){
 
-        $bannerfilename = '';
-        $logofilename = '';
-
-        if($request->hasFile('logo')){
-            $img_ext = $request->file('logo')->getClientOriginalExtension();
-            $logofilename = time() . '.' . $img_ext;
-            $logoPath = $request->file('logo')->move(public_path(), $logofilename);//image save public folder
-        }
-
-        if($request->hasFile('banner')){
-            $img_ext = $request->file('banner')->getClientOriginalExtension();
-            $bannerfilename = time() . '.' . $img_ext;
-            $bannerPath = $request->file('banner')->move(public_path(), $bannerfilename);//image save public folder
-        }
-
         $place = Place::where('id', $id)->first();
         $place->update([
             'name' => $request->name,
@@ -164,6 +149,26 @@ class PlaceController extends Controller
             'reservation_price' => $request->reservation_price,
             'bank_name' => $request->bank_name
         ]);
+
+        if($request->hasFile('logo')){
+            $img_ext = $request->file('logo')->getClientOriginalExtension();
+            $logofilename = time() . '.' . $img_ext;
+            $logoPath = $request->file('logo')->move(public_path('images/logos'), $logofilename);//image save public folder
+
+            $place->update([
+                'logo_url' => $logofilename
+            ]);
+        }
+
+        if($request->hasFile('banner')){
+            $img_ext = $request->file('banner')->getClientOriginalExtension();
+            $bannerfilename = time() . '.' . $img_ext;
+            $bannerPath = $request->file('banner')->move(public_path('images/banners'), $bannerfilename);//image save public folder
+
+            $place->update([
+                'banner_url' => $bannerfilename
+            ]);
+        }
 
         return response()->json('Place updated', 200);
     }
