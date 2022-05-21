@@ -47,7 +47,11 @@ class OrderController extends Controller
     }
 
     public function placeOrders($id){
-        $orders = Order::where('place_id', $id)->with(['customer', 'drinks', 'food','table'])->withCount('food')->get();
+        $orders = Order::where('place_id', $id)
+                        ->with(['customer', 'drinks', 'food','table'])
+                        ->withCount('food')
+                        ->orderBy('id','desc')
+                        ->get();
         return \response()->json($orders,200);
     }
 
@@ -74,6 +78,14 @@ class OrderController extends Controller
         ]);
 
         return \response()->json('Order status updated',200);
+    }
+
+    public function delete($id){
+        $order = Order::where('id', $id)->first();
+
+        $order->delete();
+
+        return response()->json('Order deleted',200);
     }
 
     public function store(Request $request){

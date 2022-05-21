@@ -217,6 +217,7 @@ Route::prefix('v1')->group(function(){
             Route::post('store',[OrderController::class,'store']);
             Route::get('restaurantConfirmPayment/{id}',[OrderController::class,'restaurantConfirmPayment']);
             Route::post('updateStatus',[OrderController::class,'changeStatus']);
+            Route::delete('delete/{id}',[OrderController::class,'delete']);
         });
 
         Route::prefix('delivery')->group(function(){

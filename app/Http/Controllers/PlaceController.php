@@ -34,7 +34,10 @@ class PlaceController extends Controller
         $orders = Order::where('place_id', $id)->withCount('food')->get();
         $reservations = Reservation::where('place_id', $id)->get();
         $menuItems = Menu::where('place_id',$id)->get();
-        $sales = Sale::where('place_id',$id)->get();
+        $sales = Order::where([
+            'place_id' => $id,
+            'payment_status' => true
+            ])->get();
         $mostSold = [];
 
         if(Menu::where('place_id', $id)->has('orders')->exists()){
