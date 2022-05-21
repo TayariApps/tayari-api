@@ -117,7 +117,7 @@ class DashboardController extends Controller
             $sales = Order::where([
                 'payment_status' => true,
                 'payment_method' => 1
-            ])->with(['customer','place'])->get(), 200
+            ])->with(['customer','place'])->orderBy('id', 'desc')->get(), 200
             );
     }
 
@@ -126,7 +126,7 @@ class DashboardController extends Controller
         $sales = Order::where([
             'payment_status' => true,
             'payment_method' => 2
-        ])->with(['customer','place'])->get();
+        ])->with(['customer','place'])->orderBy('id', 'desc')->get();
 
         return \response()->json($sales, 200);
     }
