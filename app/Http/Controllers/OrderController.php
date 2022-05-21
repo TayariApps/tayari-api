@@ -83,6 +83,9 @@ class OrderController extends Controller
     public function delete($id){
         $order = Order::where('id', $id)->first();
 
+        OrderItem::where('order_id', $id)->delete();
+        DrinkOrder::where('order_id',$id)->delete();
+
         $order->delete();
 
         return response()->json('Order deleted',200);
