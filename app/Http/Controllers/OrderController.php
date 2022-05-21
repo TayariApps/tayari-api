@@ -83,6 +83,10 @@ class OrderController extends Controller
     public function delete($id){
         $order = Order::where('id', $id)->first();
 
+        if($order->payment_status == true){
+            return response()->json('You cant delete an order that has already been paid for.',400);
+        }
+
         OrderItem::where('order_id', $id)->delete();
         DrinkOrder::where('order_id',$id)->delete();
         Sale::where('order_id', $id)->delete();
