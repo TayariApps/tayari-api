@@ -85,6 +85,7 @@ class OrderController extends Controller
 
         OrderItem::where('order_id', $id)->delete();
         DrinkOrder::where('order_id',$id)->delete();
+        Sale::where('order_id', $id)->delete();
 
         $order->delete();
 
