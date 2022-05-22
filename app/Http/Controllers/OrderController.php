@@ -11,6 +11,7 @@ use App\Models\Table;
 use App\Models\Place;
 use Carbon\Carbon;
 use App\Models\Sale;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\MailController;
 
