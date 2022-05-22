@@ -66,6 +66,12 @@ class AuthController extends Controller
         $smsController = new SMSController();
         $smsController->sendMessage(null, "Your TAYARI OTP is $otp", $user->phone);
 
+        if($user->name == null || $user->email == null){
+            return response()->json([
+                'exists' => false
+            ], 200);
+        }
+
         return response()->json([
             'exists' => true
         ], 200);
