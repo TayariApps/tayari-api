@@ -52,6 +52,48 @@ class MailController extends Controller
             return response()->json('Mail failed to be sent', 400);
         }
     }
+
+    public function orderRecievedMail(Request $request = null, $place, $user){
+        require base_path("vendor/autoload.php");
+        $mail = new PHPMailer(true);     // Passing `true` enables exceptions
+
+        try {
+
+            // Email server settings
+            $mail->SMTPDebug = 0;
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';             //  smtp host
+            $mail->SMTPAuth = true;
+            $mail->Username = 'register@tayari.co.tz';   //  sender username
+            $mail->Password = 'puagjnklvoisxcux';       // sender password
+            $mail->SMTPSecure = 'ssl';                  // encryption - ssl/tls
+            $mail->Port = 465;                          // port - 587/465
+    
+            $mail->setFrom('register@tayari.co.tz', 'New Order');
+            $mail->addAddress('info@tayari.co.tz');
+    
+            $mail->isHTML(true);                // Set email content format to HTML
+    
+            $mail->Subject = 'New order created';
+            $mail->Body    = "<html>
+           Customer $user->name has created a new order at $place->name <br><br>
+            
+                Thanks,<br>
+                Tayari
+                </html>";
+    
+                if( !$mail->send() ) {
+                    return response()->json('Mail failed to be sent', 400);
+                }
+                
+                else {
+                    return response()->json('Mail sent!', 200);
+                }
+        
+            } catch (Exception $e) {
+                return response()->json('Mail failed to be sent', 400);
+            }
+    }
     
     public function passwordResetMail(Request $request = null, $email, $token){
 
