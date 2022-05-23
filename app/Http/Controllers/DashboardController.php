@@ -45,10 +45,19 @@ class DashboardController extends Controller
     }
     
     public function getCardCount(){
+
+        $totalOrders = Order::where('payment_status', true)->count();
+
+        $sumOfSales = Order::where('payment_status', true)->sum('total_cost');
+
+        $tayariAmount = $sumOfSales - ( $sumOfSales * 0.02 ); 
+
         return \response()->json([
             'places' => Place::where('active', true)->count(),
             'customers' => User::where('role',3)->count(),
-            'sales' => Sale::where('paid', true)->sum('amount')
+            'sales' => Order::where('payment_status', true)->sum('total_cost'),
+            'totalOrders' => $totalOrders,
+            'tayariAmount' => $tayariAmount
         ]);
     }   
 
@@ -95,15 +104,18 @@ class DashboardController extends Controller
 
         $user = \App\Models\User::where('id', $id)->first();
 
-        $place = \App\Models\Place::where('owner_id', $id)->first();
+        if(\App\Models\User::where('id', $id)->has('places')->exists()){
 
-        \App\Models\Menu::where('place_id', $place->id)->delete();
+             $place = \App\Models\Place::where('owner_id', $id)->first();
 
-        \App\Models\DrinkStock::where('place_id', $place->id)->delete();
+             \App\Models\Menu::where('place_id', $place->id)->delete();
 
-        \App\Models\Order::where('place_id', $place->id)->delete();
-
-        $place->delete();
+             \App\Models\DrinkStock::where('place_id', $place->id)->delete();
+     
+             \App\Models\Order::where('place_id', $place->id)->delete();
+     
+             $place->delete();
+        }
 
         $user->delete();
 
