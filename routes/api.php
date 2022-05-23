@@ -56,6 +56,7 @@ Route::prefix('v1')->group(function(){
         Route::get('cardCount',[DashboardController::class,'getCardCount']);
         Route::get('places',[DashboardController::class,'getPlaces']);
         Route::get('customers',[DashboardController::class,'customers']);
+        Route::get('orders',[DashboardController::class,'orders']);
         Route::get('owners',[DashboardController::class,'owners']);
         Route::delete('owner/{id}',[DashboardController::class,'deleteOwner']);
         Route::get('waiters',[DashboardController::class,'waiters']);

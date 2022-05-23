@@ -99,6 +99,10 @@ class DashboardController extends Controller
         return \response()->json(Employee::where('role',1)->with('user')->get(),200);
     }
 
+    public function orders(){
+        return \response()->json(Order::get(),200);
+    }
+
     public function owners(){
         return \response()->json(
             DB::table('users')->where('role','=',4)
