@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Sale;
 use App\Models\Order;
+use App\Models\Disbursement;
+use App\Models\Revenue;
+use Illuminate\Support\Facades\Validator;
 
 class SaleController extends Controller
 {
@@ -14,6 +17,28 @@ class SaleController extends Controller
 
     public function place($placeID){
         return \response()->json(Sale::where('place_id',$placeID)->get(),200);
+    }
+
+    public function makeDisbursement(Request $request){
+        $validator = Validator::make($request->all(), [
+            'place_id' => 'required',
+            'amount' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json('Please enter all details', 400);
+        }
+
+        $disbursement = Disbursement::create([
+            'place_id' => $request->place_id,
+            'amount' => $request->amount
+        ]);
+
+        Revenue::create([
+            'place_id' => $request->place_id,
+            'amount' => $request->amount * 0.02,
+            'disbursement_id' => $disbursement->id
+        ]);
     }
 
     public function checkOrder($orderID){
