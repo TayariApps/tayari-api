@@ -53,12 +53,12 @@ class DashboardController extends Controller
             'payment_method' => 1
             ])->sum('total_cost');
 
-        $tayariAmount =  $sumOfSalesPaidWithMobile * 0.02;
+            $sumOfSalesPaidWithMobile = Order::where([
+                'payment_status' => true,
+                'payment_method' => 2
+                ])->sum('total_cost');
 
-        $sumOfSalesPaidWithMobile = Order::where([
-            'payment_status' => true,
-            'payment_method' => 2
-            ])->sum('total_cost');
+        $tayariAmount =  $sumOfSalesPaidWithMobile * 0.02;
 
         $restaurantMobileOnlyRevenue = $sumOfSalesPaidWithMobile - $tayariAmount;
 
