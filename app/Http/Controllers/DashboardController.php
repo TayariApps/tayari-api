@@ -100,7 +100,7 @@ class DashboardController extends Controller
     }
 
     public function orders(){
-        return \response()->json(Order::with(['customer', 'drinks', 'food','table'])->get(),200);
+        return \response()->json(Order::with(['customer','place', 'drinks', 'food','table'])->get(),200);
     }
 
     public function owners(){
