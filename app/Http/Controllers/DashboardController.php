@@ -188,11 +188,15 @@ class DashboardController extends Controller
     }
 
     public function placesTransactionAmounts(){
-        $sales = Place::has('orders')->withSum([
+        $data = Place::has('orders')->withSum([
             'orders as paid_sum' => function($query){
                 $query->where('orders.payment_status','=',true);
             }
         ], 'total_cost')->get();
+
+        $sales = $data->filter(function ($value) {
+            return $value->paid_sum != null;
+        })->values()->all(); 
 
         return response()->json($sales,200);
     }
