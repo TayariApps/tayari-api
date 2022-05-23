@@ -50,14 +50,17 @@ class DashboardController extends Controller
 
         $sumOfSales = Order::where('payment_status', true)->sum('total_cost');
 
-        $tayariAmount = $sumOfSales - ( $sumOfSales * 0.02 ); 
+        $tayariAmount =  $sumOfSales * 0.02;
+
+        $restaurantAmount = $sumOfSales - $tayariAmount; 
 
         return \response()->json([
             'places' => Place::where('active', true)->count(),
             'customers' => User::where('role',3)->count(),
             'sales' => Order::where('payment_status', true)->sum('total_cost'),
             'totalOrders' => $totalOrders,
-            'tayariAmount' => $tayariAmount
+            'tayariAmount' => $tayariAmount,
+            'restaurantAmount' => $restaurantAmount
         ]);
     }   
 
