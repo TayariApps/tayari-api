@@ -59,7 +59,7 @@ class AuthController extends Controller
         if($user->phone == "255692402938"){
             return \response()->json([
                 'user' => $user,
-                'token' => "123456"
+                'token' =>  $user->createToken("123456")->plainTextToken
             ],200);
         }
 
