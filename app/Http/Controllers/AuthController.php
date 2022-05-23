@@ -56,13 +56,6 @@ class AuthController extends Controller
             ], 201);
         }
 
-        if($user->phone == "255692402938"){
-            return \response()->json([
-                'user' => $user,
-                'token' =>  $user->createToken("123456")->plainTextToken
-            ],200);
-        }
-
         $otp = rand( 1000 , 9999 );
 
         UserToken::create([
