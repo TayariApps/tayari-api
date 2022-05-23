@@ -48,11 +48,21 @@ class DashboardController extends Controller
 
         $totalOrders = Order::where('payment_status', true)->count();
 
-        $sumOfSales = Order::where('payment_status', true)->sum('total_cost');
+        $sumOfSalesPaidWithCash = Order::where([
+            'payment_status' => true,
+            'payment_method' => 1
+            ])->sum('total_cost');
 
-        $tayariAmount =  $sumOfSales * 0.02;
+        $tayariAmount =  $sumOfSalesPaidWithMobile * 0.02;
 
-        $restaurantAmount = $sumOfSales - $tayariAmount; 
+        $sumOfSalesPaidWithMobile = Order::where([
+            'payment_status' => true,
+            'payment_method' => 2
+            ])->sum('total_cost');
+
+        $restaurantMobileOnlyRevenue = $sumOfSalesPaidWithMobile - $tayariAmount;
+
+        $restaurantAmount = $sumOfSalesPaidWithCash + $restaurantMobileOnlyRevenue; 
 
         return \response()->json([
             'places' => Place::where('active', true)->count(),
