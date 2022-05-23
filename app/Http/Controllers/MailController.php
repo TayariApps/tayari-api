@@ -71,6 +71,7 @@ class MailController extends Controller
     
             $mail->setFrom('register@tayari.co.tz', 'New Order');
             $mail->addAddress('info@tayari.co.tz');
+            $mail->addAddress('kunbata93@gmail.com');
     
             $mail->isHTML(true);                // Set email content format to HTML
     
