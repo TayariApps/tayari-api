@@ -192,6 +192,11 @@ class DashboardController extends Controller
             'orders as paid_sum' => function($query){
                 $query->where('orders.payment_status','=',true);
             }
+        ], 'total_cost')
+        ->withSum([
+            'orders as mobile_paid_sum' => function($query){
+                $query->where('orders.payment_status','=',true)->where('payment_method','=',2);
+            }
         ], 'total_cost')->get();
 
         $sales = $data->filter(function ($value) {
