@@ -183,11 +183,11 @@ class OrderController extends Controller
 
         $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place'])->first();
 
-        $user = User::where('id', $request->user()->id)->first();
+        // $user = User::where('id', $request->user()->id)->first();
         $place = Place::where('id', $request->place_id)->first();
 
         $mailController = new MailController();
-        $mailController->orderRecievedMail(null, $place, $user);
+        $mailController->orderRecievedMail(null, $place);
 
         return response()->json($newOrder, 201);
     }

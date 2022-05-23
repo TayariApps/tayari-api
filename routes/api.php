@@ -57,6 +57,7 @@ Route::prefix('v1')->group(function(){
         Route::get('places',[DashboardController::class,'getPlaces']);
         Route::get('customers',[DashboardController::class,'customers']);
         Route::get('owners',[DashboardController::class,'owners']);
+        Route::delete('owner/{id}',[DashboardController::class,'deleteOwner']);
         Route::get('waiters',[DashboardController::class,'waiters']);
         Route::get('cuisines',[DashboardController::class,'cuisines']);
         Route::get('drinks',[DashboardController::class,'drinks']);

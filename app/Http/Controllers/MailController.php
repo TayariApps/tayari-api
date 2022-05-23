@@ -53,7 +53,7 @@ class MailController extends Controller
         }
     }
 
-    public function orderRecievedMail(Request $request = null, $place, $user){
+    public function orderRecievedMail(Request $request = null, $place){
         require base_path("vendor/autoload.php");
         $mail = new PHPMailer(true);     // Passing `true` enables exceptions
 
@@ -76,7 +76,7 @@ class MailController extends Controller
     
             $mail->Subject = 'New order created';
             $mail->Body    = "<html>
-           Customer $user->name has created a new order at $place->name <br><br>
+           A customer has created a new order at $place->name <br><br>
             
                 Thanks,<br>
                 Tayari

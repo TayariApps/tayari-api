@@ -26,7 +26,7 @@ class UserController extends Controller
 
         return \response()->json($users,200);
     }
-
+    
     public function updateWaiterStatus(Request $request){
         $validator = Validator::make($request->all(), [
             'place_id' => 'required',

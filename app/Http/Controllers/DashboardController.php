@@ -91,6 +91,25 @@ class DashboardController extends Controller
             ,200);
     }
 
+    public function deleteOwner($id){
+
+        $user = \App\Models\User::where('id', $id)->first();
+
+        $place = \App\Models\Place::where('owner_id', $id)->first();
+
+        \App\Models\Menu::where('place_id', $place->id)->delete();
+
+        \App\Models\DrinkStock::where('place_id', $place->id)->delete();
+
+        \App\Models\Order::where('place_id', $place->id)->delete();
+
+        $place->delete();
+
+        $user->delete();
+
+        return \response()->json('User deleted',200);
+    }
+
     public function cuisines(){
         return \response()->json(Cuisine::get(),200);
     }
