@@ -87,44 +87,44 @@ class ReviewController extends Controller
 
         if($request->has('placeReview')){
 
-            $validator = Validator::make($request->all(), [
+            $validator = Validator::make($request->placeReview, [
                 'place_id' => 'required', 
                 'content' => 'required', 
                 'rating' => 'required'
             ]);
      
             if ($validator->fails()) {
-                return \response()->json('Enter all fields',400);
+                return \response()->json('Enter all place fields',400);
             }
 
             Review::updateOrCreate([
-                'place_id' => $cont->placeReview['place_id'], 
+                'place_id' => $cont->placeReview->place_id, 
                 'user_id' => $request->user()->id
             ],[
-                'content' => $cont->placeReview['content'],
-                'rating' => $cont->placeReview['rating']
+                'content' => $cont->placeReview->content,
+                'rating' => $cont->placeReview->rating
             ]);
         }
 
 
         if($request->has('foodReview')){
 
-            $validator = Validator::make($request->all(), [
+            $validator = Validator::make($request->foodReview, [
                 'menu_id' => 'required', 
                 'content' => 'required', 
                 'rating' => 'required'
             ]);
      
             if ($validator->fails()) {
-                return \response()->json('Enter all fields',400);
+                return \response()->json('Enter all food fields',400);
             }
 
             FoodReview::updateOrCreate([
-                'menu_id' => $cont->foodReview['menu_id'], 
+                'menu_id' => $cont->foodReview->menu_id, 
                 'user_id' => $request->user()->id
             ],[
-                'content' => $cont->foodReview['content'],
-                'rating' => $cont->foodReview['rating']
+                'content' => $cont->foodReview->content,
+                'rating' => $cont->foodReview->rating
             ]);
         }
 

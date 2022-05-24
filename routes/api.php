@@ -108,8 +108,6 @@ Route::prefix('v1')->group(function(){
 
     Route::middleware('auth:sanctum')->group(function(){
 
-        
-
         Route::post('updateUser',[AuthController::class,'updateUser']);
         Route::post('updateUserImage',[AuthController::class,'updateProfileImage']);
         Route::post('logout',[AuthController::class,'logout']);
