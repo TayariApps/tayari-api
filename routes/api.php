@@ -130,6 +130,7 @@ Route::prefix('v1')->group(function(){
             Route::post('menu/store',[ReviewController::class,'storeFoodReview']);
             Route::get('place/{placeID}',[ReviewController::class,'getPlaceReview']);
             Route::get('menu/{menuID}',[ReviewController::class,'getMenuReview']);
+            Route::post('foodAndPlaceReview',[ReviewController::class,'storePlaceAndFoodReview']);
         });
     
         Route::prefix('help')->group(function(){
@@ -245,6 +246,7 @@ Route::prefix('v1')->group(function(){
             Route::get('place/{placeID}',[SaleController::class,'place']);
             Route::post('mobilePayment', [SaleController::class,'mobilePayment']);
             Route::get('checkOrder/{orderID}',[SaleController::class,'checkOrder']);
+            Route::post('makeDisbursement', [SaleController::class,'makeDisbursement']);
         });
         
 

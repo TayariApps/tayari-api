@@ -136,6 +136,7 @@ class PlaceController extends Controller
             'country_id' => $request->country_id,
             'address' => $request->address,
             // 'owner_id' => $request->owner_id,
+            'cuisine_id' => $request->cuisine,
             'policy_url' => $request->policy_url,
             'phone_number' => $request->phone,
             'email' => $request->email,

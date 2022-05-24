@@ -54,12 +54,17 @@ class CuisineController extends Controller
         ]);
 
         return \response()->json('Cuisine updated', 200);
-
-        
     }
 
     public function delete($id){
+
+        //check if cuisine is linked to a place
+        if(Cuisine::has('places')->exists()){
+            return \response()->json("Can\'t delete cuisine, it is linked to a restaurant",400);
+        }
+
         Cuisine::where('id', $id)->delete();
+
         return \response()->json('Delete cuisine', 200);
     }
 }

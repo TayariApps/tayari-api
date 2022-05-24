@@ -79,6 +79,58 @@ class ReviewController extends Controller
         return response()->json('Review added', 201);
     }
 
+    public function storePlaceAndFoodReview(Request $request){
+
+        $somedata = $request->input();
+        $somedata = file_get_contents("php://input");
+        $cont = json_decode($somedata);
+
+        if($request->has('placeReview')){
+
+            $validator = Validator::make($request->all(), [
+                'place_id' => 'required', 
+                'content' => 'required', 
+                'rating' => 'required'
+            ]);
+     
+            if ($validator->fails()) {
+                return \response()->json('Enter all fields',400);
+            }
+
+            Review::updateOrCreate([
+                'place_id' => $cont->placeReview['place_id'], 
+                'user_id' => $request->user()->id
+            ],[
+                'content' => $cont->placeReview['content'],
+                'rating' => $cont->placeReview['rating']
+            ]);
+        }
+
+
+        if($request->has('foodReview')){
+
+            $validator = Validator::make($request->all(), [
+                'menu_id' => 'required', 
+                'content' => 'required', 
+                'rating' => 'required'
+            ]);
+     
+            if ($validator->fails()) {
+                return \response()->json('Enter all fields',400);
+            }
+
+            FoodReview::updateOrCreate([
+                'menu_id' => $cont->foodReview['menu_id'], 
+                'user_id' => $request->user()->id
+            ],[
+                'content' => $cont->foodReview['content'],
+                'rating' => $cont->foodReview['rating']
+            ]);
+        }
+
+        return response()->json('Review complete',200);
+    }
+
     public function storeFoodReview(Request $request){
         FoodReview::create([
             'menu_id' => $request->menu_id, 
