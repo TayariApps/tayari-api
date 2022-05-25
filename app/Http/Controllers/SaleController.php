@@ -41,6 +41,8 @@ class SaleController extends Controller
             'amount' => $request->amount * 0.02,
             'disbursement_id' => $disbursement->id
         ]);
+
+        return \response()->json('Disbursement complete',200);
     }
 
     public function checkOrder($orderID){
