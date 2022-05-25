@@ -193,6 +193,7 @@ class DashboardController extends Controller
                 $query->where('orders.payment_status','=',true);
             }
         ], 'total_cost')
+        ->withSum(['disbursements as disbursement_sum'], 'amount')
         ->withSum([
             'orders as mobile_paid_sum' => function($query){
                 $query->where('orders.payment_status','=',true)->where('payment_method','=',2);
