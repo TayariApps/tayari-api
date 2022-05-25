@@ -178,6 +178,7 @@ class OrderController extends Controller
         $order->update([
             'cost' => $cost - ( $cost * 0.1 ), //10% discount
             'total_cost' => $cost,
+            'order_number' => "TYR-".$order->id,
             'product_total' => $productTotal
         ]);
 
