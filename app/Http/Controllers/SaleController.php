@@ -29,9 +29,11 @@ class SaleController extends Controller
             return response()->json('Please enter all details', 400);
         }
 
+        $disbursementAmount = $request->amount - $request->amount * 0.02;
+
         $disbursement = Disbursement::create([
             'place_id' => $request->place_id,
-            'amount' => $request->amount
+            'amount' => $disbursementAmount
         ]);
 
         Revenue::create([
