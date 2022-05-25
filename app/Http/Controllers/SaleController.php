@@ -29,7 +29,9 @@ class SaleController extends Controller
             return response()->json('Please enter all details', 400);
         }
 
-        $disbursementAmount = $request->amount - $request->amount * 0.02;
+        $tayariCut = $request->amount * 0.02;
+
+        $disbursementAmount = $request->amount - $tayariCut;
 
         $disbursement = Disbursement::create([
             'place_id' => $request->place_id,
@@ -38,7 +40,7 @@ class SaleController extends Controller
 
         Revenue::create([
             'place_id' => $request->place_id,
-            'amount' => $request->amount * 0.02,
+            'amount' => $tayariCut,
             'disbursement_id' => $disbursement->id
         ]);
 
