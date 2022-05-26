@@ -16,10 +16,11 @@ class UserController extends Controller
     }
 
     public function getPlaceCustomers($id){
-        $check = User::whereRelation('orders', 'place_id', $id)->exists();
+        $check = User::whereRelation('orders', 'place_id', $id)
+                    ->whereRelation('orders', 'payment_status', true)->exists();
 
         if($check){
-            $users = User::whereRelation('orders', 'place_id', $id)->get();
+            $users = User::whereRelation('orders', 'place_id', $id)->whereRelation('orders', 'payment_status', true)->get();
         } else{
             $users = [];
         }
