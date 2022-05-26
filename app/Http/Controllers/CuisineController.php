@@ -13,7 +13,9 @@ class CuisineController extends Controller
 
     public function getPlacesFromCuisine($id){
 
-        $cuisine = Cuisine::where('id',$id)->with('places')->get();
+        $cuisine = Cuisine::where('id',$id)->with(['places' => function($q){
+            $q->where('active','=',true);
+        }])->get();
 
         return \response()->json($cuisine,200);
     }
