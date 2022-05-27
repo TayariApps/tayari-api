@@ -48,6 +48,16 @@ class OrderController extends Controller
         return response()->json('Payment complete',200);
     }
 
+    public function orderStatus($id){
+        $orders = Order::where('place_id', $id)
+                ->with(['customer', 'drinks', 'food','table'])
+                ->withCount('food')
+                ->orderBy('id','desc')
+                ->whereDate('created_at', Carbon::today())
+                ->get();
+        return \response()->json($orders,200);
+    }
+
     public function placeOrders($id){
         $orders = Order::where('place_id', $id)
                         ->with(['customer', 'drinks', 'food','table'])

@@ -106,6 +106,8 @@ Route::prefix('v1')->group(function(){
 
     Route::post('testSMS',[SMSController::class,'testMessage']);
 
+    Route::post('sale/makeDisbursement', [SaleController::class,'makeDisbursement']);
+
     Route::middleware('auth:sanctum')->group(function(){
 
         Route::post('updateUser',[AuthController::class,'updateUser']);
@@ -216,6 +218,7 @@ Route::prefix('v1')->group(function(){
             Route::post('user',[OrderController::class,'userOrders']);
             Route::get('place/{id}',[OrderController::class,'placeOrders']);
             Route::post('store',[OrderController::class,'store']);
+            Route::get('orderStatus/{id}',[OrderController::class,'orderStatus']);
             Route::get('restaurantConfirmPayment/{id}',[OrderController::class,'restaurantConfirmPayment']);
             Route::post('updateStatus',[OrderController::class,'changeStatus']);
             Route::delete('delete/{id}',[OrderController::class,'delete']);
@@ -244,7 +247,7 @@ Route::prefix('v1')->group(function(){
             Route::get('place/{placeID}',[SaleController::class,'place']);
             Route::post('mobilePayment', [SaleController::class,'mobilePayment']);
             Route::get('checkOrder/{orderID}',[SaleController::class,'checkOrder']);
-            Route::post('makeDisbursement', [SaleController::class,'makeDisbursement']);
+            //REMEMBER TO KEEP DISBURSEMENTS HERE
         });
         
 
