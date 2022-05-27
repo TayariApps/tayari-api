@@ -106,7 +106,7 @@ Route::prefix('v1')->group(function(){
 
     Route::post('testSMS',[SMSController::class,'testMessage']);
 
-    Route::post('sale/makeDisbursement', [SaleController::class,'makeDisbursement']);
+    Route::post('sale/makeDisbursement', [SaleController::class,'makeDisbursement']); //will need to be moved
 
     Route::middleware('auth:sanctum')->group(function(){
 
