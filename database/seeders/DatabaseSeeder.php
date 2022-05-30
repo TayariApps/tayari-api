@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             // DrinkStockSeeder::class,
             AddAdminPasswordSeeder::class,
             AddDiscountAmountToPlacesSeeder::class,
-            OrderNumberSeeder::class
+            OrderNumberSeeder::class,
         ]);
     }
 }

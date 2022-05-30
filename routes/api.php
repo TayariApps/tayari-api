@@ -22,6 +22,7 @@ use App\Http\Controllers\HelpController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SMSController;
+use App\Http\Controllers\DiscountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,8 @@ Route::prefix('v1')->group(function(){
         Route::patch('update/{id}',[CountryController::class,'update']);
         Route::delete('delete/{id}',[CountryController::class,'delete']);
     });
+
+    Route::get('table-script',[TableController::class,'script']);
 
     Route::prefix('admin')->group(function(){
         Route::get('cardCount',[DashboardController::class,'getCardCount']);
@@ -120,6 +123,12 @@ Route::prefix('v1')->group(function(){
             Route::get('{place_id}',[EmployeeController::class,'getEmployeesByPlace']);
             Route::post('update/{id}',[EmployeeController::class,'update']);
             Route::delete('delete/{id}',[EmployeeController::class,'delete']);
+        });
+
+        Route::prefix('discount')->group(function(){
+            Route::post('place',[DiscountController::class,'addPlaceDiscount']);
+            Route::post('food',[DiscountController::class,'addFoodDiscount']);
+            Route::post('type',[DiscountController::class,'addFoodTypeDiscount']);
         });
 
         Route::prefix('review')->group(function(){

@@ -66,12 +66,11 @@ class TableController extends Controller
             'table_name' => $request->table_name
         ]);
 
-        \QrCode::size(100)
-            ->format('svg')->size(200)
-            ->generate("https://tayari.co.tz|$table->place_id|$table->id", "images/tables/$table->id-table-$table->place_id.svg");
+        \QrCode::format('svg')->size(200)
+            ->generate("https://tayari.co.tz-".$table->place_id."-".$table->id, "images/tables/".$table->place_id."-".$table->id.".svg");
 
         $table->update([
-            'qr_code' => "images/tables/$table->id-table-$table->place_id.svg"
+            'qr_code' => "images/tables/".$table->place_id."-".$table->id.".svg"
         ]);
 
         return \response()->json('Table created',201);
@@ -84,6 +83,23 @@ class TableController extends Controller
         ]);
 
         return \response()->json('Table updated',200);
+    }
+
+    public function script(){
+        $tables = Table::all();
+
+        foreach ($tables as $table) {
+
+            \QrCode::format('svg')->size(200)
+            ->generate("https://tayari.co.tz-".$table->place_id."-".$table->id, "images/tables/".$table->place_id."-".$table->id.".svg");
+
+            $table->update([
+                'qr_code' => "images/tables/".$table->place_id."-".$table->id.".svg"
+            ]);
+            
+            }
+
+            return \response()->json('Complete',200);
     }
 
     public function delete($id){

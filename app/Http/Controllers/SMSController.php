@@ -17,7 +17,7 @@ class SMSController extends Controller
                 [
                     "text" => "$message",
                     "msisdn" => "$phone",
-                    "source" => "RADI"
+                    "source" => "TAYARI"
                 ]
             ]
         ]);
@@ -39,7 +39,7 @@ class SMSController extends Controller
                 [
                     "text" => "$message",
                     "msisdn" => "$phone",
-                    "source" => "RADI"
+                    "source" => "TAYARI"
                 ]
             ]
         ]);
