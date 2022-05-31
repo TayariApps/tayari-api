@@ -192,7 +192,7 @@ class OrderController extends Controller
             'product_total' => $productTotal
         ]);
 
-        $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place'])->first();
+        $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place','customer'])->first();
 
         // $user = User::where('id', $request->user()->id)->first();
         $place = Place::where('id', $request->place_id)->first();
