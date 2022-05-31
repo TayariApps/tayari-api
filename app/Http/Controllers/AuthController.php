@@ -98,6 +98,10 @@ class AuthController extends Controller
             return response()->json('Invalid token', 400);
         }
 
+        $user->update([
+            'fcm' => $request->fcm
+        ]);
+
         $token->update([
             'activated' => true
         ]);
