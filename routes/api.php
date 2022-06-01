@@ -23,6 +23,7 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SMSController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -123,6 +124,11 @@ Route::prefix('v1')->group(function(){
             Route::get('{place_id}',[EmployeeController::class,'getEmployeesByPlace']);
             Route::post('update/{id}',[EmployeeController::class,'update']);
             Route::delete('delete/{id}',[EmployeeController::class,'delete']);
+        });
+
+        Route::prefix('notification')->group(function(){
+            Route::post('send',[NotificationController::class,'sendNotification']);
+            Route::post('user',[NotificationController::class,'userNotifications']);
         });
 
         Route::prefix('discount')->group(function(){

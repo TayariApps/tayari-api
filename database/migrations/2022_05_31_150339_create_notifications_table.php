@@ -18,6 +18,7 @@ class CreateNotificationsTable extends Migration
             $table->string('title');
             $table->text('body');
             $table->foreignId('user_id')->constrained();
+            $table->text('fcm');
             $table->timestamps();
         });
     }
