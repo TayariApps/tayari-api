@@ -28,7 +28,11 @@ class NotificationController extends Controller
             return \response()->json('User does not have token',400);
         }
 
-        $response = Http::post('https://fcm.googleapis.com/fcm/send', [
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => 'key=AAAAy9HCKbo:APA91bFF1R1HmH_JlRAuXUBfRK8zj5X8ajzGEffxoL4fpYPxsGR4NphLOb98fTCvOnLmwJAnsnJXCXOmeq3IkzXGMj7kkmUqHhqXk0mv6rhKO4sS3Z6rPRfh5UX3VP33WjQgNeutgXWq'
+        ])->post('https://fcm.googleapis.com/fcm/send', [
             'to' => $user->fcm,
             'data' => [
                 'title' => $request->title,
