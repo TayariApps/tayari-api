@@ -39,6 +39,8 @@ class NotificationController extends Controller
                 'body' => $request->body
             ]
         ]);
+
+        dd($response->body());
         
         if($response->ok()){
 
