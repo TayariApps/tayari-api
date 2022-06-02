@@ -15,6 +15,7 @@ class NotificationController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'body' => 'required',
+            'userID' => 'required'
         ]);
 
         if($validator->fails()){
