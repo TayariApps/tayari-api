@@ -59,7 +59,6 @@ class NotificationController extends Controller
         return \response()->json('Notification failed',400);
     }
 
-
     public function userNotifications(Request $request){
         $notifications = Notification::where('user_id', $request->user()->id)->get();
         return \response()->json($notifications,200);

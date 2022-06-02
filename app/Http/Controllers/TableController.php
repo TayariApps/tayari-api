@@ -44,9 +44,10 @@ class TableController extends Controller
     }
 
     public function getTableOrders($placeID){
-        $tables = Table::where('place_id', $placeID)->with('orders.customer')->with(['orders' => function($q){
-            $q->whereDate('created_at', Carbon::today());
-        }])->get();
+        $tables = Table::where('place_id', $placeID)->with('orders.customer')->get();
+                // ->with(['orders' => function($q){
+                //     $q->whereDate('created_at', Carbon::today());
+                // }])->get();
 
         return \response()->json($tables,200);
     }
