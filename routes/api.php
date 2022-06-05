@@ -128,6 +128,7 @@ Route::prefix('v1')->group(function(){
 
         Route::prefix('notification')->group(function(){
             Route::post('send',[NotificationController::class,'sendNotification']);
+            Route::post('count',[NotificationController::class,'notificationCount']);
             Route::post('user',[NotificationController::class,'userNotifications']);
         });
 

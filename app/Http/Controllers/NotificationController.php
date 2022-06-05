@@ -61,8 +61,19 @@ class NotificationController extends Controller
 
     public function userNotifications(Request $request){
         $notifications = Notification::where('user_id', $request->user()->id)->get();
+
+        foreach ($notifications as $notification) {
+            $notification->update([
+                'readed' => true
+            ]);
+        }
+
         return \response()->json($notifications,200);
     }
 
+    public function notificationCount(Request $request){
+        $notifications = Notification::where('user_id', $request->user()->id)->count();
+        return \response()->json($notifications,200);
+    }
 
 }
