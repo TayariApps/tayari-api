@@ -60,6 +60,11 @@ class NotificationController extends Controller
     }
 
     public function userNotifications(Request $request){
+
+        $user = User::where('id', $request->user()->id)->first();
+
+        return \response()->json($user,200);
+
         $notifications = Notification::where('user_id', $request->user()->id)->get();
         return \response()->json($notifications,200);
     }
