@@ -12,7 +12,7 @@ class Place extends Model
 
     protected $fillable = [
         'name', 'country_id', 'address','owner_id','logo_url',
-        'banner_url', 'policy_url', 'phone_number','email','active',
+        'banner_url', 'policy_url', 'phone_number','email','active','cashier_number',
         'location','latitude','longitude','description','display_name','cuisine_id',
         'account_name', 'account_number', 'bank_swift_code', 'bank_name','discount'
     ];
