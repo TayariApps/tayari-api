@@ -12,12 +12,49 @@ use App\Models\DrinkType;
 use App\Models\Country;
 use App\Models\Sale;
 use App\Models\Employee;
+use App\Models\SystemConstant;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
 {
+    public function settings(){
+        $settings = SystemConstant::where('id', 1)->first();
+        return \response()->json($settings,200);
+    }
+
+    public function updateSettings(Request $request){
+
+        $settings = SystemConstant::where('id', 1)->first();
+
+        $discount = $request->discount/100;
+
+        $settings->update([
+            'discount' => (float)$discount
+        ]);
+
+        $places = Place::get();
+
+        foreach ($places as $place) {
+            $place->update([
+                'discount' => $settings->discount
+            ]);
+        }
+
+        if($discount == 0){
+            $settings->update([
+                'discount_active' => false
+            ]);
+        } else{
+            $settings->update([
+                'discount_active' => true
+            ]);
+        }
+
+        return response()->json('Settings updated',200);
+    }
+    
     public function adminLogin(Request $request){
         $validator = Validator::make($request->all(), [
             'email' => 'required',

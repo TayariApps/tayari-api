@@ -5,11 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SystemConstant extends Model
+class InvoiceItem extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'discount', 'discount_active'
+        'invoice_id', 'order_id'
     ];
+
+    public function order(){
+        return $this->belongsTo(Order::class);
+    }
 }

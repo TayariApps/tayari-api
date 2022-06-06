@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Disbursement;
 use App\Models\Revenue;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\InvoiceController;
 
 class SaleController extends Controller
 {
@@ -29,10 +30,6 @@ class SaleController extends Controller
             return response()->json('Please enter all details', 400);
         }
 
-        // $tayariCut = $request->amount * 0.02;
-
-        // $disbursementAmount = $request->amount - $tayariCut;
-
         $tayariCut = (0.02/0.98) * $request->amount;
 
         $disbursement = Disbursement::create([
@@ -45,6 +42,9 @@ class SaleController extends Controller
             'amount' => $tayariCut,
             'disbursement_id' => $disbursement->id
         ]);
+
+        $invoiceController = new InvoiceController();
+        $invoiceController->storeInvoice($request->place_id, $disbursement->id, $request->amount);
 
         return \response()->json('Disbursement complete',200);
     }

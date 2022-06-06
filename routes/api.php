@@ -24,6 +24,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SMSController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\InvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +73,7 @@ Route::prefix('v1')->group(function(){
         Route::get('mobileSales',[DashboardController::class,'mobileSales']);
         Route::get('drinkSales',[DashboardController::class,'drinkOrders']);
         Route::get('placeTransactions',[DashboardController::class,'placesTransactionAmounts']);
+        
     });
 
     Route::prefix('cuisine')->group(function(){
@@ -117,6 +119,15 @@ Route::prefix('v1')->group(function(){
         Route::post('updateUser',[AuthController::class,'updateUser']);
         Route::post('updateUserImage',[AuthController::class,'updateProfileImage']);
         Route::post('logout',[AuthController::class,'logout']);
+
+        Route::prefix('invoice')->group(function(){
+            Route::get('generate/{invoiceID}',[InvoiceController::class,'generateInvoice']);
+        });
+
+        Route::prefix('settings')->group(function(){
+            Route::get('/',[DashboardController::class,'settings']);
+            Route::post('update',[DashboardController::class,'updateSettings']);
+        });
 
         Route::prefix('employee')->group(function(){
             Route::get('/',[EmployeeController::class,'index']);

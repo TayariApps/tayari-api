@@ -14,6 +14,8 @@ use App\Models\Sale;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\SMSController;
+use App\Models\SystemConstant;
 
 class OrderController extends Controller
 {
@@ -83,11 +85,18 @@ class OrderController extends Controller
     }
 
     public function changeStatus(Request $request){
-        $order = Order::where('id', $request->order_id)->first();
+        $order = Order::where('id', $request->order_id)->with('customer')->first();
 
         $order->update([
             'status' => $request->status
         ]);
+
+        if($request->status == 4){
+            if($order->customer !== null){
+                $smsController = new SMSController();
+                $smsController->sendMessage(null, "Your order is ready and on the way!", $order->customer->phone);
+            }
+        }
 
         return \response()->json('Order status updated',200);
     }
@@ -185,8 +194,10 @@ class OrderController extends Controller
 
         }
 
+        $constant = SystemConstant::where('id', 1)->first();
+
         $order->update([
-            'cost' => $cost - ( $cost * 0.1 ), //10% discount
+            'cost' => $cost - ( $cost * $constant->discount ), //discount
             'total_cost' => $cost,
             'order_number' => "TYR-".$order->id,
             'product_total' => $productTotal
@@ -199,6 +210,11 @@ class OrderController extends Controller
 
         $mailController = new MailController();
         $mailController->orderRecievedMail(null, $place);
+
+        if($place->cashier_number !== null){
+            $smsController = new SMSController();
+            $smsController->sendMessage(null, "An order has been made. Please check the restuarant dashboard.", $place->cashier_number);
+        }
 
         return response()->json($newOrder, 201);
     }

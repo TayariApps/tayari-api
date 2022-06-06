@@ -12,6 +12,7 @@
         "laravel/sanctum": "^2.15",
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.5",
+        "laraveldaily/laravel-invoices": "^2.0",
         "phpmailer/phpmailer": "^6.6",
         "simplesoftwareio/simple-qrcode": "~2"
     },
