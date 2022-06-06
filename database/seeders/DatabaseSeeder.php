@@ -27,7 +27,8 @@ class DatabaseSeeder extends Seeder
             AddAdminPasswordSeeder::class,
             AddDiscountAmountToPlacesSeeder::class,
             OrderNumberSeeder::class,
-            SystemConstantSeeder::class
+            SystemConstantSeeder::class,
+            TheShackDiscountSeeder::class
         ]);
     }
 }

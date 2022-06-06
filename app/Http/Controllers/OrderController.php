@@ -12,6 +12,7 @@ use App\Models\Place;
 use Carbon\Carbon;
 use App\Models\Sale;
 use App\Models\User;
+use App\Models\Menu;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\SMSController;
@@ -181,11 +182,16 @@ class OrderController extends Controller
         if($request->has('foods')){
 
             foreach ($cont->foods as $item) {
+
+                $menu = Menu::where('id', $item->id)->first();
+
+                // return \response()->json($menu->type_id == 3 ? ($item->price - ($item->price * 0.5)) * $item->quantity : $item->price * $item->quantity,200);
+
                 $orderItem = OrderItem::create([
                     'menu_id' => $item->id, 
                     'order_id' => $order->id, 
                     'quantity' => $item->quantity, 
-                    'cost' => $item->price * $item->quantity
+                    'cost' => $menu->type_id == 1 ? ($item->price - ($item->price * 0.5)) * $item->quantity : $item->price * $item->quantity
                 ]);
     
                 $cost += $orderItem->cost;
