@@ -10,7 +10,7 @@ class Type extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'place_id'
+        'name', 'place_id', 'discount'
     ];
 
     public function places(){

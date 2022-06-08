@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\DrinkType;
 use App\Models\Country;
 use App\Models\Sale;
+use App\Models\Menu;
 use App\Models\Employee;
 use App\Models\SystemConstant;
 use Illuminate\Support\Facades\DB;
@@ -30,15 +31,21 @@ class DashboardController extends Controller
 
         $discount = $request->discount/100;
 
+        $food = Menu::get();
+
+        foreach ($food as $meal) {
+            $meal->update([
+                'discount' => $meal->discount - $settings->discount
+            ]);
+        }
+
         $settings->update([
             'discount' => (float)$discount
         ]);
 
-        $places = Place::get();
-
-        foreach ($places as $place) {
-            $place->update([
-                'discount' => $settings->discount
+        foreach ($food as $meal) {
+            $meal->update([
+                'discount' => $meal->discount + $settings->discount
             ]);
         }
 

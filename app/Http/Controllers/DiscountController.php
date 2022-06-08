@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Place;
 use App\Models\Type;
+use App\Models\SystemConstant;
 use App\Models\Menu;
 use Illuminate\Support\Facades\Validator;
 
 class DiscountController extends Controller
 {
     public function addPlaceDiscount(Request $request){
+
         $validator = Validator::make($request->all(), [
             'place_id' => 'required',
             'discount' => 'required'
@@ -22,11 +24,25 @@ class DiscountController extends Controller
 
         $place = Place::where('id', $request->place_id)->first();
 
-        $discount = $request->discount/100;
+        $food = Menu::where('place_id', $place->id)->get();
+
+        if($place->discount > 0){
+            foreach ($food as $meal) {
+                $meal->update([
+                     'discount' => $meal->discount - $place->discount
+                ]);
+             }     
+        }
 
         $place->update([
-            'discount' => $discount 
+            'discount' => $request->discount/100 
         ]);
+
+        foreach ($food as $meal) {
+            $meal->update([
+                 'discount' => $meal->discount + $place->discount
+            ]);
+         }
 
         return \response()->json('Discount added',200);
     }
@@ -44,15 +60,27 @@ class DiscountController extends Controller
 
         $type = Type::where('id', $request->type_id)->first();
 
-        $place = Place::where('id', $type->type_id)->first();
+        $food = Menu::where('type_id', $type->id)->get();
 
-        if($place->discount > 0){
-            return response()->json('This restaurant already has a discount', 400);
+        if($type->discount > 0){
+
+            foreach ($food as $meal) {
+                $meal->update([
+                 'discount' => $meal->discount - $type->discount
+                ]);
+             }     
+
         }
 
         $type->update([
             'discount' => $request->discount/100
         ]);
+
+        foreach ($food as $meal) {
+            $meal->update([
+             'discount' => $meal->discount + $type->discount
+            ]);
+         }
 
         return \response()->json('Discount added',200);
     }
@@ -68,23 +96,20 @@ class DiscountController extends Controller
             return response()->json('Please enter all details', 400);
         }  
         
-        $food = Menu::where('id', $request->menu_id)->first();
+        $food = Menu::where('id', $request->menu_id)->with(['type', 'place'])->first();
 
-        $place = Place::where('id', $food->place_id)->first();
+        $constant = SystemConstant::where('id', 1)->first();
 
-        $type = Type::where('place_id', $place->id)->first();
-
-        if($place->discount > 0){
-            return response()->json('This restaurant already has a discount', 400);
-        }
-
-        if($type->discount > 0){
-            return response()->json('This food type already has a discount', 400);
-        }
-
+       if($food->discount > 0){
         $food->update([
-            'discount' => $request->discount/100
+            'discount' => $food->discount - $food->food_discount
         ]);
+       }
+
+       $food->update([
+        'food_discount' => $request->discount/100,
+        'discount' => $request->discount/100 + $food->discount
+    ]);
 
         return \response()->json('Discount added',200);
     }

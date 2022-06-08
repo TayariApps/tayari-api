@@ -178,6 +178,10 @@ class OrderController extends Controller
             }
     
         }
+
+        $constant = SystemConstant::where('id', 1)->first();
+
+        $totalCost = 0.0;
         
         if($request->has('foods')){
 
@@ -185,33 +189,29 @@ class OrderController extends Controller
 
                 $menu = Menu::where('id', $item->id)->first();
 
-                // return \response()->json($menu->type_id == 3 ? ($item->price - ($item->price * 0.5)) * $item->quantity : $item->price * $item->quantity,200);
-
                 $orderItem = OrderItem::create([
                     'menu_id' => $item->id, 
                     'order_id' => $order->id, 
                     'quantity' => $item->quantity, 
-                    'cost' => $menu->type_id == 1 ? ($item->price - ($item->price * 0.5)) * $item->quantity : $item->price * $item->quantity
+                    'cost' => ($item->price - ($item->price * $menu->discount)) * $item->quantity 
                 ]);
     
                 $cost += $orderItem->cost;
+                $totalCost += $constant->discount_active ? $item->price * $constant->discount : 0;
                 $productTotal += $orderItem->quantity;
             }
 
         }
 
-        $constant = SystemConstant::where('id', 1)->first();
-
         $order->update([
-            'cost' => $cost - ( $cost * $constant->discount ), //discount
-            'total_cost' => $cost,
+            'cost' => $cost,
+            'total_cost' => $cost + $totalCost,
             'order_number' => "TYR-".$order->id,
             'product_total' => $productTotal
         ]);
 
         $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place','customer'])->first();
 
-        // $user = User::where('id', $request->user()->id)->first();
         $place = Place::where('id', $request->place_id)->first();
 
         $mailController = new MailController();

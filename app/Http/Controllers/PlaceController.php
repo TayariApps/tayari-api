@@ -39,6 +39,7 @@ class PlaceController extends Controller
             'payment_status' => true
             ])->get();
         $mostSold = [];
+        $place = Place::where('id', $id)->first();
 
         if(Menu::where('place_id', $id)->has('orders')->exists()){
             $mostSold = Menu::where('place_id', $id)->with('orders')->take(3)->get();
@@ -46,6 +47,7 @@ class PlaceController extends Controller
 
         return response()->json([
             'sales' => $sales,
+            'place' => $place,
             'types' => Type::where('place_id',$id)->withCount('menus')->get(),
             'orders' => $orders,
             'reservations' => $reservations,

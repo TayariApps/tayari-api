@@ -14,7 +14,9 @@ class MenuController extends Controller
     }
 
     public function place($id){
-        return \response()->json(Menu::where('place_id', $id)->get(),200);
+        return \response()->json(
+            Menu::where('place_id', $id)->get()
+            ,200);
     }
 
     public function store(Request $request){
