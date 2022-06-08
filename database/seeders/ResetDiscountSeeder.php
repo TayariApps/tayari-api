@@ -18,28 +18,28 @@ class ResetDiscountSeeder extends Seeder
     public function run()
     {
         $types = Type::get();
+        $constant = SystemConstant::where('id', 1)->first();
+        $places = Place::get();
+        $menus = Menu::get();
 
         foreach ($types as $type) {
             $type->update([
-                'discount' => 0.0
+                'discount' => $constant->discount,
+                'type_discount' => 0.0
             ]);
         }
-
-        $places = Place::get();
 
         foreach ($places as $place) {
             $place->update([
-                'discount' => 0.0
+                'discount' => $constant->discount,
+                'place_discount' => 0.0
             ]);
         }
 
-        $menus = Menu::get();
-
-        $constant = SystemConstant::where('id', 1)->first();
-
         foreach ($menus as $menu) {
             $menu->update([
-                'discount' => 0.0 + $constant->discount
+                'discount' => $constant->discount,
+                'food_discount' => 0.0
             ]);
         }
     }

@@ -26,16 +26,22 @@ class DiscountController extends Controller
 
         $food = Menu::where('place_id', $place->id)->get();
 
-        if($place->discount > 0){
+        if($place->place_discount > 0){
+
+            $place->update([
+                'discount' => $place->discount - $place->place_discount
+            ]);
+
             foreach ($food as $meal) {
                 $meal->update([
-                     'discount' => $meal->discount - $place->discount
+                     'discount' => $meal->discount - $place->place_discount
                 ]);
              }     
         }
 
         $place->update([
-            'discount' => $request->discount/100 
+            'place_discount' => $request->discount/100,
+            'discount' => $request->discount/100 + $place->discount
         ]);
 
         foreach ($food as $meal) {
@@ -64,6 +70,11 @@ class DiscountController extends Controller
 
         if($type->discount > 0){
 
+            $type->update([
+                'discount' => $type->discount - $type->type_discount
+            ]);
+
+
             foreach ($food as $meal) {
                 $meal->update([
                  'discount' => $meal->discount - $type->discount
@@ -73,7 +84,8 @@ class DiscountController extends Controller
         }
 
         $type->update([
-            'discount' => $request->discount/100
+            'type_discount' => $request->discount/100,
+            'discount' => $request->discount/100 + $type->discount
         ]);
 
         foreach ($food as $meal) {
@@ -97,8 +109,6 @@ class DiscountController extends Controller
         }  
         
         $food = Menu::where('id', $request->menu_id)->with(['type', 'place'])->first();
-
-        $constant = SystemConstant::where('id', 1)->first();
 
        if($food->discount > 0){
         $food->update([
