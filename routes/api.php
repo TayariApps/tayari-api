@@ -25,6 +25,7 @@ use App\Http\Controllers\SMSController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\OfferController;
 
 /*
 |--------------------------------------------------------------------------
@@ -115,6 +116,8 @@ Route::prefix('v1')->group(function(){
     Route::post('sale/makeDisbursement', [SaleController::class,'makeDisbursement']); //will need to be moved
 
     Route::middleware('auth:sanctum')->group(function(){
+
+        Route::get('offers',[OfferController::class,'index']);
 
         Route::post('updateUser',[AuthController::class,'updateUser']);
         Route::post('updateUserImage',[AuthController::class,'updateProfileImage']);

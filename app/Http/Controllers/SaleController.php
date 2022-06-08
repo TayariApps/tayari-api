@@ -7,6 +7,7 @@ use App\Models\Sale;
 use App\Models\Order;
 use App\Models\Disbursement;
 use App\Models\Revenue;
+use App\Models\SystemConstant;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\InvoiceController;
 
@@ -30,7 +31,9 @@ class SaleController extends Controller
             return response()->json('Please enter all details', 400);
         }
 
-        $tayariCut = (0.02/0.98) * $request->amount;
+        $constant = SystemConstant::where('id', 1)->first();
+
+        $tayariCut = ( $constant->payment_cut / (1 - $constant->payment_cut) ) * $request->amount;
 
         $disbursement = Disbursement::create([
             'place_id' => $request->place_id,

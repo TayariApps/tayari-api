@@ -40,7 +40,8 @@ class DashboardController extends Controller
         }
 
         $settings->update([
-            'discount' => (float)$discount
+            'discount' => (float)$discount,
+            'payment_cut' => (float)$request->cut/100
         ]);
 
         foreach ($food as $meal) {
@@ -49,15 +50,13 @@ class DashboardController extends Controller
             ]);
         }
 
-        if($discount == 0){
-            $settings->update([
-                'discount_active' => false
-            ]);
-        } else{
-            $settings->update([
-                'discount_active' => true
-            ]);
-        }
+        $discount == 0 ? 
+        $settings->update([
+            'discount_active' => false
+        ]) :
+        $settings->update([
+            'discount_active' => true
+        ]);
 
         return response()->json('Settings updated',200);
     }
@@ -197,7 +196,7 @@ class DashboardController extends Controller
     }
 
     public function countries(){
-        return \response()->json(Country::withCount('places')->get(),200);
+        return \response()->json(Country::withCount('places')->with('places.user')->get(),200);
     }
 
     public function sales(){

@@ -10,6 +10,6 @@ class SystemConstant extends Model
     use HasFactory;
 
     protected $fillable = [
-        'discount', 'discount_active'
+        'discount', 'discount_active', 'payment_cut'
     ];
 }
