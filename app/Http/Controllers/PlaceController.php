@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Validator;
 class PlaceController extends Controller
 {
     public function index(){
-        return \response()->json(Place::where('active', true)->withAvg('reviewed as reviewAverage', 'rating')->get(), 200);
+        return \response()->json(Place::withAvg('reviewed as reviewAverage', 'rating')->get(), 200);
     }
 
     public function changeStatus(Request $request){
