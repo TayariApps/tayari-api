@@ -174,6 +174,7 @@ Route::prefix('v1')->group(function(){
             Route::patch('update/{id}',[PlaceController::class,'update']);
             Route::delete('delete/{id}',[PlaceController::class,'delete']);
             Route::post('owner',[PlaceController::class,'ownerPlaces']);
+            Route::post('openStatus',[PlaceController::class,'changeOpenStatus']);
             Route::get('menu/{id}',[PlaceController::class,'placeMenu']);
 
 

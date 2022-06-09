@@ -17,9 +17,19 @@ use Illuminate\Support\Facades\Validator;
 class PlaceController extends Controller
 {
     public function index(){
-        return \response()->json(Place::withAvg('reviewed as reviewAverage', 'rating')->get(), 200);
+        return \response()->json(Place::where('active', true)->withAvg('reviewed as reviewAverage', 'rating')->get(), 200);
     }
+ 
+    public function changeOpenStatus(Request $request){
+        $place = Place::where('id', $request->place_id)->first();
 
+        $place->update([
+            'is_open' => !$place->is_open
+        ]);
+
+        return response()->json('Place open status updated',200);
+    }
+    
     public function changeStatus(Request $request){
         $place = Place::where('id', $request->place_id)->first();
 

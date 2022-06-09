@@ -127,7 +127,8 @@ class DashboardController extends Controller
                     'places.name as name',
                     'places.active as active',
                     'countries.name as country',
-                    'users.name as owner'
+                    'users.name as owner',
+                    'places.is_open as is_open'
                 )->get(),
             200);
     }
