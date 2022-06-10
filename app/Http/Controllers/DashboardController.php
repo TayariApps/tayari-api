@@ -197,7 +197,9 @@ class DashboardController extends Controller
     }
 
     public function countries(){
-        return \response()->json(Country::withCount('places')->with('places.user')->get(),200);
+        return \response()->json(
+            Country::has('places')->withCount('places')
+                    ->with('places.user')->get(),200);
     }
 
     public function sales(){
