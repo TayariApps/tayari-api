@@ -18,6 +18,40 @@ class ReviewController extends Controller
         return response()->json(FoodReview::get(),200);
     }
 
+    public function userSingleFoodReview(Request $request, $id){
+        $review = FoodReview::where([
+            'menu_id' => $id,
+            'user_id' => $request->user()->id
+        ])->first();
+
+        return response()->json($review,200);
+    }
+
+    public function userFoodReview(Request $request){
+        $reviews = FoodReview::where([
+            'user_id' => $request->user()->id
+        ])->get();
+
+        return response()->json($reviews,200);
+    }
+
+    public function userSinglePlaceReview(Request $request, $id){
+        $review = Review::where([
+            'place_id' => $id,
+            'user_id' => $request->user()->id
+        ])->first();
+
+        return response()->json($review,200);
+    }
+
+    public function userPlaceReview(Request $request){
+        $reviews = Review::where([
+            'user_id' => $request->user()->id
+        ])->get();
+
+        return response()->json($reviews,200);
+    }
+
     public function bestReviewedPlaces(){
         $data = \App\Models\Place::has('reviewed')
                     ->withAvg('reviewed as reviewAverage', 'rating')
@@ -141,4 +175,39 @@ class ReviewController extends Controller
 
         return response()->json('Review added', 201);
     }
+
+    public function updateFoodReview(Request $request){
+        $review = FoodReview::where('id', $request->id)->first();
+
+        $review->update([
+            'content' => $request->content, 
+            'rating' => $request->rating
+        ]); 
+
+        return response()->json('Review updated', 200);
+    }
+
+    public function updatePlaceReview(Request $request){
+        $review = Review::where('id', $request->id)->first();
+
+        $review->update([
+            'content' => $request->content, 
+            'rating' => $request->rating
+        ]); 
+
+        return response()->json('Review updated', 200);
+    }
+
+    public function deletePlaceReview($id){
+        $review = Review::where('id', $id)->first();
+        $review->delete();
+        return response()->json('Review deleted', 200);
+    }
+
+    public function deleteFoodReview($id){
+        $review = FoodReview::where('id', $id)->first();
+        $review->delete();
+        return response()->json('Review deleted', 200);
+    }
+
 }
