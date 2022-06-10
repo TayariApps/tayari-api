@@ -37,16 +37,20 @@ class InvoiceController extends Controller
             // ],
         ]);
 
-        $invItems = InvItem::where('invoice_id', $inv->id)->with('order.food')->get();
+        $invItems = InvItem::where('invoice_id', $inv->id)->with(['order.food', 'order.customer'])->get();
 
         $items = [];
         
         //start of foreach
         foreach ($invItems as $i) {
+
+            $customer = $i->order->customer->name;
+            $date = $i->order->created_at;
         
             foreach ($i->order->food as $meal) {
 
                 array_push($items, (new InvoiceItem())->title($meal->menu_name)
+                ->description("$customer ordered this item on $date")
                 ->pricePerUnit((float)$meal->pivot->cost)
                 ->quantity((float)$meal->pivot->quantity));
 

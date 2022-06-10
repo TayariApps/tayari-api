@@ -46,7 +46,7 @@ class DiscountController extends Controller
 
         foreach ($food as $meal) {
             $meal->update([
-                 'discount' => $meal->discount + $place->discount
+                 'discount' => $meal->discount + $place->place_discount
             ]);
          }
 
@@ -77,7 +77,7 @@ class DiscountController extends Controller
 
             foreach ($food as $meal) {
                 $meal->update([
-                 'discount' => $meal->discount - $type->discount
+                 'discount' => $meal->discount - $type->type_discount
                 ]);
              }     
 
@@ -90,7 +90,7 @@ class DiscountController extends Controller
 
         foreach ($food as $meal) {
             $meal->update([
-             'discount' => $meal->discount + $type->discount
+             'discount' => $meal->discount + $type->type_discount
             ]);
          }
 
