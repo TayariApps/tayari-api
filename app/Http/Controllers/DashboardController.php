@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Type;
 use App\Models\Place;
 use App\Models\User;
 use App\Models\Cuisine;
@@ -23,6 +24,64 @@ class DashboardController extends Controller
     public function settings(){
         $settings = SystemConstant::where('id', 1)->first();
         return \response()->json($settings,200);
+    }
+
+    public function changeNetwork(){
+        $constant = SystemConstant::where('id', 1)->first();
+
+        $types = Type::get();
+        $places = Place::get();
+        $menus = Menu::get();
+
+        if(!$constant->network_active){
+
+            if($constant->discount_active){
+                foreach ($types as $type) {
+                    $type->update([
+                        'discount' => $type->discount - $constant->discount,
+                    ]);
+                }
+    
+                foreach ($places as $place) {
+                    $place->update([
+                        'discount' => $place->discount - $constant->discount,
+                    ]);
+                }
+    
+                foreach ($menus as $menu) {
+                    $menu->update([
+                        'discount' => $menu->discount - $constant->discount,
+                    ]);
+                }
+            }
+
+        } else{
+            if($constant->discount_active){
+                foreach ($types as $type) {
+                    $type->update([
+                        'discount' => $type->discount + $constant->discount,
+                    ]);
+                }
+    
+                foreach ($places as $place) {
+                    $place->update([
+                        'discount' => $place->discount + $constant->discount,
+                    ]);
+                }
+    
+                foreach ($menus as $menu) {
+                    $menu->update([
+                        'discount' => $menu->discount + $constant->discount,
+                    ]);
+                }
+            }
+        }
+
+        $constant->update([
+            'network_active' => !$constant->network_active
+        ]);
+
+        return \response()->json('Settings updated',200);
     }
 
     public function updateSettings(Request $request){

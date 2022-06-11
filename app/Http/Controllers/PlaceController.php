@@ -164,7 +164,10 @@ class PlaceController extends Controller
             'closing_time' => $request->closing_time,
             'reservation_price' => $request->reservation_price,
             'bank_name' => $request->bank_name,
-            'cashier_number' => $request->cashier_number
+            'cashier_number' => $request->cashier_number,
+            'payment_name' => $request->payment_name,
+            'payment_network' => $request->payment_network,
+            'payment_number' => $request->payment_number
         ]);
 
         if($request->hasFile('logo')){
