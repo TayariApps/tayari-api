@@ -15,6 +15,7 @@ use App\Models\ReservationDrink;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\SMSController;
 
 class ReservationController extends Controller
 {
@@ -137,6 +138,11 @@ class ReservationController extends Controller
                 ]);
             }
 
+        }
+
+        if($reservation->place->cashier_number !== null){
+            $smsController = new SMSController();
+            $smsController->sendMessage(null, "A reservation has been made. Please check the restuarant dashboard.", $reservation->place->cashier_number);
         }
 
         return \response()->json('Reservation added', 200);
