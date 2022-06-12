@@ -153,6 +153,27 @@ Route::prefix('v1')->group(function(){
         Route::get('qrcode/{id}',[TableController::class,'generateQRCode']);
     });
 
+    Route::prefix('review')->group(function(){
+        Route::get('places', [ReviewController::class,'placeReviews']);
+        Route::get('topreviews',[ReviewController::class,'bestReviewedPlaces']);
+        Route::get('menus',[ReviewController::class,'menuReviews']);
+        Route::post('place/store',[ReviewController::class,'storePlaceReview']);
+        Route::post('menu/store',[ReviewController::class,'storeFoodReview']);
+        Route::get('place/{placeID}',[ReviewController::class,'getPlaceReview']);
+        Route::get('menu/{menuID}',[ReviewController::class,'getMenuReview']);
+        Route::post('foodAndPlaceReview',[ReviewController::class,'storePlaceAndFoodReview']);
+        Route::post('food/update',[ReviewController::class,'updateFoodReview']);
+        Route::post('place/update',[ReviewController::class,'updatePlaceReview']);
+        Route::delete('food/delete/{id}',[ReviewController::class,'deleteFoodReview']);
+        Route::delete('place/delete/{id}',[ReviewController::class,'deletePlaceReview']);
+
+        Route::get('user/place/single/{id}',[ReviewController::class,'userSinglePlaceReview']);
+        Route::get('user/place/{id}',[ReviewController::class,'userPlaceReview']);
+        
+        Route::get('user/food/single/{id}',[ReviewController::class,'userSingleFoodReview']);
+        Route::get('user/food/{id}',[ReviewController::class,'userFoodReview']);
+    });
+
 
     Route::middleware('auth:sanctum')->group(function(){
         
@@ -187,27 +208,6 @@ Route::prefix('v1')->group(function(){
             Route::post('place',[DiscountController::class,'addPlaceDiscount']);
             Route::post('food',[DiscountController::class,'addFoodDiscount']);
             Route::post('type',[DiscountController::class,'addFoodTypeDiscount']);
-        });
-
-        Route::prefix('review')->group(function(){
-            Route::get('places', [ReviewController::class,'placeReviews']);
-            Route::get('topreviews',[ReviewController::class,'bestReviewedPlaces']);
-            Route::get('menus',[ReviewController::class,'menuReviews']);
-            Route::post('place/store',[ReviewController::class,'storePlaceReview']);
-            Route::post('menu/store',[ReviewController::class,'storeFoodReview']);
-            Route::get('place/{placeID}',[ReviewController::class,'getPlaceReview']);
-            Route::get('menu/{menuID}',[ReviewController::class,'getMenuReview']);
-            Route::post('foodAndPlaceReview',[ReviewController::class,'storePlaceAndFoodReview']);
-            Route::post('food/update',[ReviewController::class,'updateFoodReview']);
-            Route::post('place/update',[ReviewController::class,'updatePlaceReview']);
-            Route::delete('food/delete/{id}',[ReviewController::class,'deleteFoodReview']);
-            Route::delete('place/delete/{id}',[ReviewController::class,'deletePlaceReview']);
-
-            Route::get('user/place/single/{id}',[ReviewController::class,'userSinglePlaceReview']);
-            Route::get('user/place/{id}',[ReviewController::class,'userPlaceReview']);
-            
-            Route::get('user/food/single/{id}',[ReviewController::class,'userSingleFoodReview']);
-            Route::get('user/food/{id}',[ReviewController::class,'userFoodReview']);
         });
     
         Route::prefix('help')->group(function(){
