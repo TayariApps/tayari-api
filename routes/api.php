@@ -115,67 +115,77 @@ Route::prefix('v1')->group(function(){
 
     Route::post('sale/makeDisbursement', [SaleController::class,'makeDisbursement']); //will need to be moved
 
-
     //TEMP SPOT
     Route::get('offers',[OfferController::class,'index']);
 
-    Route::prefix('menu')->group(function(){
-        Route::get('/',[MenuController::class,'index']);
-        Route::get('place/{id}',[MenuController::class,'place']);
-        Route::post('store',[MenuController::class, 'store']);
-        Route::post('update',[MenuController::class,'update']);
-        Route::get('changeStatus/{menuID}',[MenuController::class,'changeStatus']);
-        Route::delete('delete/{id}',[MenuController::class,'delete']);
-    });
+    Route::get('menu',[MenuController::class,'index']);
+    Route::get('menu/place/{id}',[MenuController::class,'place']);
 
-    Route::prefix('place')->group(function(){
-        Route::get('/',[PlaceController::class,'index']);
-        Route::get('{id}',[PlaceController::class,'getPlace']);
-        Route::post('store',[PlaceController::class,'store']);
-        Route::patch('update/{id}',[PlaceController::class,'update']);
-        Route::delete('delete/{id}',[PlaceController::class,'delete']);
-        Route::post('owner',[PlaceController::class,'ownerPlaces']);
-        Route::post('openStatus',[PlaceController::class,'changeOpenStatus']);
-        Route::get('menu/{id}',[PlaceController::class,'placeMenu']);
+    Route::get('place',[PlaceController::class,'index']);
+    Route::get('place/menu/{id}',[PlaceController::class,'placeMenu']);
 
+     Route::get('table',[TableController::class,'index']);
 
-        Route::get('restaurantData/{id}',[PlaceController::class,'dashboardData']);
-    });
-
-    Route::prefix('table')->group(function(){
-        Route::get('/',[TableController::class,'index']);
-        Route::get('orders/{placeID}',[TableController::class,'getTableOrders']);
-        Route::get('places/{placeID}',[TableController::class,'placeTables']);
-        Route::post('store',[TableController::class,'store']);
-        Route::patch('update/{id}',[TableController::class,'update']);
-        Route::delete('delete/{id}',[TableController::class,'delete']);
-
-        Route::get('qrcode/{id}',[TableController::class,'generateQRCode']);
-    });
-
-    Route::prefix('review')->group(function(){
-        Route::get('places', [ReviewController::class,'placeReviews']);
-        Route::get('topreviews',[ReviewController::class,'bestReviewedPlaces']);
-        Route::get('menus',[ReviewController::class,'menuReviews']);
-        Route::post('place/store',[ReviewController::class,'storePlaceReview']);
-        Route::post('menu/store',[ReviewController::class,'storeFoodReview']);
-        Route::get('place/{placeID}',[ReviewController::class,'getPlaceReview']);
-        Route::get('menu/{menuID}',[ReviewController::class,'getMenuReview']);
-        Route::post('foodAndPlaceReview',[ReviewController::class,'storePlaceAndFoodReview']);
-        Route::post('food/update',[ReviewController::class,'updateFoodReview']);
-        Route::post('place/update',[ReviewController::class,'updatePlaceReview']);
-        Route::delete('food/delete/{id}',[ReviewController::class,'deleteFoodReview']);
-        Route::delete('place/delete/{id}',[ReviewController::class,'deletePlaceReview']);
-
-        Route::get('user/place/single/{id}',[ReviewController::class,'userSinglePlaceReview']);
-        Route::get('user/place/{id}',[ReviewController::class,'userPlaceReview']);
-        
-        Route::get('user/food/single/{id}',[ReviewController::class,'userSingleFoodReview']);
-        Route::get('user/food/{id}',[ReviewController::class,'userFoodReview']);
-    });
-
+     Route::get('review/places', [ReviewController::class,'placeReviews']);
+     Route::get('review/topreviews',[ReviewController::class,'bestReviewedPlaces']);
+     Route::get('review/menus',[ReviewController::class,'menuReviews']);
 
     Route::middleware('auth:sanctum')->group(function(){
+
+        Route::prefix('menu')->group(function(){
+            // Route::get('/',[MenuController::class,'index']);
+            // Route::get('place/{id}',[MenuController::class,'place']);
+            Route::post('store',[MenuController::class, 'store']);
+            Route::post('update',[MenuController::class,'update']);
+            Route::get('changeStatus/{menuID}',[MenuController::class,'changeStatus']);
+            Route::delete('delete/{id}',[MenuController::class,'delete']);
+        });
+    
+        Route::prefix('place')->group(function(){
+            // Route::get('/',[PlaceController::class,'index']);
+            Route::get('{id}',[PlaceController::class,'getPlace']);
+            Route::post('store',[PlaceController::class,'store']);
+            Route::patch('update/{id}',[PlaceController::class,'update']);
+            Route::delete('delete/{id}',[PlaceController::class,'delete']);
+            Route::post('owner',[PlaceController::class,'ownerPlaces']);
+            Route::post('openStatus',[PlaceController::class,'changeOpenStatus']);
+            // Route::get('menu/{id}',[PlaceController::class,'placeMenu']);
+            Route::get('restaurantData/{id}',[PlaceController::class,'dashboardData']);
+        });
+    
+        Route::prefix('table')->group(function(){
+            // Route::get('/',[TableController::class,'index']);
+            Route::get('orders/{placeID}',[TableController::class,'getTableOrders']);
+            Route::get('places/{placeID}',[TableController::class,'placeTables']);
+            Route::post('store',[TableController::class,'store']);
+            Route::patch('update/{id}',[TableController::class,'update']);
+            Route::delete('delete/{id}',[TableController::class,'delete']);
+    
+            Route::get('qrcode/{id}',[TableController::class,'generateQRCode']);
+        });
+    
+        Route::prefix('review')->group(function(){
+            // Route::get('places', [ReviewController::class,'placeReviews']);
+            // Route::get('topreviews',[ReviewController::class,'bestReviewedPlaces']);
+            // Route::get('menus',[ReviewController::class,'menuReviews']);
+            Route::post('place/store',[ReviewController::class,'storePlaceReview']);
+            Route::post('menu/store',[ReviewController::class,'storeFoodReview']);
+            Route::get('place/{placeID}',[ReviewController::class,'getPlaceReview']);
+            Route::get('menu/{menuID}',[ReviewController::class,'getMenuReview']);
+            Route::post('foodAndPlaceReview',[ReviewController::class,'storePlaceAndFoodReview']);
+            Route::post('food/update',[ReviewController::class,'updateFoodReview']);
+            Route::post('place/update',[ReviewController::class,'updatePlaceReview']);
+            Route::delete('food/delete/{id}',[ReviewController::class,'deleteFoodReview']);
+            Route::delete('place/delete/{id}',[ReviewController::class,'deletePlaceReview']);
+    
+            Route::get('user/place/single/{id}',[ReviewController::class,'userSinglePlaceReview']);
+            Route::get('user/place/{id}',[ReviewController::class,'userPlaceReview']);
+            
+            Route::get('user/food/single/{id}',[ReviewController::class,'userSingleFoodReview']);
+            Route::get('user/food/{id}',[ReviewController::class,'userFoodReview']);
+        });
+    
+        ///this is the end
         
         Route::post('updateUser',[AuthController::class,'updateUser']);
         Route::post('updateUserImage',[AuthController::class,'updateProfileImage']);
