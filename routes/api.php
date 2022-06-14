@@ -26,6 +26,7 @@ use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\ScheduleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -131,6 +132,11 @@ Route::prefix('v1')->group(function(){
      Route::get('review/menus',[ReviewController::class,'menuReviews']);
 
     Route::middleware('auth:sanctum')->group(function(){
+
+        Route::prefix('schedule')->group(function(){
+            Route::get('{placeID}',[ScheduleController::class,'getSchedule']);
+            Route::post('update',[ScheduleController::class,'update']);
+        });
 
         Route::prefix('menu')->group(function(){
             // Route::get('/',[MenuController::class,'index']);

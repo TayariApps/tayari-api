@@ -28,7 +28,9 @@ class DatabaseSeeder extends Seeder
             AddDiscountAmountToPlacesSeeder::class,
             OrderNumberSeeder::class,
             SystemConstantSeeder::class,
-            ResetDiscountSeeder::class
+            ResetDiscountSeeder::class,
+            DaysSeeder::class,
+            KitimotoMastersPasswordSeeder::class
         ]);
     }
 }

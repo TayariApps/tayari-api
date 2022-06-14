@@ -18,6 +18,10 @@ class Place extends Model
         'payment_number', 'payment_network', 'payment_name'
     ];
 
+    public function schedules(){
+        return $this->hasMany(Schedule::class);
+    }
+
     public function user(){
         return $this->belongsTo(User::class,'owner_id', 'id');
     }
