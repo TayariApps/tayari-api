@@ -15,7 +15,7 @@ class CouponSeeder extends Seeder
      */
     public function run()
     {
-        for ($i=0; $i < 6; $i++) { 
+        for ($i=0; $i < 26; $i++) { 
             UserCoupon::create([
                 'coupon' => Str::upper(Str::random(12))
             ]);

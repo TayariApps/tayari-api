@@ -221,14 +221,16 @@ class OrderController extends Controller
                     'product_total' => $productTotal
                 ]);
 
-            }
+            } else{
 
-            $order->update([
-                'cost' => $cost,
-                'total_cost' => $cost + $totalCost,
-                'order_number' => "TYR-".$order->id,
-                'product_total' => $productTotal
-            ]);
+                $order->update([
+                    'cost' => $cost,
+                    'total_cost' => $cost + $totalCost,
+                    'order_number' => "TYR-".$order->id,
+                    'product_total' => $productTotal
+                ]);
+
+            }
 
         } else {
             $order->update([
