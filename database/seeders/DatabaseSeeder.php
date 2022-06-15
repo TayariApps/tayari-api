@@ -30,7 +30,8 @@ class DatabaseSeeder extends Seeder
             SystemConstantSeeder::class,
             ResetDiscountSeeder::class,
             DaysSeeder::class,
-            KitimotoMastersPasswordSeeder::class
+            KitimotoMastersPasswordSeeder::class,
+            CouponSeeder::class
         ]);
     }
 }

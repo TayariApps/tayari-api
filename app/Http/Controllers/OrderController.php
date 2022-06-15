@@ -3,16 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\DrinkStock;
-use App\Models\DrinkOrder;
-use App\Models\Table;
-use App\Models\Place;
 use Carbon\Carbon;
-use App\Models\Sale;
-use App\Models\User;
-use App\Models\Menu;
+use App\Models\{ Menu, User, Sale, Place, Table, DrinkOrder, DrinkStock, OrderItem, Order, UserCoupon};
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\SMSController;
@@ -203,12 +195,49 @@ class OrderController extends Controller
 
         }
 
-        $order->update([
-            'cost' => $cost,
-            'total_cost' => $cost + $totalCost,
-            'order_number' => "TYR-".$order->id,
-            'product_total' => $productTotal
-        ]);
+        if($request->has('coupon')){
+
+            $checkIfExists = UserCoupon::where([
+                'coupon' => $request->coupon,
+                'used' => false
+                ])->exists();
+
+            if($checkIfExists){
+
+                $coupon = UserCoupon::where([
+                    'coupon' => $request->coupon,
+                    'used' => false
+                    ])->first();
+
+                $coupon->update([
+                    'used' => true,
+                    'user_id' => $cont->customer_id
+                ]);
+
+                $order->update([
+                    'cost' => 0,
+                    'total_cost' => $cost + $totalCost,
+                    'order_number' => "TYR-".$order->id,
+                    'product_total' => $productTotal
+                ]);
+
+            }
+
+            $order->update([
+                'cost' => $cost,
+                'total_cost' => $cost + $totalCost,
+                'order_number' => "TYR-".$order->id,
+                'product_total' => $productTotal
+            ]);
+
+        } else {
+            $order->update([
+                'cost' => $cost,
+                'total_cost' => $cost + $totalCost,
+                'order_number' => "TYR-".$order->id,
+                'product_total' => $productTotal
+            ]);
+        }
 
         $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place','customer'])->first();
 
