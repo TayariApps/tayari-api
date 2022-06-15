@@ -36,6 +36,14 @@ class MenuController extends Controller
             return response()->json('Please enter all details', 400);
         }
 
+        $imageValidator = Validator::make($request->all(), [
+            'banner' => 'file|size:3000',
+        ]);
+
+        if($validator->fails()){
+            return response()->json('Image should be lower than 3 mbs', 400);
+        }
+
         if($request->hasFile('banner')){
             $img_ext = $request->file('banner')->getClientOriginalExtension();
             $bannerFilename = time() . '.' . $img_ext;
@@ -74,6 +82,15 @@ class MenuController extends Controller
         $menu = Menu::where('id', $request->menu_id)->first();
 
         if($request->hasFile('banner')){
+
+            $imageValidator = Validator::make($request->all(), [
+                'banner' => 'file|size:3000',
+            ]);
+    
+            if($validator->fails()){
+                return response()->json('Image should be lower than 3 mbs', 400);
+            }
+
             $img_ext = $request->file('banner')->getClientOriginalExtension();
             $bannerFilename = time() . '.' . $img_ext;
             $bannerPath = $request->file('banner')->move(public_path('images/food'), $bannerFilename);//image save public folder

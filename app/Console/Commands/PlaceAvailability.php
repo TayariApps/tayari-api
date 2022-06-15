@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\{Place,Schedule};
+use App\Models\{Place,Schedule, Day};
 use Carbon\Carbon;
 
 class PlaceAvailability extends Command
@@ -39,14 +39,32 @@ class PlaceAvailability extends Command
      */
     public function handle()
     {
-        $places = Place::has('schedules')->get();
 
-        if(count($places)){
+        $dayInWeek = Carbon::now()->format('l');
 
+        $checkIfValuesExist = Day::where('name', $dayInWeek)->has('schedules')->exists();
+
+        if($checkIfValuesExist){
+           
+            $day = Day::where('name', $dayInWeek)->with('schedules')->first();
+
+            foreach ($day->schedules as $schedule) {
             
+                if($schedule->open){
+    
+                    $place = Place::where('id', $schedule->place_id)->first();
+    
+                    $place->update([
+                        'is_open' => $schedule->open
+                    ]);
+    
+                }
+    
+            }
 
-        }
+        }  
 
+        \Log::info("Place availability cron run at $dayInWeek");
         
     }
 }
