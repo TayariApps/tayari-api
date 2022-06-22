@@ -40,7 +40,7 @@ class MenuController extends Controller
             'banner' => 'file|size:3000',
         ]);
 
-        if($validator->fails()){
+        if($imageValidator->fails()){
             return response()->json('Image should be lower than 3 mbs', 400);
         }
 
@@ -87,7 +87,7 @@ class MenuController extends Controller
                 'banner' => 'file|size:3000',
             ]);
     
-            if($validator->fails()){
+            if($imageValidator->fails()){
                 return response()->json('Image should be lower than 3 mbs', 400);
             }
 
