@@ -37,11 +37,11 @@ class MenuController extends Controller
         }
 
         $imageValidator = Validator::make($request->all(), [
-            'banner' => 'file|size:3000',
+            'banner' => 'file|size:7000',
         ]);
 
         if($imageValidator->fails()){
-            return response()->json('Image should be lower than 3 mbs', 400);
+            return response()->json('Image should be lower than 7 mbs', 400);
         }
 
         if($request->hasFile('banner')){
@@ -84,11 +84,11 @@ class MenuController extends Controller
         if($request->hasFile('banner')){
 
             $imageValidator = Validator::make($request->all(), [
-                'banner' => 'file|size:3000',
+                'banner' => 'file|size:7000',
             ]);
     
             if($imageValidator->fails()){
-                return response()->json('Image should be lower than 3 mbs', 400);
+                return response()->json('Image should be lower than 7 mbs', 400);
             }
 
             $img_ext = $request->file('banner')->getClientOriginalExtension();
