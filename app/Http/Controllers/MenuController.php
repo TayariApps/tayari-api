@@ -37,7 +37,7 @@ class MenuController extends Controller
         }
 
         $imageValidator = Validator::make($request->all(), [
-            'banner' => 'file|size:7000',
+            'banner' => 'image|mimes:jpeg,jpg,png,gif|size:7000',
         ]);
 
         if($imageValidator->fails()){
@@ -84,7 +84,7 @@ class MenuController extends Controller
         if($request->hasFile('banner')){
 
             $imageValidator = Validator::make($request->all(), [
-                'banner' => 'file|size:7000',
+                'banner' => 'image|mimes:jpeg,jpg,png,gif|size:7000',
             ]);
     
             if($imageValidator->fails()){
