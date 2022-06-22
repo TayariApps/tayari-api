@@ -36,13 +36,13 @@ class MenuController extends Controller
             return response()->json('Please enter all details', 400);
         }
 
-        $imageValidator = Validator::make($request->all(), [
-            'banner' => 'image|mimes:jpeg,jpg,png,gif|size:7000',
-        ]);
+        // $imageValidator = Validator::make($request->all(), [
+        //     'banner' => 'image|mimes:jpeg,jpg,png,gif|size:7000',
+        // ]);
 
-        if($imageValidator->fails()){
-            return response()->json('Image should be lower than 7 mbs', 400);
-        }
+        // if($imageValidator->fails()){
+        //     return response()->json('Image should be lower than 7 mbs', 400);
+        // }
 
         if($request->hasFile('banner')){
             $img_ext = $request->file('banner')->getClientOriginalExtension();
@@ -83,13 +83,13 @@ class MenuController extends Controller
 
         if($request->hasFile('banner')){
 
-            $imageValidator = Validator::make($request->all(), [
-                'banner' => 'image|mimes:jpeg,jpg,png,gif|size:7000',
-            ]);
+            // $imageValidator = Validator::make($request->all(), [
+            //     'banner' => 'image|mimes:jpeg,jpg,png,gif|size:7000',
+            // ]);
     
-            if($imageValidator->fails()){
-                return response()->json('Image should be lower than 7 mbs', 400);
-            }
+            // if($imageValidator->fails()){
+            //     return response()->json('Image should be lower than 7 mbs', 400);
+            // }
 
             $img_ext = $request->file('banner')->getClientOriginalExtension();
             $bannerFilename = time() . '.' . $img_ext;
