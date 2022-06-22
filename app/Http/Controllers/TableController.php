@@ -7,6 +7,7 @@ use App\Models\Table;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\DB;
 
 class TableController extends Controller
 {
@@ -104,9 +105,20 @@ class TableController extends Controller
     }
 
     public function delete($id){
-        Table::where('id',$id)->delete();
+        
+        DB::beginTransaction();
 
-        return \response()->json('Table deleted',200);
+        try {
+            $table = Table::where('id',$id)->delete();   
+            DB::commit();
+
+            return \response()->json('Table deleted',200);
+
+        } catch (\Throwable $e) {
+            DB::rollback();
+            return \response()->json('Table cannot be deleted because it has been used in the system',400);
+        }
+            
     }
 
 }

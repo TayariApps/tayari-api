@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\Models\{ Menu, User, Sale, Place, Table, DrinkOrder, DrinkStock, OrderItem, Order, UserCoupon};
+use App\Models\{ Menu, User, Sale, Place, Table, DrinkOrder, DrinkStock, OrderItem, Order, UserCoupon, SystemConstant};
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\SMSController;
-use App\Models\SystemConstant;
 
 class OrderController extends Controller
 {
@@ -111,6 +110,8 @@ class OrderController extends Controller
     }
 
     public function store(Request $request){
+        date_default_timezone_set('Africa/Dar_es_Salaam');
+
         $validator = Validator::make($request->all(), [
             'table_id' => 'required', 
             'executed_time' => 'required', 

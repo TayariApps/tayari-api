@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('Africa/Dar_es_Salaam');
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -166,7 +168,6 @@ Route::prefix('v1')->group(function(){
             Route::post('store',[TableController::class,'store']);
             Route::patch('update/{id}',[TableController::class,'update']);
             Route::delete('delete/{id}',[TableController::class,'delete']);
-    
             Route::get('qrcode/{id}',[TableController::class,'generateQRCode']);
         });
     

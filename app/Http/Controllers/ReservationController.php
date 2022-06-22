@@ -26,7 +26,7 @@ class ReservationController extends Controller
     public function getPlaceReservations($id){
         $reservations = Reservation::where('place_id', $id)->with([
             'user','food.menu', 'drinks.drink'
-            ])->get();
+            ])->orderBy('id', 'desc')->get();
         return \response()->json($reservations,200);
     }
 
@@ -149,6 +149,16 @@ class ReservationController extends Controller
     }
 
    public function restaurantStore(Request $request){
+    date_default_timezone_set('Africa/Dar_es_Salaam');
+
+    $validator = Validator::make($request->all(), [
+        'people_count' => 'required', 
+        'time' => 'required', 
+    ]);
+
+    if($validator->fails()){
+        return response()->json('Please enter all details', 400);
+    }
 
     $reservation = new Reservation;
     if($request->has('person')){
@@ -164,13 +174,15 @@ class ReservationController extends Controller
     $reservation->place_id = $request->place_id;
     $reservation->time = \Carbon\Carbon::parse($request->time)->toDateTimeString(); 
     $reservation->note = $request->note;
-    $reservation->people_count= $request->count;
+    $reservation->people_count= $request->people_count;
     $reservation->save();
 
     return \response()->json('Reservation created',201);
    }
    
     public function store(Request $request){
+        date_default_timezone_set('Africa/Dar_es_Salaam');
+        
         $validator = Validator::make($request->all(), [
             // 'table_id' => 'required',
             'place_id' => 'required', 
