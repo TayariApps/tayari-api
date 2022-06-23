@@ -268,7 +268,7 @@ Route::prefix('v1')->group(function(){
             
             Route::get('place/{id}',[DrinkController::class,'place']);
             
-            Route::post('update/stock',[DrinkController::class,'updateStock']);
+            Route::post('update/stock/new',[DrinkController::class,'updateStock']);
             Route::patch('addStock',[DrinkController::class,'addStock']);
             Route::post('createStock',[DrinkController::class,'createStock']);
             

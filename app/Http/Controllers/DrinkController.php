@@ -123,6 +123,7 @@ class DrinkController extends Controller
     }
 
     public function updateStock(Request $request){
+
         DrinkStock::where([
             'place_id' => $request->placeId, 
             'drink_id' => $request->drinkId
