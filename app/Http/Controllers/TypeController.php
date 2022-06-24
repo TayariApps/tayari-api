@@ -41,6 +41,28 @@ class TypeController extends Controller
         return \response()->json('Type updated',200);
     }  
 
+    public function changeStatus($typeID){
+        $checkIfExists = Type::where('id', $typeID)->has('menus')->exists();
+
+        if(!$checkIfExists){
+            return \response()->json('This food type has no food added to it', 400);
+        }
+
+        $type = Type::where('id', $typeID)->has('menus')->first();
+
+        $type->update([
+            'status' => !$type->status
+        ]);
+
+        foreach ($type->menus as $menu) {
+            $menu->update([
+                'status' => $type->status
+            ]);
+        }
+
+        return \response()->json('Status updated',200);
+    }
+
     public function delete($id){
           
         $checkIfTypeHasMenus = Type::where('id', $id)->has('menus')->exists();

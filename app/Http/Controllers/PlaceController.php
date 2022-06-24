@@ -13,6 +13,7 @@ use App\Models\Menu;
 use App\Models\Sale;
 use App\Models\Table;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Builder;
 
 class PlaceController extends Controller
 {
@@ -234,8 +235,8 @@ class PlaceController extends Controller
             $drinks = [];
         }
 
-        if(Type::where('place_id', $id)->has('menus')->exists()){
-            $food = Type::where('place_id', $id)->with('menus')->get();
+        if(Type::where('place_id', $id)->whereRelation('menus', 'status', true)->exists()){
+            $food = Type::where('place_id', $id)->with('menus')->whereRelation('menus', 'status', true)->get();
 
             //add 10% discount
             // $food = collect($result)->map(function($item){

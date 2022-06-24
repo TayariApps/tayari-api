@@ -294,6 +294,7 @@ Route::prefix('v1')->group(function(){
             Route::get('/',[TypeController::class,'index']);
             Route::post('store',[TypeController::class,'store']);
             Route::get('place/{id}',[TypeController::class,'place']);
+            Route::get('status/{typeID}',[TypeController::class,'changeStatus']);
             Route::post('update/{id}',[TypeController::class,'update']);
             Route::delete('delete/{id}',[TypeController::class,'delete']);
         });
