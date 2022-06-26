@@ -254,6 +254,10 @@ class OrderController extends Controller
             $smsController->sendMessage(null, "An order has been made. Please check the restuarant dashboard.", $place->cashier_number);
         }
 
+        $smsController = new SMSController();
+        $smsController->sendMessage(null, "An order has been made on $place->name", "255714779397");
+        $smsController->sendMessage(null, "An order has been made on $place->name", "255747852570");
+
         return response()->json($newOrder, 201);
     }
 }
