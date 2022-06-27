@@ -32,7 +32,7 @@ class CreateOrdersTable extends Migration
             $table->integer('payment_method')->nullable(); //1 -->cash, 2-->mobile, 3-->card , 4-->
             $table->boolean('has_offer')->default(false);
             $table->boolean('review_done')->default(false);
-            $table->integer('type'); //1--> pre-order, 2--> dine-in , 3-->reservation
+            $table->integer('type'); //1--> pre-order, 2--> dine-in , 3-->reservation //4-->delivery
             $table->integer('status')->default(1);
             $table->timestamps();
         });

@@ -212,11 +212,12 @@ class OrderController extends Controller
 
                 $coupon->update([
                     'used' => true,
-                    'user_id' => $cont->customer_id
+                    'user_id' => $cont->customer_id,
+                    'place_id' => $request->place_id,
                 ]);
 
                 $order->update([
-                    'cost' => 0,
+                    'cost' => $cost - ($cost * 0.5),
                     'total_cost' => $cost + $totalCost,
                     'order_number' => "TYR-".$order->id,
                     'product_total' => $productTotal
