@@ -113,7 +113,6 @@ class OrderController extends Controller
         date_default_timezone_set('Africa/Dar_es_Salaam');
 
         $validator = Validator::make($request->all(), [
-            'table_id' => 'required', 
             'executed_time' => 'required', 
             'customer_id' => 'required',
             'foods' => 'required'
@@ -128,22 +127,34 @@ class OrderController extends Controller
         $cont = json_decode($somedata);
 
         $now = Carbon::now();
-        $table = Table::where('id', $cont->table_id)->first();
 
         $cost = 0.00;
         $productTotal = 0;
 
-        $order = Order::create([
-            'table_id' => $table->id,
-            'place_id' => $request->place_id,
-            'executed_time' => $cont->executed_time,
-            'customer_id' => $cont->customer_id,
-            'waiting_time' => $cont->waiting_time,
-            'order_created_by' => $request->user()->id,
-            'completed_time' => $now->addMinutes($cont->waiting_time)->toDateTimeString(),
-            'type' => $request->type,
-            'payment_method' => $request->method //method of payment
-        ]);
+        if($request->type == 4){
+            $order = Order::create([
+                'place_id' => $request->place_id,
+                'executed_time' => $cont->executed_time,
+                'customer_id' => $cont->customer_id,
+                'waiting_time' => $cont->waiting_time,
+                'order_created_by' => $request->user()->id,
+                'completed_time' => $now->addMinutes($cont->waiting_time)->toDateTimeString(),
+                'type' => $request->type,
+                'payment_method' => $request->method //method of payment
+            ]);
+        } else{
+            $order = Order::create([
+                'table_id' => $cont->table_id,
+                'place_id' => $request->place_id,
+                'executed_time' => $cont->executed_time,
+                'customer_id' => $cont->customer_id,
+                'waiting_time' => $cont->waiting_time,
+                'order_created_by' => $request->user()->id,
+                'completed_time' => $now->addMinutes($cont->waiting_time)->toDateTimeString(),
+                'type' => $request->type,
+                'payment_method' => $request->method //method of payment
+            ]);
+        }
 
 
         if($request->has('drinks')){
@@ -152,7 +163,7 @@ class OrderController extends Controller
                 
                 $drinkstock = DrinkStock::where([
                     'drink_id' => $drink->id, 
-                    'place_id' => $table->place_id
+                    'place_id' => $request->place_id
                 ])->first();
 
                 $drinkstock->update([
@@ -250,14 +261,24 @@ class OrderController extends Controller
         $mailController = new MailController();
         $mailController->orderRecievedMail(null, $place);
 
+        $smsController = new SMSController();
+
         if($place->cashier_number !== null){
-            $smsController = new SMSController();
-            $smsController->sendMessage(null, "An order has been made. Please check the restuarant dashboard.", $place->cashier_number);
+            if($request->type == 4){
+                $smsController->sendMessage(null, "An delivery order has been made. Please check the restuarant dashboard.", $place->cashier_number);
+            } else{
+                $smsController->sendMessage(null, "An restaurant order has been made. Please check the restuarant dashboard.", $place->cashier_number);
+            }   
         }
 
-        $smsController = new SMSController();
-        $smsController->sendMessage(null, "An order has been made on $place->name", "255714779397");
-        $smsController->sendMessage(null, "An order has been made on $place->name", "255747852570");
+       if($request->type == 4){
+        $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255714779397");
+        $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255747852570");
+       } else{
+        $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255714779397");
+        $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255747852570");
+       }
+        
 
         return response()->json($newOrder, 201);
     }
