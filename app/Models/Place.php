@@ -15,7 +15,7 @@ class Place extends Model
         'banner_url', 'policy_url', 'phone_number','email','active','cashier_number',
         'location','latitude','longitude','description','display_name','cuisine_id',
         'account_name', 'account_number', 'bank_swift_code', 'bank_name','discount','is_open',
-        'payment_number', 'payment_network', 'payment_name'
+        'payment_number', 'payment_network', 'payment_name', 'delivery'
     ];
 
     public function schedules(){

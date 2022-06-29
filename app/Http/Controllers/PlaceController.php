@@ -168,7 +168,8 @@ class PlaceController extends Controller
             'cashier_number' => $request->cashier_number,
             'payment_name' => $request->payment_name,
             'payment_network' => $request->payment_network,
-            'payment_number' => $request->payment_number
+            'payment_number' => $request->payment_number,
+            'delivery' => $request->delivery == "true" ? true : false
         ]);
 
         if($request->hasFile('logo')){
