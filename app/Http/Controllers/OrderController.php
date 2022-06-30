@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\Models\{ Menu, User, Sale, Place, Table, DrinkOrder, DrinkStock, OrderItem, Order, UserCoupon, SystemConstant};
+use App\Models\{ Menu, User, Sale, Place, Table, Drink, DrinkOrder, DrinkStock, OrderItem, Order, UserCoupon, SystemConstant};
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\SMSController;
@@ -131,12 +131,33 @@ class OrderController extends Controller
         $cost = 0.00;
         $productTotal = 0;
 
-        if($place->cashier_number !== null){
-            if($request->type == 4){
-                $txtBody = "An delivery order has been made. The order items are: \n";
-            } else{
-                $txtBody = "An restaurant order has been made. The order items are: \n";
-            }   
+        $txtBody = "A new order has been made on Tayari App. \n";
+        switch ($request->type) {
+            case 1:
+                $txtBody .= "Order type: Pre-order \n"; 
+                break;
+
+            case 2: 
+                $txtBody .= "Order type: Dine In \n"; 
+                break;
+            
+            case 3: 
+                $txtBody .= "Order type: Reservation \n"; 
+                break;
+            
+            case 4: 
+                $txtBody .= "Order type: Delivery"; 
+                break;
+            
+            default:
+                $txtBody .= "Order type: Pre-order \n"; 
+                break;
+        }
+
+        $txtBody .= "\n The order items are: \n";
+
+        if ($request->has('customer_id')) {
+            $user = User::where('id', $request->customer_id)->first();
         }
 
         if($request->type == 4){
@@ -164,10 +185,14 @@ class OrderController extends Controller
             ]);
         }
 
+        $constant = SystemConstant::where('id', 1)->first();
+        $totalCost = 0.0;
 
         if($request->has('drinks')){
 
             foreach ($cont->drinks as $drink) { 
+
+                $drinkItem = Drink::where('id', $drink->id)->first();
                 
                 $drinkstock = DrinkStock::where([
                     'drink_id' => $drink->id, 
@@ -184,17 +209,16 @@ class OrderController extends Controller
                     'quantity' => $drink->quantity,
                     'price' => $drinkstock->selling_price
                 ]);
+
+                $txtBody .= "$drink->quantity x $drinkItem->name \n";
     
                 $cost += $drinkstock->selling_price;
+                $totalCost += $drinkstock->selling_price;
                 $productTotal += $drink->quantity;
             }
     
         }
 
-        $constant = SystemConstant::where('id', 1)->first();
-
-        $totalCost = 0.0;
-        
         if($request->has('foods')){
 
             foreach ($cont->foods as $item) {
@@ -264,7 +288,10 @@ class OrderController extends Controller
             ]);
         }
 
+        $txtBody .= "\n 10% Tayari discount is active";
         $txtBody .= "\n The customer will pay $cost TZS";
+        $txtBody .= "\n Customer phone: $user->phone";
+        $txtBody .= "\n Tayari will pay you $order->total_cost TZS";
 
         $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place','customer'])->first();
 
@@ -272,7 +299,10 @@ class OrderController extends Controller
         $mailController->orderRecievedMail(null, $place);
 
         $smsController = new SMSController();
-        $smsController->sendMessage(null, $txtBody, $place->cashier_number);
+
+        if($place->cashier_number !== null){
+            $smsController->sendMessage(null, $txtBody, $place->cashier_number);
+        }
 
        if($request->type == 4){
         $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255714779397");
