@@ -125,11 +125,19 @@ class OrderController extends Controller
         $somedata = $request->input();
         $somedata = file_get_contents("php://input");
         $cont = json_decode($somedata);
-
+        $place = Place::where('id', $request->place_id)->first();
         $now = Carbon::now();
 
         $cost = 0.00;
         $productTotal = 0;
+
+        if($place->cashier_number !== null){
+            if($request->type == 4){
+                $txtBody = "An delivery order has been made. The order items are: \n";
+            } else{
+                $txtBody = "An restaurant order has been made. The order items are: \n";
+            }   
+        }
 
         if($request->type == 4){
             $order = Order::create([
@@ -199,7 +207,9 @@ class OrderController extends Controller
                     'quantity' => $item->quantity, 
                     'cost' => ($item->price - ($item->price * $menu->discount)) * $item->quantity 
                 ]);
-    
+                
+                $txtBody .= "$item->quantity x $menu->menu_name \n";
+                
                 $cost += $orderItem->cost;
                 $totalCost += $constant->discount_active ? $item->price * $constant->discount : 0;
                 $productTotal += $orderItem->quantity;
@@ -254,22 +264,15 @@ class OrderController extends Controller
             ]);
         }
 
-        $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place','customer'])->first();
+        $txtBody .= "\n The customer will pay $cost TZS";
 
-        $place = Place::where('id', $request->place_id)->first();
+        $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place','customer'])->first();
 
         $mailController = new MailController();
         $mailController->orderRecievedMail(null, $place);
 
         $smsController = new SMSController();
-
-        if($place->cashier_number !== null){
-            if($request->type == 4){
-                $smsController->sendMessage(null, "An delivery order has been made. Please check the restuarant dashboard.", $place->cashier_number);
-            } else{
-                $smsController->sendMessage(null, "An restaurant order has been made. Please check the restuarant dashboard.", $place->cashier_number);
-            }   
-        }
+        $smsController->sendMessage(null, $txtBody, $place->cashier_number);
 
        if($request->type == 4){
         $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255714779397");
