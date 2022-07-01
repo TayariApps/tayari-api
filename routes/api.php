@@ -29,6 +29,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\POSController;
 
 /*
 |--------------------------------------------------------------------------
@@ -134,6 +135,11 @@ Route::prefix('v1')->group(function(){
      Route::get('review/menus',[ReviewController::class,'menuReviews']);
 
     Route::middleware('auth:sanctum')->group(function(){
+
+        Route::prefix('pos')->group(function(){
+            Route::post('store',[POSController::class,'store']);
+        });
+
 
         Route::prefix('schedule')->group(function(){
             Route::get('{placeID}',[ScheduleController::class,'getSchedule']);
