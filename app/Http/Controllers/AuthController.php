@@ -222,7 +222,7 @@ class AuthController extends Controller
             'phone' => $request->phone,
         ])->first();
 
-        $employee = Employee::where('user_id', $user->id)->first();
+        $employee = Employee::where('user_id', $user->id)->with('place')->first();
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             return \response()->json('Wrong credentials', 400);
@@ -231,6 +231,7 @@ class AuthController extends Controller
         return response()->json([
             'user' => $user,
             'place_id' => $employee->place_id,
+            'place' => $employee->place,
             'status' => $employee->status,
             'token' => $user->createToken(time())->plainTextToken
         ], 200);             

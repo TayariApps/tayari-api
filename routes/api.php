@@ -140,7 +140,6 @@ Route::prefix('v1')->group(function(){
             Route::post('store',[POSController::class,'store']);
         });
 
-
         Route::prefix('schedule')->group(function(){
             Route::get('{placeID}',[ScheduleController::class,'getSchedule']);
             Route::post('update',[ScheduleController::class,'update']);
