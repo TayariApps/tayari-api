@@ -45,7 +45,8 @@ class AuthController extends Controller
 
             UserToken::create([
                 'user_id' => $user->id,
-                'otp' => $otp
+                'otp' => $otp,
+                'activated' => false
             ]);
 
             $smsController = new SMSController();
@@ -60,7 +61,8 @@ class AuthController extends Controller
 
         UserToken::create([
             'user_id' => $user->id,
-            'otp' => $otp
+            'otp' => $otp,
+            'activated' => false
         ]);
 
         $smsController = new SMSController();
@@ -112,6 +114,7 @@ class AuthController extends Controller
         ],200);
     }
 
+    //current in use
     public function userPhoneLoginUpdate(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required',
