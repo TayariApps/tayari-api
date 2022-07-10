@@ -162,6 +162,7 @@ class OrderController extends Controller
 
         if($request->type == 4){
             $order = Order::create([
+                'table_id' => 1,
                 'place_id' => $request->place_id,
                 'executed_time' => $cont->executed_time,
                 'customer_id' => $cont->customer_id,
@@ -311,7 +312,6 @@ class OrderController extends Controller
         $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255714779397");
         $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255747852570");
        }
-        
 
         return response()->json($newOrder, 201);
     }
