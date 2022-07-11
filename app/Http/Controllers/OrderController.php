@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\{ Menu, User, Sale, Place, Table, Drink, DrinkOrder, DrinkStock, OrderItem, Order, UserCoupon, SystemConstant};
-use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\MailController;
-use App\Http\Controllers\SMSController;
+use Illuminate\Support\Facades\{Validator, Http};
+use App\Http\Controllers\{MailController,SMSController};
 
 class OrderController extends Controller
 {
@@ -111,6 +110,8 @@ class OrderController extends Controller
 
     public function store(Request $request){
         date_default_timezone_set('Africa/Dar_es_Salaam');
+
+        dd($request->bearerToken());
 
         $validator = Validator::make($request->all(), [
             'executed_time' => 'required', 
@@ -311,6 +312,16 @@ class OrderController extends Controller
        } else{
         $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255714779397");
         $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255747852570");
+       }
+
+       //send notification to user
+       if($newOrder->customer_id != null){
+
+        if($newOrder->customer->fcm != null){
+
+
+        }
+
        }
 
         return response()->json($newOrder, 201);
