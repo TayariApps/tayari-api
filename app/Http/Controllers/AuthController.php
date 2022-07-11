@@ -121,7 +121,8 @@ class AuthController extends Controller
             'email' => 'required',
             'phone' => 'required',
             'country_id' => 'required',
-            'otp' => 'required'
+            'otp' => 'required',
+            'fcm' => 'required'
         ]);
 
         if($validator->fails()){
