@@ -111,8 +111,6 @@ class OrderController extends Controller
     public function store(Request $request){
         date_default_timezone_set('Africa/Dar_es_Salaam');
 
-        dd($request->bearerToken());
-
         $validator = Validator::make($request->all(), [
             'executed_time' => 'required', 
             'customer_id' => 'required',
