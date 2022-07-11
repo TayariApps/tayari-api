@@ -125,8 +125,6 @@ class AuthController extends Controller
             'fcm' => 'required'
         ]);
 
-        return \response()->json($request->fcm,200);
-
         if($validator->fails()){
             return response()->json('Please enter all details', 400);
         }
