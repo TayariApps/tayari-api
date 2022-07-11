@@ -61,7 +61,7 @@ class NotificationController extends Controller
 
     public function notificationMethod($title, $body, $userID){
 
-        $user = User::where('id', $request->userID)->first();
+        $user = User::where('id', $userID)->first();
 
         if($user->fcm == null){
             return \response()->json('User does not have token',400);
