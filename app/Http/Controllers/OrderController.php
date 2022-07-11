@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\{ Menu, User, Sale, Place, Table, Drink, DrinkOrder, DrinkStock, OrderItem, Order, UserCoupon, SystemConstant};
 use Illuminate\Support\Facades\{Validator, Http};
-use App\Http\Controllers\{MailController,SMSController};
+use App\Http\Controllers\{MailController,SMSController, NotificationController};
 
 class OrderController extends Controller
 {
@@ -315,13 +315,16 @@ class OrderController extends Controller
        }
 
        //send notification to user
+
+       //check if order has customer id
        if($newOrder->customer_id != null){
+            //check if customer has FCM token
+            if($newOrder->customer->fcm != null){
+                $notificationController = new NotificationController();
 
-        if($newOrder->customer->fcm != null){
-
-
-        }
-
+                //send notification
+                $notificationController->notificationMethod('Tayari', "Your order has been accepted, it will take $newOrder->waiting_time minutes", $newOrder->customer_id);
+            }
        }
 
         return response()->json($newOrder, 201);
