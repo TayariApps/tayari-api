@@ -10,6 +10,51 @@ use Illuminate\Support\Facades\Http;
 
 class NotificationController extends Controller
 {
+    public function sendNotificationToAll(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'body' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json('Please enter all details', 400);
+        }
+
+        $users = User::whereNotNull('fcm')->where('role',3)->get();
+
+        if(count($users) > 0){
+            foreach ($users as $user) {
+            
+                $response = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'key=AAAAy9HCKbo:APA91bFF1R1HmH_JlRAuXUBfRK8zj5X8ajzGEffxoL4fpYPxsGR4NphLOb98fTCvOnLmwJAnsnJXCXOmeq3IkzXGMj7kkmUqHhqXk0mv6rhKO4sS3Z6rPRfh5UX3VP33WjQgNeutgXWq'
+                ])->post('https://fcm.googleapis.com/fcm/send', [
+                    'to' => $user->fcm,
+                    'data' => [
+                        'title' => 'Tayari',
+                        'body' => $request->body
+                    ],
+                    'notification' => [
+                        'title' => 'Tayari',
+                        'body' => $request->body
+                    ]
+                ]);
+                
+                if($response->ok()){
+                    Notification::create([
+                        'title' => 'Tayari', 
+                        'body' => $request->body, 
+                        'user_id' => $user->id,
+                        'fcm' => $user->fcm
+                    ]);
+                }
+            }
+        }
+
+        return \response()->json('Notification sent',200);
+    }
+    
     public function sendNotification(Request $request){
 
         $validator = Validator::make($request->all(), [

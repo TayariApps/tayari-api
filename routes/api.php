@@ -134,6 +134,8 @@ Route::prefix('v1')->group(function(){
      Route::get('review/topreviews',[ReviewController::class,'bestReviewedPlaces']);
      Route::get('review/menus',[ReviewController::class,'menuReviews']);
 
+     Route::post('notification/user/all',[NotificationController::class,'sendNotificationToAll']);
+
     Route::middleware('auth:sanctum')->group(function(){
 
         Route::prefix('pos')->group(function(){
