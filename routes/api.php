@@ -30,6 +30,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\POSController;
+use App\Http\Controllers\DisbursementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -317,6 +318,8 @@ Route::prefix('v1')->group(function(){
             Route::post('mobilePayment', [SaleController::class,'mobilePayment']);
             Route::get('checkOrder/{orderID}',[SaleController::class,'checkOrder']);
             //REMEMBER TO KEEP DISBURSEMENTS HERE
+
+            Route::post('disbursementPayment',[DisbursementController::class,'makeDisbursement']);
         });
         
 

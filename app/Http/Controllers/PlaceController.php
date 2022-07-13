@@ -103,9 +103,9 @@ class PlaceController extends Controller
             'banner' => 'required',  
         ]);
 
-        if ($imageValidator->fails()) {
-            return response()->json('Logo or banner size should be below 3 MBs', 400);
-        }
+        // if ($imageValidator->fails()) {
+        //     return response()->json('Logo or banner size should be below 3 MBs', 400);
+        // }
 
         if($request->hasFile('logo')){
             $img_ext = $request->file('logo')->getClientOriginalExtension();
