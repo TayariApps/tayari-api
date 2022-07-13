@@ -10,6 +10,6 @@ class Disbursement extends Model
     use HasFactory;
 
     protected $fillable = [
-        'place_id', 'amount'
+        'place_id', 'amount', 'ref_id'
     ];
 }   

@@ -12,15 +12,15 @@ class DisbursementController extends Controller
         return response()->json($places,200);
     }
 
-    public function makeDisbursement(Request $request){
+    public function makeDisbursement($phone, $amount, $refID){
 
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])->post('http://3.136.115.91/api/makeTransfer', [
-            'phone' => $request->phone,
-            'amount' => $request->amount,
-            'referenceid' => $request->referenceID
+            'phone' => $phone,
+            'amount' => $amount,
+            'referenceid' => $refID
         ]);
 
         if($response->ok()){

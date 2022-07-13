@@ -9,7 +9,7 @@ use App\Models\Disbursement;
 use App\Models\Revenue;
 use App\Models\SystemConstant;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\{InvoiceController, DisburementController};
 
 class SaleController extends Controller
 {
@@ -24,20 +24,28 @@ class SaleController extends Controller
     public function makeDisbursement(Request $request){
         $validator = Validator::make($request->all(), [
             'place_id' => 'required',
-            'amount' => 'required'
+            'amount' => 'required',
+            'phone' => 'required'
         ]);
 
         if($validator->fails()){
             return response()->json('Please enter all details', 400);
         }
 
+        if(strlen($request->phone) !== 12){
+            return response()->json('Phone number should be in the format of 255XXX...', 400);
+        }
+
         $constant = SystemConstant::where('id', 1)->first();
 
         $tayariCut = ( $constant->payment_cut / (1 - $constant->payment_cut) ) * $request->amount;
 
+        $refID = "TYR". rand( 10000000 , 99999999);
+
         $disbursement = Disbursement::create([
             'place_id' => $request->place_id,
-            'amount' => $request->amount
+            'amount' => $request->amount,
+            'ref_id' => $refID
         ]);
 
         Revenue::create([
@@ -45,6 +53,9 @@ class SaleController extends Controller
             'amount' => $tayariCut,
             'disbursement_id' => $disbursement->id
         ]);
+
+        $disbursementController = new DisbursementController();
+        $disbursementController->makeDisbursement($request->phone, $request->amount, $refID);
 
         $invoiceController = new InvoiceController();
         $invoiceController->storeInvoice($request->place_id, $disbursement->id, $request->amount);
@@ -65,7 +76,7 @@ class SaleController extends Controller
     public function mobilePayment(Request $request){
 
         $order = Order::where('id', $request->orderID)->first();
-        
+
         Sale::create([
             'order_id' => $order->id, 
             'code' => $request->ResponseCode, 
