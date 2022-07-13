@@ -65,8 +65,6 @@ class SaleController extends Controller
     public function mobilePayment(Request $request){
 
         $order = Order::where('id', $request->orderID)->first();
-
-        return response()->json($order, 200);
         
         Sale::create([
             'order_id' => $order->id, 
