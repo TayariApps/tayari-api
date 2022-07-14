@@ -9,7 +9,7 @@ use App\Models\Disbursement;
 use App\Models\Revenue;
 use App\Models\SystemConstant;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\{InvoiceController, DisburementController};
+use App\Http\Controllers\{InvoiceController, DisburementController, SMSController};
 
 class SaleController extends Controller
 {

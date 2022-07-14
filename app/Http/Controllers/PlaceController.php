@@ -12,6 +12,7 @@ use App\Models\DrinkStock;
 use App\Models\Menu;
 use App\Models\Sale;
 use App\Models\Table;
+use App\Models\RestaurantNumber;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -99,13 +100,13 @@ class PlaceController extends Controller
         }
 
         $imageValidator = Validator::make($request->all(), [
-            'logo' => 'required',
-            'banner' => 'required',  
+            'logo' => 'required|image|mimes:jpeg,jpg,png,gif|max:7000',
+            'banner' => 'required|image|mimes:jpeg,jpg,png,gif|max:7000',  
         ]);
 
-        // if ($imageValidator->fails()) {
-        //     return response()->json('Logo or banner size should be below 3 MBs', 400);
-        // }
+        if ($imageValidator->fails()) {
+            return response()->json('Logo or banner size should be below 7 MBs', 400);
+        }
 
         if($request->hasFile('logo')){
             $img_ext = $request->file('logo')->getClientOriginalExtension();
@@ -137,6 +138,20 @@ class PlaceController extends Controller
             'logo_url' => $logoFilename,
             'discount' => 0.1
         ]);
+
+        if($request->has('phone1')){
+            RestaurantNumber::create([
+                'place_id' => $place->id,
+                'phone' => $request->phone1,
+            ]);
+        }
+
+        if($request->has('phone2')){
+            RestaurantNumber::create([
+                'place_id' => $place->id,
+                'phone' => $request->phone2,
+            ]);
+        }
 
         return response()->json('Place created', 201);
     }
