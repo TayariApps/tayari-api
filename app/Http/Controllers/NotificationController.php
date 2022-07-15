@@ -22,6 +22,8 @@ class NotificationController extends Controller
 
         $users = User::whereNotNull('fcm')->where('role',3)->get();
 
+        return response()->json($users, 200);
+
         if(count($users) > 0){
             foreach ($users as $user) {
             
