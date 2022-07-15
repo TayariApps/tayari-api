@@ -18,6 +18,10 @@ class Place extends Model
         'payment_number', 'payment_network', 'payment_name', 'delivery'
     ];
 
+    public function phones(){
+        return $this->hasMany(RestaurantNumber::class);
+    }
+
     public function schedules(){
         return $this->hasMany(Schedule::class);
     }

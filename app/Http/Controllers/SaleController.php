@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Sale;
-use App\Models\Order;
-use App\Models\Disbursement;
-use App\Models\Revenue;
-use App\Models\SystemConstant;
+use App\Models\{Sale, Order, Disbursement, Revenue, SystemConstant, Place};
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\{InvoiceController, DisburementController, SMSController};
 
@@ -55,7 +52,7 @@ class SaleController extends Controller
         ]);
 
         $disbursementController = new DisbursementController();
-        $disbursementController->makeDisbursement($request->phone, $request->amount, $refID);
+        $disbursementController->makeDisbursement($request->phone, $request->amount, $refID,  $request->place_id);
 
         $invoiceController = new InvoiceController();
         $invoiceController->storeInvoice($request->place_id, $disbursement->id, $request->amount);
@@ -83,7 +80,7 @@ class SaleController extends Controller
             'amount' => $request->amount, 
             'reference_id' => $request->ReferenceID, 
             'type' => 2, 
-            'phone_number' => $request->CustomerMSIDN, 
+            'phone_number' => $request->CustomerMSISDN, 
             'place_id' => $order->place_id
         ]);
 
@@ -91,6 +88,7 @@ class SaleController extends Controller
     }
 
     public function mobileCallback(Request $request){
+        date_default_timezone_set('Africa/Dar_es_Salaam');
 
         $checkIfReferenceIDexists = Sale::where('reference_id', $request->ReferenceID)->exists();
 
@@ -118,6 +116,18 @@ class SaleController extends Controller
                 'status' => 4,
                 'paid' => $sale->amount
             ]);
+
+            //successful sms text
+            $date = Carbon::now()->toDateTimeString();
+            $place = Place::where('id', $sale->place_id)->first();
+
+            $txt = "Successful payment to $place->name via TAYARI PAYMENTS.";
+            $txt .= "\n REF: $sale->reference_id";
+            $txt .= "\n MOB: $sale->phone_number";
+            $txt .= "\n DATE: $date";
+
+            $smsController = new SMSController();
+            $smsController->sendMessage(null, $txt, $sale->phone_number);
 
             return \response()->json([
                 "ResponseCode" => "BILLER-18-0000-S",

@@ -71,7 +71,7 @@ class PlaceController extends Controller
     }
 
     public function getPlace($id){
-        return \response()->json(Place::where('id', $id)->first(),200);
+        return \response()->json(Place::where('id', $id)->with('phones')->first(),200);
     }
 
     public function ownerPlaces(Request $request){
@@ -186,6 +186,14 @@ class PlaceController extends Controller
             'payment_number' => $request->payment_number,
             'delivery' => $request->delivery == "true" ? true : false
         ]);
+
+        if($request->has('phone1')){
+            RestaurantNumber::updateOrCreate([
+                'place_id' => $place->id
+            ],[
+                'phone' => $request->phone1
+            ]);
+        }
 
         if($request->hasFile('logo')){
             $img_ext = $request->file('logo')->getClientOriginalExtension();

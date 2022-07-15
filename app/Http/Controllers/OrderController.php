@@ -223,7 +223,7 @@ class OrderController extends Controller
 
             foreach ($cont->foods as $item) {
 
-                $menu = Menu::where('id', $item->id)->first();
+                $menu = Menu::where('id', $item->id)->with('type')->first();
 
                 $orderItem = OrderItem::create([
                     'menu_id' => $item->id, 
@@ -231,8 +231,11 @@ class OrderController extends Controller
                     'quantity' => $item->quantity, 
                     'cost' => ($item->price - ($item->price * $menu->discount)) * $item->quantity 
                 ]);
-                
-                $txtBody .= "$item->quantity x $menu->menu_name \n";
+
+                $typename = $menu->type->name;
+
+                $txtBody .= "Food type: $typename \n";
+                $txtBody .= "$item->quantity x $menu->menu_name \n\n";
                 
                 $cost += $orderItem->cost;
                 $totalCost += $constant->discount_active ? $item->price * $constant->discount : 0;

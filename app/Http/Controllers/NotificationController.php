@@ -13,6 +13,7 @@ class NotificationController extends Controller
     public function sendNotificationToAll(Request $request){
 
         $validator = Validator::make($request->all(), [
+            'title' => 'required',
             'body' => 'required',
         ]);
 
@@ -32,18 +33,18 @@ class NotificationController extends Controller
                 ])->post('https://fcm.googleapis.com/fcm/send', [
                     'to' => $user->fcm,
                     'data' => [
-                        'title' => 'Tayari',
+                        'title' => $request->title,
                         'body' => $request->body
                     ],
                     'notification' => [
-                        'title' => 'Tayari',
+                        'title' => $request->title,
                         'body' => $request->body
                     ]
                 ]);
                 
                 if($response->ok()){
                     Notification::create([
-                        'title' => 'Tayari', 
+                        'title' => $request->title,
                         'body' => $request->body, 
                         'user_id' => $user->id,
                         'fcm' => $user->fcm
