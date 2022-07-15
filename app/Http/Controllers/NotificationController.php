@@ -88,6 +88,8 @@ class NotificationController extends Controller
                 'body' => $request->body
             ]
         ]);
+
+        return response()->json($response->ok(), 200);
         
         if($response->ok()){
 
