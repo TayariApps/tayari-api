@@ -239,15 +239,15 @@ class OrderController extends Controller
                 $productTotal += $orderItem->quantity;
 
                 //testing
-                return \response()->json([
-                    'cost' => $cost,
-                    'totalCost' => $totalCost,
-                    'constant' => $constant->discount_active,
-                    'discount' => $constant->discount,
-                    'menu_discount' => $menu->discount,
-                    'menu_price' => $item->price,
-                    'discount_Active' => $constant->discount_active
-                ], 200);
+                // return \response()->json([
+                //     'cost' => $cost,
+                //     'totalCost' => $totalCost,
+                //     'constant' => $constant->discount_active,
+                //     'discount' => $constant->discount,
+                //     'menu_discount' => $menu->discount,
+                //     'menu_price' => $item->price,
+                //     'discount_Active' => $constant->discount_active
+                // ], 200);
             }
 
         }
