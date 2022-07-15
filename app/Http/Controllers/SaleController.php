@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\{Sale, Order, Disbursement, Revenue, SystemConstant, Place};
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\{Validator, Http};
 use App\Http\Controllers\{InvoiceController, DisburementController, SMSController};
 
 class SaleController extends Controller
@@ -39,25 +39,54 @@ class SaleController extends Controller
 
         $refID = "TYR". rand( 10000000 , 99999999);
 
-        $disbursement = Disbursement::create([
-            'place_id' => $request->place_id,
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        ])->post('http://3.136.115.91/api/makeTransfer', [
+            'phone' => $request->phone,
             'amount' => $request->amount,
-            'ref_id' => $refID
+            'referenceid' => $refID
         ]);
 
-        Revenue::create([
-            'place_id' => $request->place_id,
-            'amount' => $tayariCut,
-            'disbursement_id' => $disbursement->id
-        ]);
+        $txnstatus = json_decode($response->body(), true)['TXNSTATUS'];
 
-        $disbursementController = new DisbursementController();
-        $disbursementController->makeDisbursement($request->phone, $request->amount, $refID,  $request->place_id);
+        if($txnstatus == "200"){
 
-        $invoiceController = new InvoiceController();
-        $invoiceController->storeInvoice($request->place_id, $disbursement->id, $request->amount);
+            $place = Place::where('id', $request->place_id)->first();
+            $date = Carbon::now()->toDateTimeString();
 
-        return \response()->json('Disbursement complete',200);
+            $txtBody = "Successful disbursement of TZS $request->amount has been made to $place->name from TAYARI PAYMENTS.";
+            $txtBody .= "\n REF: $refID";
+            $txtBody .= "\n MOB: $request->phone";
+            $txtBody .= "\n DATE: $date"; 
+
+            $smsController = new SMSController();
+            $smsController->sendMessage(null, $txtBody, $request->phone);
+            $smsController->sendMessage(null, $txtBody, "255714779397");
+
+            $disbursement = Disbursement::create([
+                'place_id' => $request->place_id,
+                'amount' => $request->amount,
+                'ref_id' => $refID
+            ]);
+    
+            Revenue::create([
+                'place_id' => $request->place_id,
+                'amount' => $tayariCut,
+                'disbursement_id' => $disbursement->id
+            ]);
+
+            // $disbursementController = new DisbursementController();
+            // $disbursementController->makeDisbursement($request->phone, $request->amount, $refID,  $request->place_id);
+
+            $invoiceController = new InvoiceController();
+            $invoiceController->storeInvoice($request->place_id, $disbursement->id, $request->amount);
+
+            return \response()->json('Disbursement complete',200);
+        } else{
+            return \response()->json('Disbursement failed',400);
+        }
+       
     }
 
     public function checkOrder($orderID){

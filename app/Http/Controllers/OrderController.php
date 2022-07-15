@@ -129,6 +129,9 @@ class OrderController extends Controller
 
         $cost = 0.00;
         $productTotal = 0;
+        $foodCost = 0.0;
+        $drinkCost = 0.0;
+        $constant = SystemConstant::where('id', 1)->first();
 
         $txtBody = "A new order has been made on Tayari App. \n";
         switch ($request->type) {
@@ -185,8 +188,41 @@ class OrderController extends Controller
             ]);
         }
 
-        $constant = SystemConstant::where('id', 1)->first();
-        $totalCost = 0.0;
+        if($request->has('foods')){
+
+            foreach ($cont->foods as $item) {
+
+                $menu = Menu::where('id', $item->id)->with('type')->first();
+
+                $orderItem = OrderItem::create([
+                    'menu_id' => $item->id, 
+                    'order_id' => $order->id, 
+                    'quantity' => $item->quantity, 
+                    'cost' => ($item->price - ($item->price * $menu->discount)) * $item->quantity 
+                ]);
+
+                $typename = $menu->type->name;
+
+                $txtBody .= "Food type: $typename \n";
+                $txtBody .= "$item->quantity x $menu->menu_name \n\n";
+                
+                $cost += $orderItem->cost;
+                $foodCost += $constant->discount_active ? $item->price * $constant->discount : 0;
+                $productTotal += $orderItem->quantity;
+                
+                //testing
+                // return \response()->json([
+                //     'cost' => $cost,
+                //     'totalCost' => $totalCost,
+                //     'constant' => $constant->discount_active,
+                //     'discount' => $constant->discount,
+                //     'menu_discount' => $menu->discount,
+                //     'menu_price' => $item->price,
+                //     'discount_Active' => $constant->discount_active
+                // ], 200);
+            }
+
+        }
 
         if($request->has('drinks')){
 
@@ -212,47 +248,11 @@ class OrderController extends Controller
 
                 $txtBody .= "$drink->quantity x $drinkItem->name \n";
     
-                $cost += $drinkstock->selling_price;
-                $totalCost += $drinkstock->selling_price;
+                $cost += $drinkstock->selling_price * $drink->quantity;;
+                $drinkCost += $drinkstock->selling_price * $drink->quantity;
                 $productTotal += $drink->quantity;
             }
     
-        }
-
-        if($request->has('foods')){
-
-            foreach ($cont->foods as $item) {
-
-                $menu = Menu::where('id', $item->id)->with('type')->first();
-
-                $orderItem = OrderItem::create([
-                    'menu_id' => $item->id, 
-                    'order_id' => $order->id, 
-                    'quantity' => $item->quantity, 
-                    'cost' => ($item->price - ($item->price * $menu->discount)) * $item->quantity 
-                ]);
-
-                $typename = $menu->type->name;
-
-                $txtBody .= "Food type: $typename \n";
-                $txtBody .= "$item->quantity x $menu->menu_name \n\n";
-                
-                $cost += $orderItem->cost;
-                $totalCost += $constant->discount_active ? $item->price * $constant->discount : 0;
-                $productTotal += $orderItem->quantity;
-
-                //testing
-                // return \response()->json([
-                //     'cost' => $cost,
-                //     'totalCost' => $totalCost,
-                //     'constant' => $constant->discount_active,
-                //     'discount' => $constant->discount,
-                //     'menu_discount' => $menu->discount,
-                //     'menu_price' => $item->price,
-                //     'discount_Active' => $constant->discount_active
-                // ], 200);
-            }
-
         }
 
         if($request->has('coupon')){
@@ -277,7 +277,7 @@ class OrderController extends Controller
 
                 $order->update([
                     'cost' => $cost - ($cost * 0.5),
-                    'total_cost' => $cost + $totalCost,
+                    'total_cost' =>  $cost + $foodCost,
                     'order_number' => "TYR-".$order->id,
                     'product_total' => $productTotal
                 ]);
@@ -286,7 +286,7 @@ class OrderController extends Controller
 
                 $order->update([
                     'cost' => $cost,
-                    'total_cost' => $cost + $totalCost,
+                    'total_cost' =>  $cost + $foodCost,
                     'order_number' => "TYR-".$order->id,
                     'product_total' => $productTotal
                 ]);
@@ -296,7 +296,7 @@ class OrderController extends Controller
         } else {
             $order->update([
                 'cost' => $cost,
-                'total_cost' => $cost + $totalCost,
+                'total_cost' => $cost + $foodCost,
                 'order_number' => "TYR-".$order->id,
                 'product_total' => $productTotal
             ]);
@@ -309,8 +309,8 @@ class OrderController extends Controller
 
         $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place','customer'])->first();
 
-        $mailController = new MailController();
-        $mailController->orderRecievedMail(null, $place);
+        // $mailController = new MailController();
+        // $mailController->orderRecievedMail(null, $place);
 
         $smsController = new SMSController();
 
