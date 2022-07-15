@@ -245,7 +245,8 @@ class OrderController extends Controller
                     'constant' => $constant->discount_active,
                     'discount' => $constant->discount,
                     'menu_discount' => $menu->discount,
-                    'menu_price' => $item->price
+                    'menu_price' => $item->price,
+                    'discount_Active' => $constant->discount_active
                 ], 200);
             }
 
