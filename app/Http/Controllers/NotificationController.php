@@ -20,9 +20,7 @@ class NotificationController extends Controller
             return response()->json('Please enter all details', 400);
         }
 
-        $users = User::whereNotNull('fcm')->whereIn('role', [3,4])->get();
-
-        return response()->json($users, 200);
+        $users = User::whereNotNull('fcm')->whereIn('role',[3,4])->get();
 
         if(count($users) > 0){
             foreach ($users as $user) {
