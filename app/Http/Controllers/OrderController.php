@@ -237,6 +237,14 @@ class OrderController extends Controller
                 $cost += $orderItem->cost;
                 $totalCost += $constant->discount_active ? $item->price * $constant->discount : 0;
                 $productTotal += $orderItem->quantity;
+
+                //testing
+                return \response()->json([
+                    'cost' => $cost,
+                    'totalCost' => $totalCost,
+                    'constant' => $constant->discount_active,
+                    'discount' => $constant->discount,
+                ], 200);
             }
 
         }
