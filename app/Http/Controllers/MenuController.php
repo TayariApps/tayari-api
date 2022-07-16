@@ -118,7 +118,8 @@ class MenuController extends Controller
             'price' => $request->price, 
             'time_takes_to_make' => $request->time, 
             'type_id' => $request->type,
-            'ingredients' => $request->ingredients
+            'ingredients' => $request->ingredients,
+            'kilos' => $request->kilos
         ]);
 
         return \response()->json('Menu updated',200);

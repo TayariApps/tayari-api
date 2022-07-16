@@ -29,7 +29,7 @@ class SMSController extends Controller
     public function sendTextToAllClients(Request $request){
         $message = $request->message;
 
-        $users = User::where('role',3)->get();
+        $users = User::where('role',3)->whereNotNull('phone')->get();
 
         foreach ($users as $user) {
             $response = Http::post('https://secure-gw.fasthub.co.tz/fasthub/messaging/json/api', [

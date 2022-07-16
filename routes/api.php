@@ -291,8 +291,8 @@ Route::prefix('v1')->group(function(){
             Route::get('place/{id}',[OrderController::class,'placeOrders']);
             Route::post('store',[OrderController::class,'store']);
 
-            Route::post('mobileStore',[SecondOrderController::class,'mobileStore']);
-            Route::post('cashStore',[SecondOrderController::class,'cashStore']);
+            Route::post('mobileStore',[SecondOrderController::class,'mobileOrder']);
+            Route::post('cashStore',[SecondOrderController::class,'cashOrder']);
 
             Route::get('orderStatus/{id}',[OrderController::class,'orderStatus']);
             Route::get('restaurantConfirmPayment/{id}',[OrderController::class,'restaurantConfirmPayment']);
