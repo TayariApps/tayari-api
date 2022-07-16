@@ -47,7 +47,8 @@ class NotificationController extends Controller
                         'title' => $request->title,
                         'body' => $request->body, 
                         'user_id' => $user->id,
-                        'fcm' => $user->fcm
+                        'fcm' => $user->fcm,
+                        'unix_time' => intval(microtime(true) * 1000)
                     ]);
                 }
             }
@@ -96,7 +97,8 @@ class NotificationController extends Controller
                 'title' => $request->title, 
                 'body' => $request->body, 
                 'user_id' => $user->id,
-                'fcm' => $user->fcm
+                'fcm' => $user->fcm,
+                'unix_time' => intval(microtime(true) * 1000)
             ]);
 
             return \response()->json('Notification sent',200);
@@ -135,7 +137,8 @@ class NotificationController extends Controller
                 'title' => $title, 
                 'body' => $body, 
                 'user_id' => $user->id,
-                'fcm' => $user->fcm
+                'fcm' => $user->fcm,
+                'unix_time' => intval(microtime(true) * 1000)
             ]);
 
             return \response()->json('Notification sent',200);

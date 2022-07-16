@@ -10,7 +10,7 @@ class Type extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'place_id', 'discount','type_discount', 'status'
+        'name', 'place_id', 'discount','type_discount', 'status', 'drink_type_id', 'addon'
     ];
 
     public function places(){
@@ -19,5 +19,9 @@ class Type extends Model
 
     public function menus(){
         return $this->hasMany(Menu::class);
+    }
+
+    public function drinkType(){
+        return $this->belongsTo(DrinkType::class);
     }
 }

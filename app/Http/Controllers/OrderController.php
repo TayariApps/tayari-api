@@ -125,13 +125,13 @@ class OrderController extends Controller
         $somedata = file_get_contents("php://input");
         $cont = json_decode($somedata);
         $place = Place::where('id', $request->place_id)->first();
-        $now = Carbon::now();
+        $now = Carbon::now();                                    //current timestamp
 
-        $cost = 0.00;
-        $productTotal = 0;
-        $foodCost = 0.0;
-        $drinkCost = 0.0;
-        $constant = SystemConstant::where('id', 1)->first();
+        $cost = 0.00;                                           //cost which will be displayed to the customer
+        $productTotal = 0;                                      //total number of products in the order
+        $foodCost = 0.0;                                        //cost of food for restuarant
+        $constant = SystemConstant::where('id', 1)->first();    //system constants
+        $hasCoupon  = false;                                    //boolean value to check if user has coupon
 
         $txtBody = "A new order has been made on Tayari App. \n";
         switch ($request->type) {
@@ -188,73 +188,6 @@ class OrderController extends Controller
             ]);
         }
 
-        if($request->has('foods')){
-
-            foreach ($cont->foods as $item) {
-
-                $menu = Menu::where('id', $item->id)->with('type')->first();
-
-                $orderItem = OrderItem::create([
-                    'menu_id' => $item->id, 
-                    'order_id' => $order->id, 
-                    'quantity' => $item->quantity, 
-                    'cost' => ($item->price - ($item->price * $menu->discount)) * $item->quantity 
-                ]);
-
-                $typename = $menu->type->name;
-
-                $txtBody .= "Food type: $typename \n";
-                $txtBody .= "$item->quantity x $menu->menu_name \n\n";
-                
-                $cost += $orderItem->cost;
-                $foodCost += $constant->discount_active ? $item->price * $constant->discount : 0;
-                $productTotal += $orderItem->quantity;
-                
-                //testing
-                // return \response()->json([
-                //     'cost' => $cost,
-                //     'totalCost' => $totalCost,
-                //     'constant' => $constant->discount_active,
-                //     'discount' => $constant->discount,
-                //     'menu_discount' => $menu->discount,
-                //     'menu_price' => $item->price,
-                //     'discount_Active' => $constant->discount_active
-                // ], 200);
-            }
-
-        }
-
-        if($request->has('drinks')){
-
-            foreach ($cont->drinks as $drink) { 
-
-                $drinkItem = Drink::where('id', $drink->id)->first();
-                
-                $drinkstock = DrinkStock::where([
-                    'drink_id' => $drink->id, 
-                    'place_id' => $request->place_id
-                ])->first();
-
-                $drinkstock->update([
-                    'quantity' => $drinkstock->quantity - $drink->quantity
-                ]);
-
-                DrinkOrder::create([
-                    'drink_id' => $drink->id,
-                    'order_id' => $order->id,
-                    'quantity' => $drink->quantity,
-                    'price' => $drinkstock->selling_price
-                ]);
-
-                $txtBody .= "$drink->quantity x $drinkItem->name \n";
-    
-                $cost += $drinkstock->selling_price * $drink->quantity;;
-                $drinkCost += $drinkstock->selling_price * $drink->quantity;
-                $productTotal += $drink->quantity;
-            }
-    
-        }
-
         if($request->has('coupon')){
 
             $checkIfExists = UserCoupon::where([
@@ -275,34 +208,77 @@ class OrderController extends Controller
                     'place_id' => $request->place_id,
                 ]);
 
-                $order->update([
-                    'cost' => $cost - ($cost * 0.5),
-                    'total_cost' =>  $cost + $foodCost,
-                    'order_number' => "TYR-".$order->id,
-                    'product_total' => $productTotal
+                $hasCoupon = true;
+            } 
+        } 
+
+        if($request->has('foods')){
+
+            foreach ($cont->foods as $item) {
+
+                $menu = Menu::where('id', $item->id)->with('type')->first();
+
+                $orderItem = OrderItem::create([
+                    'menu_id' => $item->id, 
+                    'order_id' => $order->id, 
+                    'quantity' => $item->quantity, 
+                    'details' => $item->details,
+                    'cost' => !$hasCoupon ? 
+                                ($item->price - ($item->price * $menu->discount)) * $item->quantity :
+                                ($item->price - ($item->price * 0.5)) * $item->quantity 
                 ]);
 
-            } else{
+                $typename = $menu->type->name;
 
-                $order->update([
-                    'cost' => $cost,
-                    'total_cost' =>  $cost + $foodCost,
-                    'order_number' => "TYR-".$order->id,
-                    'product_total' => $productTotal
-                ]);
-
+                $txtBody .= "Food type: $typename \n";
+                $txtBody .= "$item->quantity x $menu->menu_name \n\n";
+                
+                $cost += $orderItem->cost;
+                $foodCost += $constant->discount_active ? $item->price * $constant->discount : 0;
+                $productTotal += $orderItem->quantity;       
             }
 
-        } else {
-            $order->update([
-                'cost' => $cost,
-                'total_cost' => $cost + $foodCost,
-                'order_number' => "TYR-".$order->id,
-                'product_total' => $productTotal
-            ]);
         }
 
-        $txtBody .= "\n 10% Tayari discount is active";
+        if($request->has('drinks')){
+
+            foreach ($cont->drinks as $drink) { 
+
+                $drinkItem = Drink::where('id', $drink->id)->first();
+                
+                $drinkstock = DrinkStock::where([
+                    'drink_id' => $drink->id, 
+                    'place_id' => $request->place_id
+                ])->first();
+
+                $drinkstock->update([
+                    'quantity' => $drinkstock->quantity - $drink->quantity
+                ]);
+
+                $drinkOrder = DrinkOrder::create([
+                    'drink_id' => $drink->id,
+                    'order_id' => $order->id,
+                    'quantity' => $drink->quantity,
+                    'price' => $hasCoupon ? ($drinkstock->selling_price - ($drinkstock->selling_price * 0.5)) * $drink->quantity :
+                                $drinkstock->selling_price * $drink->quantity
+                ]);
+
+                $txtBody .= "$drink->quantity x $drinkItem->name \n";
+    
+                $cost += $drinkOrder->price;
+                $productTotal += $drink->quantity;
+            }
+    
+        }
+
+        $order->update([
+            'cost' => $cost,
+            'total_cost' => $cost + $foodCost,
+            'order_number' => "TYR-".$order->id,
+            'product_total' => $productTotal
+        ]);
+
+        // $txtBody .= "\n 10% Tayari discount is active";
         $txtBody .= "\n The customer will pay $cost TZS";
         $txtBody .= "\n Customer phone: $user->phone";
         $txtBody .= "\n Tayari will pay you $order->total_cost TZS";

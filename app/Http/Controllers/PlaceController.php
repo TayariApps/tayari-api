@@ -96,7 +96,7 @@ class PlaceController extends Controller
         ]);
  
         if ($validator->fails()) {
-            return response()->json('Failed to save place', 400);
+            return response()->json('Some details are missing, enter all details', 400);
         }
 
         $imageValidator = Validator::make($request->all(), [
