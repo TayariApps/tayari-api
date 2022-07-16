@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Type;
 use App\Models\Menu;
 use App\Models\Place;
+use Illuminate\Support\Facades\Validator;
 
 class TypeController extends Controller
 {
@@ -25,18 +26,59 @@ class TypeController extends Controller
     }
     
     public function store(Request $request){
-        Type::create([
-            'name' => $request->name,
-            'place_id' => $request->place_id
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required', 
+            'place_id' => 'required'
         ]);
+ 
+        if ($validator->fails()) {
+            return response()->json('Enter all details', 400);
+        }
+       
+        if($request->addon){
+
+            if($request->drink_type_id == null){
+                return \response()->json('Please add drink type',400);
+            }
+
+            Type::where('id', $id)->update([
+                'name' => $request->name,
+                'addon' => $request->addon,
+                'drink_type_id' => $request->drink_type_id,
+                'place_id' => $request->place_id,
+            ]);
+
+        }else{
+            Type::create([
+                'name' => $request->name,
+                'place_id' => $request->place_id,
+            ]);
+        }
 
         return \response()->json('Type created',201);
     }
 
     public function update(Request $request,$id){
-        Type::where('id', $id)->update([
-            'name' => $request->name
-        ]);
+        
+        if($request->addon){
+            
+            if($request->drink_type_id == null){
+                return \response()->json('Please add drink type',400);
+            }
+
+            Type::where('id', $id)->update([
+                'name' => $request->name,
+                'addon' => $request->addon,
+                'drink_type_id' => $request->drink_type_id
+            ]);
+
+        } else{
+            Type::where('id', $id)->update([
+                'name' => $request->name,
+                'addon' => $request->addon,
+            ]);
+        }
 
         return \response()->json('Type updated',200);
     }  

@@ -92,6 +92,16 @@ class DrinkController extends Controller
 
     public function createStock(Request $request){
 
+        $validator = Validator::make($request->all(), [
+            'drink_id' => 'required',
+            'selling_price' => 'required',
+            'place_id' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json('Please enter all details', 400);
+        }
+
         $checkIfStockExists = DrinkStock::where([
             'place_id' => $request->place_id,
             'drink_id' => $request->drink_id
@@ -104,8 +114,8 @@ class DrinkController extends Controller
         DrinkStock::create([
             'place_id' => $request->place_id,
             'drink_id' => $request->drink_id,
-            'quantity' => $request->quantity ?? 0,
-            'buying_price' => $request->buying_price,
+            'quantity' => 10,
+            'buying_price' => 2500,
             'selling_price' => $request->selling_price
         ]);
 

@@ -167,6 +167,7 @@ Route::prefix('v1')->group(function(){
             Route::post('owner',[PlaceController::class,'ownerPlaces']);
             Route::post('openStatus',[PlaceController::class,'changeOpenStatus']);
             // Route::get('menu/{id}',[PlaceController::class,'placeMenu']);
+            Route::get('drinkstock/{id}',[PlaceController::class,'getDrinkStock']);
             Route::get('restaurantData/{id}',[PlaceController::class,'dashboardData']);
         });
     
