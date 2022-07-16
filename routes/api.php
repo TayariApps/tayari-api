@@ -31,6 +31,7 @@ use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\POSController;
 use App\Http\Controllers\DisbursementController;
+use App\Http\Controllers\SecondOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -287,6 +288,10 @@ Route::prefix('v1')->group(function(){
             Route::post('user',[OrderController::class,'userOrders']);
             Route::get('place/{id}',[OrderController::class,'placeOrders']);
             Route::post('store',[OrderController::class,'store']);
+
+            Route::post('mobileStore',[SecondOrderController::class,'mobileStore']);
+            Route::post('cashStore',[SecondOrderController::class,'cashStore']);
+
             Route::get('orderStatus/{id}',[OrderController::class,'orderStatus']);
             Route::get('restaurantConfirmPayment/{id}',[OrderController::class,'restaurantConfirmPayment']);
             Route::post('updateStatus',[OrderController::class,'changeStatus']);
