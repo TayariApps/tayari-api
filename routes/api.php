@@ -118,6 +118,7 @@ Route::prefix('v1')->group(function(){
     Route::post('admin/login',[DashboardController::class,'adminLogin']);
 
     Route::post('testSMS',[SMSController::class,'testMessage']);
+    Route::post('sendTxtToAll',[SMSController::class,'sendTextToAllClients']);
 
     Route::post('sale/makeDisbursement', [SaleController::class,'makeDisbursement']); //will need to be moved
 
