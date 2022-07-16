@@ -16,7 +16,6 @@ class SecondOrderController extends Controller
         $validator = Validator::make($request->all(), [
             'executed_time' => 'required', 
             'customer_id' => 'required',
-            'foods' => 'required'
         ]);
 
         if($validator->fails()){
@@ -197,7 +196,6 @@ class SecondOrderController extends Controller
         $validator = Validator::make($request->all(), [
             'executed_time' => 'required', 
             'customer_id' => 'required',
-            'foods' => 'required'
         ]);
 
         if($validator->fails()){

@@ -114,7 +114,7 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(), [
             'executed_time' => 'required', 
             'customer_id' => 'required',
-            'foods' => 'required'
+
         ]);
 
         if($validator->fails()){
@@ -224,9 +224,15 @@ class OrderController extends Controller
                     'quantity' => $item->quantity, 
                     'details' => $item->details,
                     'cost' => !$hasCoupon ? 
-                                ($item->price - ($item->price * $menu->discount)) * $item->quantity :
-                                ($item->price - ($item->price * 0.5)) * $item->quantity 
+                    ($item->price - ($item->price * $menu->discount)) * $item->quantity :
+                    ($item->price - ($item->price * 0.5)) * $item->quantity 
                 ]);
+
+                if($order->payment_method == 1){
+                    $orderItem->update([
+                        'cost' => $item->price * $item->quantity
+                    ]);
+                }
 
                 $typename = $menu->type->name;
 
@@ -234,7 +240,8 @@ class OrderController extends Controller
                 $txtBody .= "$item->quantity x $menu->menu_name \n\n";
                 
                 $cost += $orderItem->cost;
-                $foodCost += $constant->discount_active ? $item->price * $constant->discount : 0;
+                $foodCost += $order->payment_method == 2 ? 
+                ($constant->discount_active ? $item->price * $constant->discount : 0) : 0;
                 $productTotal += $orderItem->quantity;       
             }
 
@@ -262,6 +269,12 @@ class OrderController extends Controller
                     'price' => $hasCoupon ? ($drinkstock->selling_price - ($drinkstock->selling_price * 0.5)) * $drink->quantity :
                                 $drinkstock->selling_price * $drink->quantity
                 ]);
+
+                if($order->payment_method == 1){
+                    $drinkOrder->update([
+                        'cost' =>  $drinkstock->selling_price * $drink->quantity
+                    ]);
+                }
 
                 $txtBody .= "$drink->quantity x $drinkItem->name \n";
     
