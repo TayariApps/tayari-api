@@ -114,7 +114,6 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(), [
             'executed_time' => 'required', 
             'customer_id' => 'required',
-
         ]);
 
         if($validator->fails()){
@@ -172,7 +171,7 @@ class OrderController extends Controller
                 'order_created_by' => $request->user()->id,
                 'completed_time' => $now->addMinutes($cont->waiting_time)->toDateTimeString(),
                 'type' => $request->type,
-                'payment_method' => $request->method //method of payment
+                'payment_method' => (int)$request->method //method of payment
             ]);
         } else{
             $order = Order::create([
@@ -184,7 +183,7 @@ class OrderController extends Controller
                 'order_created_by' => $request->user()->id,
                 'completed_time' => $now->addMinutes($cont->waiting_time)->toDateTimeString(),
                 'type' => $request->type,
-                'payment_method' => $request->method //method of payment
+                'payment_method' => (int)$request->method //method of payment
             ]);
         }
 
@@ -224,13 +223,13 @@ class OrderController extends Controller
                     'quantity' => $item->quantity, 
                     'details' => $item->details,
                     'cost' => !$hasCoupon ? 
-                    ($item->price - ($item->price * $menu->discount)) * $item->quantity :
-                    ($item->price - ($item->price * 0.5)) * $item->quantity 
+                                ($item->price - ($item->price * $menu->discount)) * $item->quantity :
+                                ($item->price - ($item->price * 0.5)) * $item->quantity 
                 ]);
 
                 if($order->payment_method == 1){
                     $orderItem->update([
-                        'cost' => $item->price * $item->quantity
+                        'cost' => $item->price * $item->quantity 
                     ]);
                 }
 
@@ -240,9 +239,13 @@ class OrderController extends Controller
                 $txtBody .= "$item->quantity x $menu->menu_name \n\n";
                 
                 $cost += $orderItem->cost;
-                $foodCost += $order->payment_method == 2 ? 
-                ($constant->discount_active ? $item->price * $constant->discount : 0) : 0;
-                $productTotal += $orderItem->quantity;       
+                $productTotal += $orderItem->quantity;  
+                
+                if($order->payment_method == 2){
+                    $foodCost += $constant->discount_active ? $item->price * $constant->discount : 0;
+                }else{
+                    $foodCost += 0;
+                }
             }
 
         }
@@ -258,10 +261,6 @@ class OrderController extends Controller
                     'place_id' => $request->place_id
                 ])->first();
 
-                $drinkstock->update([
-                    'quantity' => $drinkstock->quantity - $drink->quantity
-                ]);
-
                 $drinkOrder = DrinkOrder::create([
                     'drink_id' => $drink->id,
                     'order_id' => $order->id,
@@ -272,7 +271,7 @@ class OrderController extends Controller
 
                 if($order->payment_method == 1){
                     $drinkOrder->update([
-                        'cost' =>  $drinkstock->selling_price * $drink->quantity
+                        'price' => $drinkstock->selling_price * $drink->quantity 
                     ]);
                 }
 

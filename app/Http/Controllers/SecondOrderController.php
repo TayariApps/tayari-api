@@ -123,9 +123,9 @@ class SecondOrderController extends Controller
                     'place_id' => $request->place_id
                 ])->first();
 
-                $drinkstock->update([
-                    'quantity' => $drinkstock->quantity - $drink->quantity
-                ]);
+                // $drinkstock->update([
+                //     'quantity' => $drinkstock->quantity - $drink->quantity
+                // ]);
 
                 $drinkOrder = DrinkOrder::create([
                     'drink_id' => $drink->id,
@@ -332,9 +332,9 @@ class SecondOrderController extends Controller
                     'place_id' => $request->place_id
                 ])->first();
 
-                $drinkstock->update([
-                    'quantity' => $drinkstock->quantity - $drink->quantity
-                ]);
+                // $drinkstock->update([
+                //     'quantity' => $drinkstock->quantity - $drink->quantity
+                // ]);
 
                 $drinkOrder = DrinkOrder::create([
                     'drink_id' => $drink->id,
