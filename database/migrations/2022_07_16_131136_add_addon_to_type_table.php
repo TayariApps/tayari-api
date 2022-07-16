@@ -15,7 +15,7 @@ class AddAddonToTypeTable extends Migration
     {
         Schema::table('types', function (Blueprint $table) {
             $table->boolean('addon')->default(false)->after('status');
-            $table->foreignId('drink_type_id')->nullable()->constrained('drink_types')->after('addon');
+            $table->foreignId('drink_type_id')->nullable()->constrained('drink_types');
         });
     }
 

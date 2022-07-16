@@ -24,7 +24,7 @@ class Order extends Model
     }
 
     public function food(){
-        return $this->belongsToMany(Menu::class,'order_items','order_id','menu_id')->withPivot('quantity', 'cost');
+        return $this->belongsToMany(Menu::class,'order_items','order_id','menu_id')->withPivot('quantity', 'cost','details');
     }
 
     public function place(){
