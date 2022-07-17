@@ -104,7 +104,12 @@ class SecondOrderController extends Controller
                 $typename = $menu->type->name;
 
                 $txtBody .= "Food type: $typename \n";
-                $txtBody .= "$item->quantity x $menu->menu_name \n\n";
+                
+                if($orderItem->details !== null){
+                    $txtBody .= "$item->quantity x $menu->menu_name with extras: $orderItem->details \n\n";
+                }else{
+                    $txtBody .= "$item->quantity x $menu->menu_name \n\n";
+                }
                 
                 $cost += $orderItem->cost;
                 $productTotal += $orderItem->quantity;       
@@ -312,7 +317,12 @@ class SecondOrderController extends Controller
                 $typename = $menu->type->name;
 
                 $txtBody .= "Food type: $typename \n";
-                $txtBody .= "$item->quantity x $menu->menu_name \n\n";
+
+                if($orderItem->details !== null){
+                    $txtBody .= "$item->quantity x $menu->menu_name with extras: $orderItem->details \n\n";
+                }else{
+                    $txtBody .= "$item->quantity x $menu->menu_name \n\n";
+                }
                 
                 $cost += $orderItem->cost;
                 $foodCost += $constant->discount_active ? $item->price * $constant->discount : 0;
