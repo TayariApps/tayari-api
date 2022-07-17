@@ -120,20 +120,23 @@ class OrderController extends Controller
             return response()->json('Please enter all details', 400);
         }
 
+        //json parse the data
         $somedata = $request->input();
         $somedata = file_get_contents("php://input");
         $cont = json_decode($somedata);
-        $place = Place::where('id', $request->place_id)->first();
-        $now = Carbon::now();                                    //current timestamp
+        $place = Place::where('id', $request->place_id)->first();            //get restaurant object
+        $now = Carbon::now();                                               //current timestamp
 
-        $cost = 0.00;                                           //cost which will be displayed to the customer
-        $productTotal = 0;                                      //total number of products in the order
-        $foodCost = 0.00;                                        //cost of food for restuarant
-        $drinkCost = 0.00;
-        $constant = SystemConstant::where('id', 1)->first();    //system constants
-        $hasCoupon  = false;                                    //boolean value to check if user has coupon
+        $cost = 0.00;                                                       //cost which will be displayed to the customer
+        $productTotal = 0;                                                  //total number of products in the order
+        $foodCost = 0.00;                                                   //actual cost for food
+        $drinkCost = 0.00;                                                  //actual cost for drink
+        $constant = SystemConstant::where('id', 1)->first();                //system constants
+        $hasCoupon  = false;                                                //boolean value to check if user has coupon
 
-        $txtBody = "A new order has been made on Tayari App. \n";
+        $txtBody = "A new order has been made on Tayari App. \n";           //initialize text
+
+        //get order type to add to text
         switch ($request->type) {
             case 1:
                 $txtBody .= "Order type: Pre-order \n"; 
@@ -156,8 +159,10 @@ class OrderController extends Controller
                 break;
         }
 
+        //initialize order items to text
         $txtBody .= "\n The order items are: \n";
 
+        //get customer id if present in request object
         if ($request->has('customer_id')) {
             $user = User::where('id', $request->customer_id)->first();
         }
