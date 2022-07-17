@@ -156,22 +156,25 @@ class SecondOrderController extends Controller
 
         $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place','customer'])->first();
 
-        // $mailController = new MailController();
-        // $mailController->orderRecievedMail(null, $place);
-
         $smsController = new SMSController();
 
-        if($place->cashier_number !== null){
-            $smsController->sendMessage(null, $txtBody, $place->cashier_number);
-        }
+        if(env('APP_ENV') == "production"){
+                
+            // $mailController = new MailController();
+            // $mailController->orderRecievedMail(null, $place);
 
-       if($request->type == 4){
-        $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255714779397");
-        $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255747852570");
-       } else{
-        $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255714779397");
-        $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255747852570");
-       }
+            if($place->cashier_number !== null){
+                $smsController->sendMessage(null, $txtBody, $place->cashier_number);
+            }
+
+            if($request->type == 4){
+                $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255714779397");
+                $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255747852570");
+               } else{
+                $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255714779397");
+                $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255747852570");
+               }
+        }
 
        //send notification to user
 
@@ -343,7 +346,7 @@ class SecondOrderController extends Controller
                     'order_id' => $order->id,
                     'quantity' => $drink->quantity,
                     'price' => $hasCoupon ? ($drink->price - ($drink->price * 0.5)) * $drink->quantity :
-                                $drink->price * $drink->quantity
+                                ($drink->price - ($drink->price * $constant->discount)) * $drink->quantity
                 ]);
 
                 $txtBody .= "$drink->quantity x $drinkItem->name \n";
@@ -369,22 +372,25 @@ class SecondOrderController extends Controller
 
         $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place','customer'])->first();
 
-        // $mailController = new MailController();
-        // $mailController->orderRecievedMail(null, $place);
-
         $smsController = new SMSController();
 
-        if($place->cashier_number !== null){
-            $smsController->sendMessage(null, $txtBody, $place->cashier_number);
-        }
+        if(env('APP_ENV') == "production"){
+                
+            // $mailController = new MailController();
+            // $mailController->orderRecievedMail(null, $place);
 
-       if($request->type == 4){
-        $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255714779397");
-        $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255747852570");
-       } else{
-        $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255714779397");
-        $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255747852570");
-       }
+            if($place->cashier_number !== null){
+                $smsController->sendMessage(null, $txtBody, $place->cashier_number);
+            }
+
+            if($request->type == 4){
+                $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255714779397");
+                $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255747852570");
+               } else{
+                $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255714779397");
+                $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255747852570");
+               }
+        }
 
        //send notification to user
 
