@@ -128,7 +128,8 @@ class OrderController extends Controller
 
         $cost = 0.00;                                           //cost which will be displayed to the customer
         $productTotal = 0;                                      //total number of products in the order
-        $foodCost = 0.0;                                        //cost of food for restuarant
+        $foodCost = 0.00;                                        //cost of food for restuarant
+        $drinkCost = 0.00;
         $constant = SystemConstant::where('id', 1)->first();    //system constants
         $hasCoupon  = false;                                    //boolean value to check if user has coupon
 
@@ -247,13 +248,14 @@ class OrderController extends Controller
                 $productTotal += $orderItem->quantity;  
                 
                 if($order->payment_method == 2){
-                    $foodCost += $constant->discount_active ? $item->price * $constant->discount : 0;
+                    $foodCost += $constant->discount_active ? ($item->price * $item->quantity)* $constant->discount : 0;
                 }else{
                     $foodCost += 0;
                 }
             }
 
         }
+
 
         if($request->has('drinks')){
 
@@ -271,7 +273,7 @@ class OrderController extends Controller
                     'order_id' => $order->id,
                     'quantity' => $drink->quantity,
                     'price' => $hasCoupon ? ($drinkstock->selling_price - ($drinkstock->selling_price * 0.5)) * $drink->quantity :
-                                $drinkstock->selling_price * $drink->quantity
+                                ($drinkstock->selling_price - ($drinkstock->selling_price * $constant->discount)) * $drink->quantity
                 ]);
 
                 if($order->payment_method == 1){
@@ -284,13 +286,19 @@ class OrderController extends Controller
     
                 $cost += $drinkOrder->price;
                 $productTotal += $drink->quantity;
+
+                if($order->payment_method == 2){
+                    $drinkCost += $constant->discount_active ? ($drinkstock->selling_price * $drink->quantity) * $constant->discount : 0;
+                }else{
+                    $drinkCost += 0;
+                }
             }
     
         }
 
         $order->update([
             'cost' => $cost,
-            'total_cost' => $cost + $foodCost,
+            'total_cost' => $cost + $foodCost + $drinkCost,
             'order_number' => "TYR-".$order->id,
             'product_total' => $productTotal
         ]);
@@ -311,13 +319,13 @@ class OrderController extends Controller
             $smsController->sendMessage(null, $txtBody, $place->cashier_number);
         }
 
-       if($request->type == 4){
-        $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255714779397");
-        $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255747852570");
-       } else{
-        $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255714779397");
-        $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255747852570");
-       }
+    //    if($request->type == 4){
+    //     $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255714779397");
+    //     $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255747852570");
+    //    } else{
+    //     $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255714779397");
+    //     $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255747852570");
+    //    }
 
        //send notification to user
 

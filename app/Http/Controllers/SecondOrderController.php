@@ -30,7 +30,6 @@ class SecondOrderController extends Controller
 
         $cost = 0.00;                                           //cost which will be displayed to the customer
         $productTotal = 0;                                      //total number of products in the order
-        $foodCost = 0.0;                                        //cost of food for restuarant
 
         $txtBody = "A new order has been made on Tayari App. \n";
         switch ($request->type) {
@@ -128,10 +127,6 @@ class SecondOrderController extends Controller
                     'place_id' => $request->place_id
                 ])->first();
 
-                // $drinkstock->update([
-                //     'quantity' => $drinkstock->quantity - $drink->quantity
-                // ]);
-
                 $drinkOrder = DrinkOrder::create([
                     'drink_id' => $drink->id,
                     'order_id' => $order->id,
@@ -215,7 +210,8 @@ class SecondOrderController extends Controller
 
         $cost = 0.00;                                           //cost which will be displayed to the customer
         $productTotal = 0;                                      //total number of products in the order
-        $foodCost = 0.0;                                        //cost of food for restuarant
+        $foodCost = 0.00;                                        //cost of food for restuarant
+        $drinkCost = 0.00;
         $constant = SystemConstant::where('id', 1)->first();    //system constants
         $hasCoupon  = false;                                    //boolean value to check if user has coupon
 
@@ -325,7 +321,7 @@ class SecondOrderController extends Controller
                 }
                 
                 $cost += $orderItem->cost;
-                $foodCost += $constant->discount_active ? $item->price * $constant->discount : 0;
+                $foodCost += $constant->discount_active ? ($item->price * $item->quantity) * $constant->discount : 0;
                 $productTotal += $orderItem->quantity;       
             }
 
@@ -342,10 +338,6 @@ class SecondOrderController extends Controller
                     'place_id' => $request->place_id
                 ])->first();
 
-                // $drinkstock->update([
-                //     'quantity' => $drinkstock->quantity - $drink->quantity
-                // ]);
-
                 $drinkOrder = DrinkOrder::create([
                     'drink_id' => $drink->id,
                     'order_id' => $order->id,
@@ -358,13 +350,14 @@ class SecondOrderController extends Controller
     
                 $cost += $drinkOrder->price;
                 $productTotal += $drink->quantity;
+                $drinkCost += $constant->discount_active ? ($drink->price * $drink->quantity) * $constant->discount : 0;
             }
     
         }
 
         $order->update([
             'cost' => $cost,
-            'total_cost' => $cost + $foodCost,
+            'total_cost' => $cost + $foodCost + $drinkCost,
             'order_number' => "TYR-".$order->id,
             'product_total' => $productTotal
         ]);
