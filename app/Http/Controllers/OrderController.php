@@ -319,13 +319,13 @@ class OrderController extends Controller
             $smsController->sendMessage(null, $txtBody, $place->cashier_number);
         }
 
-    //    if($request->type == 4){
-    //     $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255714779397");
-    //     $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255747852570");
-    //    } else{
-    //     $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255714779397");
-    //     $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255747852570");
-    //    }
+       if($request->type == 4){
+        $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255714779397");
+        $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255747852570");
+       } else{
+        $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255714779397");
+        $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255747852570");
+       }
 
        //send notification to user
 
