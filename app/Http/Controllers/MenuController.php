@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Menu;
-use App\Models\Place;
+use App\Models\{Menu, Place, SystemConstant};
 use Illuminate\Support\Facades\Validator;
 
 class MenuController extends Controller
@@ -50,6 +49,8 @@ class MenuController extends Controller
             $bannerPath = $request->file('banner')->move(public_path('images/food'), $bannerFilename);//image save public folder
         }
 
+        $constant = SystemConstant::where('id', 1)->first();  
+
         $menu = Menu::create([
             'menu_name' => $request->menu_name, 
             'description' => $request->description, 
@@ -60,7 +61,8 @@ class MenuController extends Controller
             'place_id' => $request->place_id,
             'type_id' => $request->type_id,
             'ingredients' => $request->ingredients,
-            'kilos' => $request->kilos
+            'kilos' => $request->kilos,
+            'discount' => $constant->discount
         ]);
 
         return \response()->json('Menu created',200);

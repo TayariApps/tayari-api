@@ -32,6 +32,7 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\POSController;
 use App\Http\Controllers\DisbursementController;
 use App\Http\Controllers\SecondOrderController;
+use App\Http\Controllers\SystemConstantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +64,7 @@ Route::prefix('v1')->group(function(){
     });
 
     Route::get('table-script',[TableController::class,'script']);
+    Route::get('menu-script',[SystemConstantController::class,'discountScript']);
 
     Route::prefix('admin')->group(function(){
         Route::get('cardCount',[DashboardController::class,'getCardCount']);
