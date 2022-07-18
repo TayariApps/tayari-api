@@ -152,6 +152,7 @@ class SaleController extends Controller
 
             $txt = "Successful payment to $place->name via TAYARI PAYMENTS.";
             $txt .= "\n REF: $sale->reference_id";
+            $txt .= "\n AMOUNT: $sale->amount";
             $txt .= "\n MOB: $sale->phone_number";
             $txt .= "\n DATE: $date";
 
