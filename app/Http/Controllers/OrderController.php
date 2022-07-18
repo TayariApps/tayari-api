@@ -227,7 +227,7 @@ class OrderController extends Controller
                     'menu_id' => $item->id, 
                     'order_id' => $order->id, 
                     'quantity' => $item->quantity, 
-                    // 'details' => $item->details,
+                    'details' => $item->details == null || "" ? null : $item->details,
                     'cost' => !$hasCoupon ? 
                                 ($item->price - ($item->price * $menu->discount)) * $item->quantity :
                                 ($item->price - ($item->price * 0.5)) * $item->quantity 
