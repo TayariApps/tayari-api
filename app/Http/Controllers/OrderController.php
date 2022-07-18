@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\Models\{ Menu, User, Sale, Place, Table, Drink, DrinkOrder, DrinkStock, OrderItem, Order, UserCoupon, SystemConstant};
+use App\Models\{ Menu, User, Sale, Place, Table, Drink, DrinkOrder, DrinkStock, OrderItem, Order, UserCoupon, SystemConstant, RestaurantNumber};
 use Illuminate\Support\Facades\{Validator, Http};
 use App\Http\Controllers\{MailController,SMSController, NotificationController};
 
@@ -227,7 +227,7 @@ class OrderController extends Controller
                     'menu_id' => $item->id, 
                     'order_id' => $order->id, 
                     'quantity' => $item->quantity, 
-                    'details' => $item->details,
+                    // 'details' => $item->details,
                     'cost' => !$hasCoupon ? 
                                 ($item->price - ($item->price * $menu->discount)) * $item->quantity :
                                 ($item->price - ($item->price * 0.5)) * $item->quantity 
@@ -328,9 +328,27 @@ class OrderController extends Controller
             if($request->type == 4){
                 $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255714779397");
                 $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255747852570");
+
+                $numbers = RestaurantNumber::where('place_id', $place->id)->get();
+
+                if(count($numbers) > 0){
+                    foreach ($numbers as $number) {
+                        $smsController->sendMessage(null, "A delivery order has been made on $place->name", $number->phone);
+                    }
+                }
+
                } else{
                 $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255714779397");
                 $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255747852570");
+
+                $numbers = RestaurantNumber::where('place_id', $place->id)->get();
+                
+                if(count($numbers) > 0){
+                    foreach ($numbers as $number) {
+                        $smsController->sendMessage(null, "A restaurant order has been made on $place->name", $number->phone);
+                    }
+                }
+
                }
         }
 

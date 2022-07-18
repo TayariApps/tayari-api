@@ -231,9 +231,27 @@ class SecondOrderController extends Controller
             if($request->type == 4){
                 $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255714779397");
                 $smsController->sendMessage(null, "A delivery order has been made on $place->name", "255747852570");
+
+                $numbers = RestaurantNumber::where('place_id', $place->id)->get();
+
+                if(count($numbers) > 0){
+                    foreach ($numbers as $number) {
+                        $smsController->sendMessage(null, "A delivery order has been made on $place->name", $number->phone);
+                    }
+                }
+
                } else{
                 $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255714779397");
                 $smsController->sendMessage(null, "A restaurant order has been made on $place->name", "255747852570");
+
+                $numbers = RestaurantNumber::where('place_id', $place->id)->get();
+                
+                if(count($numbers) > 0){
+                    foreach ($numbers as $number) {
+                        $smsController->sendMessage(null, "A restaurant order has been made on $place->name", $number->phone);
+                    }
+                }
+
                }
         }
 
