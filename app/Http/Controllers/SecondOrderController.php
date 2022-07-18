@@ -136,7 +136,7 @@ class SecondOrderController extends Controller
                                 ($item->price - ($item->price * 0.5)) * $item->quantity 
                 ]);
 
-                if($order->payment_method == 1){
+                if($order->payment_method == 2){
                     $orderItem->update([
                         'cost' => $item->price * $item->quantity 
                     ]);
@@ -155,7 +155,7 @@ class SecondOrderController extends Controller
                 $cost += $orderItem->cost;
                 $productTotal += $orderItem->quantity;  
                 
-                if($order->payment_method == 2){
+                if($order->payment_method == 1){
                     $foodCost += $constant->discount_active ? ($item->price * $item->quantity)* $constant->discount : 0;
                 }else{
                     $foodCost += 0;
@@ -184,7 +184,7 @@ class SecondOrderController extends Controller
                                 ($drink->price - ($drink->price * $constant->discount)) * $drink->quantity
                 ]);
 
-                if($order->payment_method == 1){
+                if($order->payment_method == 2){
                     $drinkOrder->update([
                         'price' => $drink->price * $drink->quantity 
                     ]);
@@ -195,7 +195,7 @@ class SecondOrderController extends Controller
                 $cost += $drinkOrder->price;
                 $productTotal += $drink->quantity;
 
-                if($order->payment_method == 2){
+                if($order->payment_method == 1){
                     $drinkCost += $constant->discount_active ? ($drink->price * $drink->quantity) * $constant->discount : 0;
                 }else{
                     $drinkCost += 0;
