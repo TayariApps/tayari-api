@@ -190,7 +190,7 @@ class PlaceController extends Controller
             'policy_url' => $request->policy_url,
             'phone_number' => $request->phone,
             'email' => $request->email,
-            'location' => $request->location,
+            'location' =>$request->address,
             // 'latitude' => $request->latitude,
             // 'longitude' => $request->longitude,
             'description'=> $request->description,
