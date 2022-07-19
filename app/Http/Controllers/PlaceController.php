@@ -206,6 +206,7 @@ class PlaceController extends Controller
             'payment_name' => $request->payment_name,
             'payment_network' => $request->payment_network,
             'payment_number' => $request->payment_number,
+            'en' => $request->en == "true" ? true : false,
             'delivery' => $request->delivery == "true" ? true : false
         ]);
 

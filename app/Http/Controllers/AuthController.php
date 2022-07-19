@@ -353,6 +353,16 @@ class AuthController extends Controller
             return response()->json('Please enter all details', 400);
         }
 
+        $checkIfUserExists = User::where([
+            'phone' => $request->phone,
+            'role' => 3
+        ])->exists();
+
+        if($checkIfUserExists){
+            return \response()->json('This account exists. Please contact Tayari personel to upgrade 
+            your account to restaurant owner status', 400);
+        }
+
         $user = User::create([
             'country_id' => $request->country_id,
             'phone' => $request->phone,
@@ -361,6 +371,10 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'role' => 4
         ]);
+
+        if(!$user){
+            return response()-json('Could not create user', 400);
+        }
 
         $mailController = new MailController();
         $mailController->ownerRegisterMail(null, $user);

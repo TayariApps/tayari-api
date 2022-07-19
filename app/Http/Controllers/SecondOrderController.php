@@ -38,32 +38,39 @@ class SecondOrderController extends Controller
         $hasCoupon  = false;                                                //boolean value to check if user has coupon
 
         $txtBody = "A new order has been made on Tayari App. \n";           //initialize text
+        $swTxt = "Oda mpya imeingia kwenye Tayari. \n";
 
         //get order type to add to text
         switch ($request->type) {
             case 1:
                 $txtBody .= "Order type: Pre-order \n"; 
+                $swTxt .= "Aina ya oda: Agizo la mapema. \n";
                 break;
 
             case 2: 
                 $txtBody .= "Order type: Dine In \n"; 
+                $swTxt .= "Aina ya oda: Mlo wa ndani. \n";
                 break;
             
             case 3: 
                 $txtBody .= "Order type: Reservation \n"; 
+                $swTxt .= "Aina ya oda: Uhifadhi \n";
                 break;
             
             case 4: 
                 $txtBody .= "Order type: Delivery"; 
+                $swTxt .= "Aina ya oda: Mteja kupelekewa. \n";
                 break;
             
             default:
                 $txtBody .= "Order type: Pre-order \n"; 
+                $swTxt .= "Aina ya oda: Agizo la mapema. \n";
                 break;
         }
 
         //initialize order items to text
         $txtBody .= "\n The order items are: \n";
+        $swTxt .= "Bidhaa zilizo kwenye oda ni: \n";
 
         //get customer id if present in request object
         if ($request->has('customer_id')) {
@@ -145,11 +152,14 @@ class SecondOrderController extends Controller
                 $typename = $menu->type->name;
 
                 $txtBody .= "Food type: $typename \n";
+                $swTxt .= "Aina ya chakula: $typename \n";
                 
                 if($orderItem->details !== null){
                     $txtBody .= "$item->quantity x $menu->menu_name with extras: $orderItem->details \n\n";
+                    $swTxt .= "$item->quantity x $menu->menu_name pamoja na: $orderItem->details \n\n";
                 }else{
                     $txtBody .= "$item->quantity x $menu->menu_name \n\n";
+                    $swTxt .= "$item->quantity x $menu->menu_name \n\n";
                 }
                 
                 $cost += $orderItem->cost;
@@ -191,6 +201,7 @@ class SecondOrderController extends Controller
                 }
 
                 $txtBody .= "$drink->quantity x $drinkItem->name \n";
+                $swTxt .= "$drink->quantity x $drinkItem->name \n";
     
                 $cost += $drinkOrder->price;
                 $productTotal += $drink->quantity;
@@ -216,6 +227,10 @@ class SecondOrderController extends Controller
         $txtBody .= "\n Customer phone: $user->phone";
         $txtBody .= "\n Tayari will pay you $order->total_cost TZS";
 
+        $swTxt .= "\n Mteja atakulipa $cost TZS";
+        $swTxt .= "\n Namba ya sim ya mteja: $user->phone";
+        $swTxt .= "\n TAYARI itakulipa $order->total_cost TZS";
+
         $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place','customer'])->first();
 
         // $mailController = new MailController();
@@ -225,7 +240,11 @@ class SecondOrderController extends Controller
 
         if(env('APP_ENV') == "production"){
             if($place->cashier_number !== null){
-                $smsController->sendMessage(null, $txtBody, $place->cashier_number);
+                if($place->en == true){
+                    $smsController->sendMessage(null, $txtBody, $place->cashier_number);
+                   } else{
+                    $smsController->sendMessage(null,$swTxt, $place->cashier_number);
+                   }
             }
 
             if($request->type == 4){
@@ -236,7 +255,11 @@ class SecondOrderController extends Controller
 
                 if(count($numbers) > 0){
                     foreach ($numbers as $number) {
-                        $smsController->sendMessage(null, "A delivery order has been made on $place->name", $number->phone);
+                        if($place->en == true){
+                            $smsController->sendMessage(null,  $txtBody, $number->phone);
+                        }else{
+                            $smsController->sendMessage(null,  $swTxt, $number->phone);
+                        }
                     }
                 }
 
@@ -248,7 +271,11 @@ class SecondOrderController extends Controller
                 
                 if(count($numbers) > 0){
                     foreach ($numbers as $number) {
-                        $smsController->sendMessage(null,  $txtBody, $number->phone);
+                        if($place->en == true){
+                            $smsController->sendMessage(null,  $txtBody, $number->phone);
+                        }else{
+                            $smsController->sendMessage(null,  $swTxt, $number->phone);
+                        }
                     }
                 }
 
