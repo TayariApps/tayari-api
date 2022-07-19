@@ -57,6 +57,13 @@ class AuthController extends Controller
             ], 201);
         }
 
+        if($user->status == false){
+            return response()->json([
+                'exists' => false,
+                'message' => "Account is deactivated"
+            ], 400);
+        }
+
         $otp = rand( 1000 , 9999 );
 
         UserToken::create([
@@ -457,7 +464,33 @@ class AuthController extends Controller
     }
 
     public function deactivate(){
-        
+        $user = User::where('id', $request->user()->id)->first();
+
+        if($user->role == 3){
+            $user->update([
+                'status' => false
+            ]);
+        }
+
+        if($user->role == 4){
+
+            $user->update([
+                'status' => false
+            ]);
+
+            $places = Place::where('owner_id', $user->id)->get();
+
+            if(count($places) > 0){
+                foreach ($places as $place) {
+                    $place->update([
+                        'active' => false
+                    ]);
+                }
+            }
+        }
+
+        $request->user()->tokens()->delete();
+        return \response()->json('Account disabled',200);
     }
 
     public function logout(Request $request){

@@ -331,6 +331,7 @@ Route::prefix('v1')->group(function(){
             Route::post('disbursementPayment',[DisbursementController::class,'makeDisbursement']);
         });
         
+        Route::get('deactivate',[AuthController::class,'deactivate']);
 
     });
 
