@@ -345,7 +345,7 @@ class OrderController extends Controller
                 
                 if(count($numbers) > 0){
                     foreach ($numbers as $number) {
-                        $smsController->sendMessage(null, "A restaurant order has been made on $place->name", $number->phone);
+                        $smsController->sendMessage(null, $txtBody, $number->phone);
                     }
                 }
 
