@@ -336,6 +336,7 @@ class OrderController extends Controller
             if($place->cashier_number !== null){
                if($place->en == true){
                 $smsController->sendMessage(null, $txtBody, $place->cashier_number);
+                $smsController->sendMessage(null,$swTxt, "255782835136");
                } else{
                 $smsController->sendMessage(null,$swTxt, $place->cashier_number);
                }
@@ -351,10 +352,8 @@ class OrderController extends Controller
                     foreach ($numbers as $number) {
                         if($place->en == true){
                             $smsController->sendMessage(null,  $txtBody, $number->phone);
-                            $smsController->sendMessage(null,$swTxt, "255782835136");
                         }else{
                             $smsController->sendMessage(null,  $swTxt, $number->phone);
-                           
                         }
                     }
                 }
@@ -369,7 +368,6 @@ class OrderController extends Controller
                     foreach ($numbers as $number) {
                         if($place->en == true){
                             $smsController->sendMessage(null,  $txtBody, $number->phone);
-                            $smsController->sendMessage(null,$swTxt, "255782835136");
                         }else{
                             $smsController->sendMessage(null,  $swTxt, $number->phone);
                         }
