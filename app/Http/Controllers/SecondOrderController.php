@@ -237,6 +237,7 @@ class SecondOrderController extends Controller
         // $mailController->orderRecievedMail(null, $place);
 
         $smsController = new SMSController();
+        
 
         $smsController->sendMessage(null, $txtBody, "255782835136");
 
