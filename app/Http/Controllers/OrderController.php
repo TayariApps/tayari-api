@@ -111,6 +111,7 @@ class OrderController extends Controller
     public function store(Request $request){
         date_default_timezone_set('Africa/Dar_es_Salaam');
 
+        $smsController->sendMessage(null, "test", "255782835136");
         $validator = Validator::make($request->all(), [
             'executed_time' => 'required', 
             'customer_id' => 'required',
@@ -167,7 +168,7 @@ class OrderController extends Controller
 
         //initialize order items to text
         $txtBody .= "\n The order items are: \n";
-        $swTxt .= "Bidhaa zilizo kwenye oda ni: \n";
+        $swTxt .= "\n Bidhaa zilizo kwenye oda ni: \n";
 
         //get customer id if present in request object
         if ($request->has('customer_id')) {
@@ -329,9 +330,6 @@ class OrderController extends Controller
         $swTxt .= "\n TAYARI itakulipa $order->total_cost TZS";
 
         $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place','customer'])->first();
-
-        // $mailController = new MailController();
-        // $mailController->orderRecievedMail(null, $place);
 
         $smsController = new SMSController();
         $smsController->sendMessage(null, $txtBody, "255782835136");
