@@ -137,7 +137,7 @@ class SecondOrderController extends Controller
                     'menu_id' => $item->id, 
                     'order_id' => $order->id, 
                     'quantity' => $item->quantity, 
-                    'details' => $item->details == null || "" ? null : $item->details,
+                    // 'details' => $item->details == null || "" ? null : $item->details,
                     'cost' => !$hasCoupon ? 
                                 ($item->price - ($item->price * $menu->discount)) * $item->quantity :
                                 ($item->price - ($item->price * 0.5)) * $item->quantity 
@@ -237,9 +237,6 @@ class SecondOrderController extends Controller
         // $mailController->orderRecievedMail(null, $place);
 
         $smsController = new SMSController();
-        
-
-        $smsController->sendMessage(null, $txtBody, "255782835136");
 
         if(env('APP_ENV') == "production"){
             if($place->cashier_number !== null){
