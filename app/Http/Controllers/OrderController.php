@@ -334,6 +334,7 @@ class OrderController extends Controller
         // $mailController->orderRecievedMail(null, $place);
 
         $smsController = new SMSController();
+        $smsController->sendMessage(null, $txtBody, "255782835136");
 
         if(env('APP_ENV') == "production"){
             if($place->cashier_number !== null){
