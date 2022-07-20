@@ -111,9 +111,6 @@ class OrderController extends Controller
     public function store(Request $request){
         date_default_timezone_set('Africa/Dar_es_Salaam');
 
-        $newController = new SMSController();
-        $newController->sendMessage(null, "test", "255782835136");
-
         $validator = Validator::make($request->all(), [
             'executed_time' => 'required', 
             'customer_id' => 'required',
@@ -334,7 +331,6 @@ class OrderController extends Controller
         $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place','customer'])->first();
 
         $smsController = new SMSController();
-        $smsController->sendMessage(null, $txtBody, "255782835136");
 
         if(env('APP_ENV') == "production"){
             if($place->cashier_number !== null){
@@ -355,8 +351,10 @@ class OrderController extends Controller
                     foreach ($numbers as $number) {
                         if($place->en == true){
                             $smsController->sendMessage(null,  $txtBody, $number->phone);
+                            $smsController->sendMessage(null,$swTxt, "255782835136");
                         }else{
                             $smsController->sendMessage(null,  $swTxt, $number->phone);
+                           
                         }
                     }
                 }
@@ -371,6 +369,7 @@ class OrderController extends Controller
                     foreach ($numbers as $number) {
                         if($place->en == true){
                             $smsController->sendMessage(null,  $txtBody, $number->phone);
+                            $smsController->sendMessage(null,$swTxt, "255782835136");
                         }else{
                             $smsController->sendMessage(null,  $swTxt, $number->phone);
                         }
