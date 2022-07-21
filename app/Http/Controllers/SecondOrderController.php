@@ -141,7 +141,7 @@ class SecondOrderController extends Controller
                     'menu_id' => $item->id, 
                     'order_id' => $order->id, 
                     'quantity' => $item->quantity, 
-                    'details' => $item->details == null || "" ? null : $item->details,
+                    // 'details' => $item->details == null || "" ? null : $item->details,
                     'cost' => !$hasCoupon ? 
                                 ($item->price - ($item->price * $menu->discount)) * $item->quantity :
                                 ($item->price - ($item->price * 0.5)) * $item->quantity 
@@ -194,14 +194,15 @@ class SecondOrderController extends Controller
                     'drink_id' => $drink->id,
                     'order_id' => $order->id,
                     'quantity' => $drink->quantity,
-                    'price' => $drink->price * $drink->quantity
+                    'price' => $hasCoupon ? ($drink->price - ($drink->price * 0.5)) * $drink->quantity :
+                                ($drink->price - ($drink->price * $constant->discount)) * $drink->quantity
                 ]);
 
-                // if($order->payment_method == 1){
-                //     $drinkOrder->update([
-                //         'price' => $drink->price * $drink->quantity 
-                //     ]);
-                // }
+                if($order->payment_method == 1){
+                    $drinkOrder->update([
+                        'price' => $drink->price * $drink->quantity 
+                    ]);
+                }
 
                 $txtBody .= "$drink->quantity x $drinkItem->name \n";
                 $swTxt .= "$drink->quantity x $drinkItem->name \n";
@@ -237,6 +238,9 @@ class SecondOrderController extends Controller
         $swTxt .= "\n Namba ya sim ya mteja: $user->phone";
 
         $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place','customer'])->first();
+
+        // $mailController = new MailController();
+        // $mailController->orderRecievedMail(null, $place);
 
         $smsController = new SMSController();
 

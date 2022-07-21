@@ -291,14 +291,15 @@ class OrderController extends Controller
                     'drink_id' => $drink->id,
                     'order_id' => $order->id,
                     'quantity' => $drink->quantity,
-                    'price' => $drinkstock->selling_price * $drink->quantity
+                    'price' => $hasCoupon ? ($drinkstock->selling_price - ($drinkstock->selling_price * 0.5)) * $drink->quantity :
+                                ($drinkstock->selling_price - ($drinkstock->selling_price * $constant->discount)) * $drink->quantity
                 ]);
 
-                // if($order->payment_method == 1){
-                //     $drinkOrder->update([
-                //         'price' => $drinkstock->selling_price * $drink->quantity 
-                //     ]);
-                // }
+                if($order->payment_method == 1){
+                    $drinkOrder->update([
+                        'price' => $drinkstock->selling_price * $drink->quantity 
+                    ]);
+                }
 
                 $txtBody .= "$drink->quantity x $drinkItem->name \n";
                 $swTxt .= "$drink->quantity x $drinkItem->name \n";
