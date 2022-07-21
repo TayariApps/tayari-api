@@ -174,6 +174,10 @@ class OrderController extends Controller
             $user = User::where('id', $request->customer_id)->first();
         }
 
+        if(!$request->has('foods') || !$request->has('drinks')){
+            return response()->json('Order does not have food or drink',400);
+        }
+
         if($request->type == 4){
             $order = Order::create([
                 'table_id' => 1,
@@ -234,7 +238,7 @@ class OrderController extends Controller
                     'menu_id' => $item->id, 
                     'order_id' => $order->id, 
                     'quantity' => $item->quantity, 
-                    'details' => $item->details == null || "" ? null : $item->details,
+                    // 'details' => $item->details == null || "" ? null : $item->details,
                     'cost' => !$hasCoupon ? 
                                 ($item->price - ($item->price * $menu->discount)) * $item->quantity :
                                 ($item->price - ($item->price * 0.5)) * $item->quantity 
@@ -287,15 +291,14 @@ class OrderController extends Controller
                     'drink_id' => $drink->id,
                     'order_id' => $order->id,
                     'quantity' => $drink->quantity,
-                    'price' => $hasCoupon ? ($drinkstock->selling_price - ($drinkstock->selling_price * 0.5)) * $drink->quantity :
-                                ($drinkstock->selling_price - ($drinkstock->selling_price * $constant->discount)) * $drink->quantity
+                    'price' => $drinkstock->selling_price * $drink->quantity
                 ]);
 
-                if($order->payment_method == 1){
-                    $drinkOrder->update([
-                        'price' => $drinkstock->selling_price * $drink->quantity 
-                    ]);
-                }
+                // if($order->payment_method == 1){
+                //     $drinkOrder->update([
+                //         'price' => $drinkstock->selling_price * $drink->quantity 
+                //     ]);
+                // }
 
                 $txtBody .= "$drink->quantity x $drinkItem->name \n";
                 $swTxt .= "$drink->quantity x $drinkItem->name \n";
@@ -312,6 +315,10 @@ class OrderController extends Controller
     
         }
 
+        if($productTotal == 0){
+            return \response()->json('There are no items in this order',400);
+        }
+
         $order->update([
             'cost' => $cost,
             'total_cost' => $cost + $foodCost + $drinkCost,
@@ -322,11 +329,9 @@ class OrderController extends Controller
         // $txtBody .= "\n 10% Tayari discount is active";
         $txtBody .= "\n The customer will pay $cost TZS";
         $txtBody .= "\n Customer phone: $user->phone";
-        $txtBody .= "\n Tayari will pay you $order->total_cost TZS";
 
         $swTxt .= "\n Mteja atakulipa $cost TZS";
         $swTxt .= "\n Namba ya sim ya mteja: $user->phone";
-        $swTxt .= "\n TAYARI itakulipa $order->total_cost TZS";
 
         $newOrder = Order::where('id', $order->id)->with(['food','drinks','table','place','customer'])->first();
 
