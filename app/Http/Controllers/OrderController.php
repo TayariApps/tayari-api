@@ -397,4 +397,26 @@ class OrderController extends Controller
 
         return response()->json($newOrder, 201);
     }
+
+    public function confirmArrival(Request $request){
+        $user = User::where('id', $request->user()->id)->first();
+
+        $order = Order::where('id', $request->order_id)->with('place')->first();
+
+        $smsController = new SMSController();
+
+        if($order->place->cashier_number !== null){
+            $smsController->sendMessage(null,  "$user->name has arrived for their order", $order->place->cashier_number);
+        }
+
+        $numbers = RestaurantNumber::where('place_id', $order->place->id)->get();
+                
+            if(count($numbers) > 0){
+                foreach ($numbers as $number) {
+                    $smsController->sendMessage(null, "$user->name has arrived for their order", $number->phone);
+                }
+            }
+
+        return \response()->json('Message has been sent',200);
+    }
 }

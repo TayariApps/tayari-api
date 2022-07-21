@@ -143,6 +143,8 @@ Route::prefix('v1')->group(function(){
 
     Route::middleware('auth:sanctum')->group(function(){
 
+        Route::post('confirmArrival',[OrderController::class,'confirmArrival']);
+
         Route::prefix('pos')->group(function(){
             Route::post('store',[POSController::class,'store']);
         });
