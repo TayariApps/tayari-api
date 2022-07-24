@@ -130,6 +130,10 @@ class PlaceController extends Controller
             return response()->json('Logo or banner size should be below 7 MBs', 400);
         }
 
+        if(Place::where('name', $request->name)->exists()){
+            return \response()->json('Restaurant with this name exists. Please check with admin', 400);
+        }
+
         if($request->hasFile('logo')){
             $img_ext = $request->file('logo')->getClientOriginalExtension();
             $logoFilename = time() . '.' . $img_ext;
@@ -210,7 +214,7 @@ class PlaceController extends Controller
             'delivery' => $request->delivery == "true" ? true : false
         ]);
 
-        if($request->has('phone1')){
+        if($request->filled('phone1')){
             RestaurantNumber::updateOrCreate([
                 'place_id' => $place->id
             ],[
