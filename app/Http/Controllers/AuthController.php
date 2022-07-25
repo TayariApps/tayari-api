@@ -353,6 +353,14 @@ class AuthController extends Controller
             return response()->json('Please enter all details', 400);
         }
 
+        $emailUniqueValidator = Validator::make($request->all(), [
+            'email' => 'unique:users,email',
+        ]);
+
+        if($emailUniqueValidator->fails()){
+            return response()->json('Email is already in use. Email should be unique', 400);
+        }
+
         $checkIfUserExists = User::where([
             'phone' => $request->phone,
             'role' => 3
@@ -361,6 +369,14 @@ class AuthController extends Controller
         if($checkIfUserExists){
             return \response()->json('This account exists. Please contact Tayari personel to upgrade 
             your account to restaurant owner status', 400);
+        }
+
+        $phoneUniqueValidator = Validator::make($request->all(), [
+            'phone' => 'unique:users,phone',
+        ]);
+
+        if($phoneUniqueValidator->fails()){
+            return response()->json('Phone number is already in use. Phone number should be unique', 400);
         }
 
         $user = User::create([
